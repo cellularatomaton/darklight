@@ -7,8 +7,8 @@ namespace DarkLight.Common.Engines
     public sealed class StrategyManagementEngine
     {
         private static readonly StrategyManagementEngine instance = new StrategyManagementEngine();
-        private Dictionary<int, iManageable> strategies;
-        private Dictionary<int, StrategyInfo> strategyInfos;
+        private Dictionary<string, iManageable> strategies;
+        private Dictionary<string, StrategyInfo> strategyInfos;
 
         public static StrategyManagementEngine Instance
         {
@@ -16,15 +16,15 @@ namespace DarkLight.Common.Engines
         }
         private StrategyManagementEngine()
         {
-            strategies = new Dictionary<int, iManageable>();
-            strategyInfos = new Dictionary<int,StrategyInfo>();
+            strategies = new Dictionary<string, iManageable>();
+            strategyInfos = new Dictionary<string, StrategyInfo>();
         }
 
         public void AddStrategy(iManageable strat)
         {
             var stratInfo = strat.GetStrategyInfo();
-            strategies.Add(stratInfo.StrategyID, strat);
-            strategyInfos.Add(stratInfo.StrategyID, stratInfo);
+            strategies.Add(stratInfo.StrategyName, strat);
+            strategyInfos.Add(stratInfo.StrategyName, stratInfo);
             // Control initialization from here...
             strat.InitializeStrategy();
         }
@@ -52,12 +52,12 @@ namespace DarkLight.Common.Engines
 
         public void StartStrategy(StrategyInfo strategyInfo)
         {
-            strategies[strategyInfo.StrategyID].StartStrategy();
+            strategies[strategyInfo.StrategyName].StartStrategy();
         }
 
         public void StopStrategy(StrategyInfo strategyInfo)
         {
-            strategies[strategyInfo.StrategyID].StopStrategy();
+            strategies[strategyInfo.StrategyName].StopStrategy();
         }
     }
 }

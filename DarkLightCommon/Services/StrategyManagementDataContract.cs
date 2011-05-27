@@ -15,9 +15,6 @@ namespace DarkLight.Common.Services
     public class StrategyInfo
     {
         [DataMember]
-        public int StrategyID { get; set; }
-
-        [DataMember]
         public string StrategyName { get; set; }
 
         [DataMember]

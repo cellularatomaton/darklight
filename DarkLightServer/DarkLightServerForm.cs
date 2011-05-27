@@ -73,8 +73,11 @@ namespace DarkLight.Server
 
         private void btnCreateManagerService_Click(object sender, EventArgs e)
         {
-            strategyManagerService = new ServiceHost(typeof(StrategyManagementService));
-            strategyManagerService.Open();
+            if(strategyManagerService == null)
+                strategyManagerService = new ServiceHost(typeof(StrategyManagementService));
+            if(strategyManagerService.State != CommunicationState.Opened ||
+                strategyManagerService.State != CommunicationState.Opening)
+                strategyManagerService.Open();
         }
 
         private void btnLoadStrategies_Click(object sender, EventArgs e)
