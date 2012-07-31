@@ -1,6 +1,0 @@
-syntax: glob
-_ReSharper.DarkLight/
-obj/
-bin/
-DarkLight.suo
-DarkLight.5.1.ReSharper.user
