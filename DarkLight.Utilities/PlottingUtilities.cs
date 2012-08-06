@@ -20,6 +20,17 @@ namespace DarkLight.Utilities
             return colorList;
         }
 
+        public static List<System.Drawing.Color> GetLegacyColorList(int numberOfColors)
+        {
+            List<System.Drawing.Color> legacyColorList = new List<System.Drawing.Color>();
+            var colorList = GetColorList(numberOfColors);
+            foreach (var _color in colorList)
+            {
+                 legacyColorList.Add(System.Drawing.Color.FromArgb(_color.A, _color.R, _color.B, _color.G));
+            }
+            return legacyColorList;
+        }
+
         public static Color ColorFromHSV(double hue, double saturation, double value)
         {
             int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;

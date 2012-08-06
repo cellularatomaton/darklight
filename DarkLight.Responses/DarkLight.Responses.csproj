@@ -33,6 +33,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="bbv.Common">
@@ -81,9 +82,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FractalResponse.cs" />
     <Compile Include="Statements.cs" />
     <Compile Include="CEPResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DarkLight.Utilities\DarkLight.Utilities.csproj">
+      <Project>{377A079C-34EB-4CAC-9705-4106B1DBC54F}</Project>
+      <Name>DarkLight.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

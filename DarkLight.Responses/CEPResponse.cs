@@ -26,7 +26,7 @@ namespace DarkLight.Responses
         {
             // CEP engine configruation:
             var configuration = new Configuration();
-            configuration.AddEventType("Tick", typeof(Bar).FullName);
+            configuration.AddEventType("Tick", typeof(Tick).FullName);
             configuration.AddEventType("Bar", typeof(Bar).FullName);
             _provider = EPServiceProviderManager.GetProvider(TradingSpace, configuration);
             _runtime = _provider.EPRuntime;
