@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdjustableProperties.cs" />
+    <Compile Include="IReportable.cs" />
     <Compile Include="PlottingModels.cs" />
     <Compile Include="PlottingUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
