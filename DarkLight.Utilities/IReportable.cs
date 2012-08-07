@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TradeLink.API;
+using System.Windows.Threading;
 
 namespace DarkLight.Utilities
 {
@@ -18,9 +19,22 @@ namespace DarkLight.Utilities
         event Action<string[]> GotIndicators;
     }
 
+    public enum DispatchableType
+    {
+        Status,
+        Message,
+        Tick,
+        Fill,
+        Order,
+        Position,
+        Plot,
+        Indicator,
+    }
+
     public class ReportModel : IDisposable
     {
         private IReportable _engine;
+        private Dictionary<DispatchableType, Dispatcher> _dispatchingMap = new Dictionary<DispatchableType, Dispatcher>(); 
 
         public ReportModel(IReportable engine)
         {
@@ -33,46 +47,83 @@ namespace DarkLight.Utilities
             _engine.GotPosition += engine_GotPosition;
             _engine.GotPlot += engine_GotPlot;
             _engine.GotIndicators += engine_GotIndicators;
+
+            // Default each dispatchable type to the current thread's dispatcher.  Any controls which register a dispatcher will change this.
+            var dispatchValues = Enum.GetValues(typeof(DispatchableType)).Cast<DispatchableType>();
+            foreach (var _value in dispatchValues)
+            {
+                _dispatchingMap[_value] = Dispatcher.CurrentDispatcher;
+            }
+        }
+
+        // Register a dispatcher from the control thread.
+        public void RegisterDispatcher(DispatchableType dispatchableType, Dispatcher dispatcher)
+        {
+            _dispatchingMap[dispatchableType] = dispatcher;
         }
 
         void engine_GotIndicators(string[] obj)
         {
-            throw new NotImplementedException();
+            _dispatchingMap[DispatchableType.Indicator].Invoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                // Do you thang...
+            }));
         }
 
         void engine_GotPlot(TimePlot obj)
         {
-            throw new NotImplementedException();
+            _dispatchingMap[DispatchableType.Plot].Invoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                // Do you thang...
+            }));
         }
 
         void engine_GotPosition(Position obj)
         {
-            throw new NotImplementedException();
+            _dispatchingMap[DispatchableType.Position].Invoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                // Do you thang...
+            }));
         }
 
         void engine_GotOrder(Order obj)
         {
-            throw new NotImplementedException();
+            _dispatchingMap[DispatchableType.Order].Invoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                // Do you thang...
+            }));
         }
 
         void engine_GotFill(Trade obj)
         {
-            throw new NotImplementedException();
+            _dispatchingMap[DispatchableType.Fill].Invoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                // Do you thang...
+            }));
         }
 
         void engine_GotTick(Tick obj)
         {
-            throw new NotImplementedException();
+            _dispatchingMap[DispatchableType.Tick].Invoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                // Do you thang...
+            }));
         }
 
         void engine_StatusUpdate(string obj)
         {
-            throw new NotImplementedException();
+            _dispatchingMap[DispatchableType.Status].Invoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                // Do you thang...
+            }));
         }
 
         void engine_MessageUpdate(string obj)
         {
-            throw new NotImplementedException();
+            _dispatchingMap[DispatchableType.Message].Invoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                // Do you thang...
+            }));
         }
 
         #region Implementation of IDisposable

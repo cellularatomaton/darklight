@@ -54,6 +54,7 @@
     <Reference Include="TradeLinkResearch">
       <HintPath>..\Lib\TradeLinkResearch.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdjustableProperties.cs" />
