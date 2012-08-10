@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Media;
+using TradeLink.AppKit;
 
 namespace DarkLight.Utilities
 {
@@ -56,9 +57,9 @@ namespace DarkLight.Utilities
                 return Color.FromArgb(255, v, p, q);
         }
 
-        public static List<PlottableValue> GetAllPlottableValues(Type plottableType)
+        public static List<PlottableProperty> GetAllPlottableValues(Type plottableType)
         {
-            var plottableValueList = new List<PlottableValue>();
+            var plottableValueList = new List<PlottableProperty>();
             var memberInfos = GetFieldsAndProperties(plottableType, BindingFlags.Instance | BindingFlags.Public);
             
             foreach (var memberInfo in memberInfos)
@@ -72,7 +73,7 @@ namespace DarkLight.Utilities
                             propertyInfo.PropertyType == typeof(double) ||
                             propertyInfo.PropertyType == typeof(decimal))
                         {
-                            plottableValueList.Add(new PlottableValue
+                            plottableValueList.Add(new PlottableProperty
                             {
                                 PropertyName = propertyInfo.Name,
                                 Selected = false,
@@ -87,7 +88,7 @@ namespace DarkLight.Utilities
                             fieldInfo.FieldType == typeof(double) ||
                             fieldInfo.FieldType == typeof(decimal))
                         {
-                            plottableValueList.Add(new PlottableValue
+                            plottableValueList.Add(new PlottableProperty
                             {
                                 PropertyName = fieldInfo.Name,
                                 Selected = false,
@@ -135,14 +136,14 @@ namespace DarkLight.Utilities
             return targetMembers;
         }
 
-        public static List<PlotPoint1D> ToPlottable(List<ResultPoint1D> resultsList, PlottableValue plottableValue)
+        public static List<PlottablePoint> ToPlottable<T>(List<PlottableValue<T>> plottableValueList, PlottableProperty plottableProperty)
         {
-            var pointList = new List<PlotPoint1D>();
-            foreach (var resultSet in resultsList)
+            var pointList = new List<PlottablePoint>();
+            foreach (var plottableValue in plottableValueList)
             {
-                var result = resultSet.result;
+                var result = plottableValue.Value;
                 var instanceType = result.GetType();
-                var memberInfos = instanceType.GetMember(plottableValue.PropertyName);
+                var memberInfos = instanceType.GetMember(plottableProperty.PropertyName);
                 foreach (var memberInfo in memberInfos)
                 {
                     switch (memberInfo.MemberType)
@@ -151,14 +152,14 @@ namespace DarkLight.Utilities
                         {
                             var propertyInfo = memberInfo as PropertyInfo;
                             var propertyValue = Convert.ToDouble(propertyInfo.GetValue(result, null));
-                            pointList.Add(new PlotPoint1D { X = resultSet.X, Y = propertyValue });
+                            pointList.Add(new PlottablePoint { X = plottableValue.X, Y = propertyValue });
                             break;
                         }
                         case MemberTypes.Field:
                         {
                             var fieldInfo = memberInfo as FieldInfo;
                             var propertyValue = Convert.ToDouble(fieldInfo.GetValue(result));
-                            pointList.Add(new PlotPoint1D { X = resultSet.X, Y = propertyValue });
+                            pointList.Add(new PlottablePoint { X = plottableValue.X, Y = propertyValue });
                             break;
                         }
                         default:
@@ -171,6 +172,34 @@ namespace DarkLight.Utilities
                 
             }
             return pointList;
+        }
+
+        public static void CopyParameters<T1,T2>(T1 sourceInstance, T2 destinationInstance)
+        {
+            var sourceMemberInfos = GetFieldsAndProperties(sourceInstance.GetType(), BindingFlags.Instance | BindingFlags.Public);
+            foreach (MemberInfo memberInfo in sourceMemberInfos)
+            {
+                if(memberInfo is FieldInfo)
+                {
+                    var sourceFieldInfo = memberInfo as FieldInfo;
+                    FieldInfo destinationFieldInfo = destinationInstance.GetType().GetField(memberInfo.Name);
+                    if (destinationFieldInfo != null)
+                    {
+                        destinationFieldInfo.SetValue(destinationInstance, sourceFieldInfo.GetValue(sourceInstance));
+                    }
+                }
+                else if(memberInfo is PropertyInfo)
+                {
+                    var sourcePropertyInfo = memberInfo as PropertyInfo;
+                    PropertyInfo destinationPropertyInfo = destinationInstance.GetType().GetProperty(memberInfo.Name);
+                    if (destinationPropertyInfo != null && 
+                        sourcePropertyInfo.CanRead &&
+                        destinationPropertyInfo.CanWrite)
+                    {
+                        destinationPropertyInfo.SetValue(destinationInstance, sourcePropertyInfo.GetValue(sourceInstance, null), null);
+                    }
+                }
+            }
         }
     }
 }

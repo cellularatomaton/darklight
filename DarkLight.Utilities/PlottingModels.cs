@@ -6,16 +6,17 @@ using TradeLink.AppKit;
 
 namespace DarkLight.Utilities
 {
-    public class ResultPoint1D
-    {
-        public double X { get; set; }
-        public Results result { get; set; }
-    }
-
-    public class PlotPoint1D
+    public class PlottablePoint
     {
         public double X { get; set; }
         public double Y { get; set; }
+    }
+
+    public class PlottableValue<T>
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
+        public T Value { get; set; }
     }
 
     public class TimePlot
@@ -32,7 +33,7 @@ namespace DarkLight.Utilities
         public decimal Value { get; set; }
     }
 
-    public class PlottableValue : INotifyPropertyChanged
+    public class PlottableProperty : INotifyPropertyChanged
     {
         private string _propertyName;
         public string PropertyName
@@ -87,5 +88,16 @@ namespace DarkLight.Utilities
             }
         }
         #endregion
+    }
+
+    public class DarkLightResults : Results
+    {
+        public decimal NetProfitOrLoss { get; set; }
+
+        public DarkLightResults(Results results)
+        {
+            PlottingUtilities.CopyParameters(results, this);
+            NetProfitOrLoss = GrossPL - (HundredLots*100*ComPerShare);
+        }
     }
 }

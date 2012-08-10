@@ -16,7 +16,7 @@ namespace DarkLight.Analytics.Models
         Response myres = null;
         PlayTo _playTo = PlayTo.Hour;
         bool _useBidAskFills = false;
-        string _programName = "Incepto.Analytics";
+        string _programName = "DarkLight.Analytics";
         bool _showticks = true;
         int _time = 0;
         int _date = 0;
@@ -24,8 +24,8 @@ namespace DarkLight.Analytics.Models
         string _playToString = "Play +";
         string _nowTime = "0";
         string _status = "";
-        decimal _rfr = .01m;
-        decimal _comm = .01m;
+        decimal _rfr = 0.00m;
+        decimal _comm = .0012m;
         private int _percentComplete = 0;
 
         Dictionary<string, PositionImpl> _positionList = new Dictionary<string, PositionImpl>();

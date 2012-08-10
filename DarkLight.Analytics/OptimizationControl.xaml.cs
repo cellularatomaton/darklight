@@ -34,7 +34,7 @@ namespace DarkLight.Analytics
         static TickDataFileList _optimizationTickDataFileList = new TickDataFileList();
         static ResponseLibraryList _optimizationResponseLibraryList = new ResponseLibraryList();
 
-        static List<ResultPoint1D> _optimizationResults = new List<ResultPoint1D>();
+        static List<PlottableValue<DarkLightResults>> _optimizationResults = new List<PlottableValue<DarkLightResults>>();
         static AutoResetEvent _optimizationResetEvent = new AutoResetEvent(false);
 
         bool _initializationModelsUnbound = false;
@@ -235,20 +235,17 @@ namespace DarkLight.Analytics
                         plottableValues[i].PlotColor = colorList[i];
                     }
 
-                    foreach (var plottableValue in _optimizationConfigurationModel.PlottableValues)
+                    foreach (var plottableValue in plottableValues)
                     {
-                        if (plottableValue.Selected)
-                        {
-                            var pointList = PlottingUtilities.ToPlottable(_optimizationResults, plottableValue);
-                            var dataSource = CreateResultsDataSource(pointList.OrderBy(p => p.X));
-                            OptimizationPlotter.AddLineGraph(dataSource, plottableValue.PlotColor, 1,
-                                                             plottableValue.PropertyName);
+                        var pointList = PlottingUtilities.ToPlottable(_optimizationResults, plottableValue);
+                        var dataSource = CreateResultsDataSource(pointList.OrderBy(p => p.X));
+                        OptimizationPlotter.AddLineGraph(dataSource, plottableValue.PlotColor, 1,
+                                                            plottableValue.PropertyName);
 
-                            maxX = Math.Max(pointList.Max(r => r.X), maxX);
-                            minX = Math.Min(pointList.Min(r => r.X), minX);
-                            maxY = Math.Max(pointList.Max(r => r.Y), maxY);
-                            minY = Math.Min(pointList.Min(r => r.Y), minY);
-                        }
+                        maxX = Math.Max(pointList.Max(r => r.X), maxX);
+                        minX = Math.Min(pointList.Min(r => r.X), minX);
+                        maxY = Math.Max(pointList.Max(r => r.Y), maxY);
+                        minY = Math.Min(pointList.Min(r => r.Y), minY);
                     }
                 }
                 else
@@ -271,9 +268,9 @@ namespace DarkLight.Analytics
             }));
         }
 
-        private EnumerableDataSource<PlotPoint1D> CreateResultsDataSource(IEnumerable<PlotPoint1D> plottablePoints)
+        private EnumerableDataSource<PlottablePoint> CreateResultsDataSource(IEnumerable<PlottablePoint> plottablePoints)
         {
-            var ds = new EnumerableDataSource<PlotPoint1D>(plottablePoints);
+            var ds = new EnumerableDataSource<PlottablePoint>(plottablePoints);
             ds.SetXMapping(p => p.X);
             ds.SetYMapping(p => p.Y);
             return ds;
@@ -299,7 +296,8 @@ namespace DarkLight.Analytics
             _optimizationModel.LoadTickData(tickDataFileNames);
             Action<Results> onCompleted = r =>
             {
-                _optimizationResults.Add(new ResultPoint1D { X = xValue, result = r });
+                var darkLightResults = new DarkLightResults(r);
+                _optimizationResults.Add(new PlottableValue<DarkLightResults> { X = xValue, Value = darkLightResults });
                 _optimizationResetEvent.Set();
                 UpdateOptimizationPlot();
             };

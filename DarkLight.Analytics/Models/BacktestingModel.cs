@@ -330,7 +330,7 @@ namespace DarkLight.Analytics.Models
             _historicalSimulator = new MultiSimImpl();
             _broker = new Broker();
             _resultsModel = new ResultsModel();
-
+            
             _decimalPrecisionString = "N" + _decimalPrecision;
             _broker.UseBidAskFills = _useBidAskFills;
             initializeTables();

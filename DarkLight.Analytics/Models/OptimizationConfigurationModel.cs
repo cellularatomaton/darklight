@@ -27,15 +27,15 @@ namespace DarkLight.Analytics.Models
             }
         }
 
-        private PlottableValue _selectedPlottableValue;
-        public PlottableValue SelectedPlottableValue
+        private PlottableProperty _selectedPlottableProperty;
+        public PlottableProperty SelectedPlottableProperty
         {
-            get { return _selectedPlottableValue; }
+            get { return _selectedPlottableProperty; }
             set
             {
-                if (value != _selectedPlottableValue)
+                if (value != _selectedPlottableProperty)
                 {
-                    _selectedPlottableValue = value;
+                    _selectedPlottableProperty = value;
                     NotifyPropertyChanged("SelectedPlottableValue");
                 }
             }
@@ -109,8 +109,8 @@ namespace DarkLight.Analytics.Models
             }
         }
 
-        ObservableCollection<PlottableValue> _plottableValues = new ObservableCollection<PlottableValue>();
-        public ObservableCollection<PlottableValue> PlottableValues
+        ObservableCollection<PlottableProperty> _plottableValues = new ObservableCollection<PlottableProperty>();
+        public ObservableCollection<PlottableProperty> PlottableValues
         {
             get { return _plottableValues; }
             set
@@ -146,7 +146,7 @@ namespace DarkLight.Analytics.Models
         public void PopulatePlottableValues()
         {
             PlottableValues.Clear();
-            var plottableType = typeof(Results);
+            var plottableType = typeof(DarkLightResults);
             var plottableList = PlottingUtilities.GetAllPlottableValues(plottableType);
             foreach (var plottableValue in plottableList)
             {
