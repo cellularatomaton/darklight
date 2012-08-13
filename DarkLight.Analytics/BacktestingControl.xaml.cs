@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,24 +14,28 @@ using Microsoft.Research.DynamicDataDisplay.DataSources;
 using Microsoft.Win32;
 using TradeLink.Common;
 
+
 namespace DarkLight.Analytics
 {
     /// <summary>
     /// Interaction logic for BacktestingControl.xaml
     /// </summary>
+    /// 
+
     public partial class BacktestingControl : UserControl
     {
         // Shared Models:
         static ActivityModel _activityModel = new ActivityModel();
 
         // Backtesting Models:
+        static BatchReportModel _reportModel;
         static BacktestingModel _backtestingModel;
         static BacktestingConfigurationModel _backtestingConfigurationModel = new BacktestingConfigurationModel();
         static TickDataFileList _backtestingTickDataFileList = new TickDataFileList();
         static ResponseLibraryList _backtestingResponseLibraryList = new ResponseLibraryList();
 
         bool _initializationModelsUnbound = false;
-        bool _backtestingModelsUnbound = false;
+        bool _reportModelsUnbound = false;
         bool _responseModelsUnbound = false;
 
         public BacktestingControl()
@@ -56,7 +61,11 @@ namespace DarkLight.Analytics
             UnbindInitializationModels();
 
             _backtestingTickDataFileList.LoadPath(Properties.Settings.Default.TickDataDirectory);
-            _backtestingResponseLibraryList.LoadResponseListFromFileName(Properties.Settings.Default.ResponseFileName);
+            //_backtestingResponseLibraryList.LoadResponseListFromFileName(Properties.Settings.Default.ResponseFileName);
+            _backtestingResponseLibraryList.LoadResponseListFromFileName(
+    "C:\\Users\\matt.barkley.HANLEYGROUPLP\\Documents\\darklight\\DarkLight.Responses\\bin\\D" +
+    "ebug\\DarkLight.Responses.dll");
+
 
             BacktestPlotter.AxisGrid.DrawHorizontalMinorTicks = false;
             BacktestPlotter.AxisGrid.DrawHorizontalTicks = false;
@@ -90,8 +99,8 @@ namespace DarkLight.Analytics
 
         private void BacktestingComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if(_initializationModelsUnbound || 
-                _backtestingModelsUnbound ||
+            if (_initializationModelsUnbound ||
+                _reportModelsUnbound ||
                 _responseModelsUnbound)
             {
                 return;
@@ -112,40 +121,37 @@ namespace DarkLight.Analytics
             _activityModel.Messages.Clear();
             _activityModel.Status = "Backtest started.";
             var tickDataFileNames = _backtestingTickDataFileList.Where(f => f.Checked).Select(f => f.LongFileName).ToList();
+
+            if (_reportModel != null)
+            {
+                _reportModel.Dispose();
+            }
             if (_backtestingModel != null)
             {
                 _backtestingModel.Dispose();
             }
-            Action<string> onStatusUpdate = s =>
-            {
-                _activityModel.Status = s;
-            };
-            Action<string> onMessageUpdate = m =>
-            {
-                MessagesDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
-                {
-                    _activityModel.Messages.Add(new ObservableMessage
-                    {
-                        Message = m,
-                    });
-                }));
-            };
-            _backtestingModel = new BacktestingModel(onStatusUpdate, onMessageUpdate);
+
+            _backtestingModel = new BacktestingModel();
+
+            Action updatePlots = () => { UpdateBacktestPlots(); }; //TODO: refactor this lambda out
+            _reportModel = new BatchReportModel(_backtestingModel, _activityModel, updatePlots);
+
+            //following individual registrations not needed when running in one window since all these tabs are running on same UI thread (?)
+            _reportModel.RegisterDispatcher(DispatchableType.Fill, FillsTab.Dispatcher);
+            _reportModel.RegisterDispatcher(DispatchableType.Indicator, IndicatorTab.Dispatcher);
+            _reportModel.RegisterDispatcher(DispatchableType.Message, MessagesTab.Dispatcher);
+            _reportModel.RegisterDispatcher(DispatchableType.Order, OrdersTab.Dispatcher);
+            _reportModel.RegisterDispatcher(DispatchableType.Plot, PlotsTab.Dispatcher);
+            _reportModel.RegisterDispatcher(DispatchableType.Position, PositionTab.Dispatcher);
+
             _backtestingModel.LoadResponse(_backtestingConfigurationModel.SelectedResponse);
             _backtestingModel.LoadTickData(tickDataFileNames);
-            Action onCompleted = () => 
-            { 
-                UpdateBacktestPlots(); 
-            };
-            Action<int> onPercentComplete = i =>
-            {
-                _activityModel.PercentComplete = i;
-            };
+
             BindInitializationModels();
 
-            UnbindBacktestingModels();
-            _backtestingModel.Play(_backtestingConfigurationModel.SelectedPlayToValue, onCompleted, onPercentComplete);
-            BindBacktestingModels();
+            UnbindReportModels();
+            _backtestingModel.Play(_backtestingConfigurationModel.SelectedPlayToValue);
+            BindReportModels();
         }
 
         private void BacktestingPlotUpdateButton_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -185,17 +191,17 @@ namespace DarkLight.Analytics
             BacktestingResponsePropertyGrid.DataContext = null;
         }
 
-        private void BindBacktestingModels()
+        private void BindReportModels()
         {
             MessagesDataGrid.DataContext = _activityModel;
-            BacktestingTabControl.DataContext = _backtestingModel;
-            BacktestingPlotExpander.DataContext = _backtestingModel;
-            _backtestingModelsUnbound = false;
+            BacktestingTabControl.DataContext = _reportModel;
+            BacktestingPlotExpander.DataContext = _reportModel;
+            _reportModelsUnbound = false;
         }
 
-        private void UnbindBacktestingModels()
+        private void UnbindReportModels()
         {
-            _backtestingModelsUnbound = true;
+            _reportModelsUnbound = true;
             MessagesDataGrid.DataContext = null;
             BacktestingTabControl.DataContext = null;
             BacktestingPlotExpander.DataContext = null;
@@ -212,7 +218,7 @@ namespace DarkLight.Analytics
             double maxValue = double.MinValue;
             double minValue = double.MaxValue;
 
-            foreach (var plot in _backtestingModel.Plots.Where(p => p.Selected))
+            foreach (var plot in _reportModel.Plots.Where(p => p.Selected))
             {
                 var cleanedData = plot.PlotPoints.GroupBy(point => point.Time).Select(group => group.First()).OrderBy(point => point.Time).ToList();
 
@@ -240,5 +246,10 @@ namespace DarkLight.Analytics
         }
 
         #endregion
+
+        private void BacktestingRunExpander_Expanded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

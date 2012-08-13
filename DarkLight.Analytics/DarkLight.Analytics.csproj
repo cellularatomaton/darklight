@@ -56,16 +56,16 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="TA-Lib-Core">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\TradeLink\TA-Lib-Core.dll</HintPath>
+      <HintPath>..\Lib\TA-Lib-Core.dll</HintPath>
     </Reference>
     <Reference Include="TradeLinkAPI">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\TradeLink\TradeLinkAPI.dll</HintPath>
+      <HintPath>..\Lib\TradeLinkAPI.dll</HintPath>
     </Reference>
     <Reference Include="TradeLinkAppKit">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\TradeLink\TradeLinkAppKit.dll</HintPath>
+      <HintPath>..\Lib\TradeLinkAppKit.dll</HintPath>
     </Reference>
     <Reference Include="TradeLinkCommon">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\TradeLink\TradeLinkCommon.dll</HintPath>
+      <HintPath>..\Lib\TradeLinkCommon.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -136,13 +136,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Models\ActivityModel.cs" />
     <Compile Include="Models\BacktestingConfigurationModel.cs" />
     <Compile Include="Models\BacktestingModel.cs" />
     <Compile Include="Models\FileModels.cs" />
     <Compile Include="Models\OptimizationModel.cs" />
     <Compile Include="Models\OptimizationConfigurationModel.cs" />
-    <Compile Include="Models\ResultsModel.cs" />
     <Page Include="OptimizationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
