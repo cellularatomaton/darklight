@@ -61,11 +61,7 @@ namespace DarkLight.Analytics
             UnbindInitializationModels();
 
             _backtestingTickDataFileList.LoadPath(Properties.Settings.Default.TickDataDirectory);
-            //_backtestingResponseLibraryList.LoadResponseListFromFileName(Properties.Settings.Default.ResponseFileName);
-            _backtestingResponseLibraryList.LoadResponseListFromFileName(
-    "C:\\Users\\matt.barkley.HANLEYGROUPLP\\Documents\\darklight\\DarkLight.Responses\\bin\\D" +
-    "ebug\\DarkLight.Responses.dll");
-
+            _backtestingResponseLibraryList.LoadResponseListFromFileName(Properties.Settings.Default.ResponseFileName);
 
             BacktestPlotter.AxisGrid.DrawHorizontalMinorTicks = false;
             BacktestPlotter.AxisGrid.DrawHorizontalTicks = false;
