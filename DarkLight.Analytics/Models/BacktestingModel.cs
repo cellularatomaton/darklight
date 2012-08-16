@@ -43,27 +43,6 @@ namespace DarkLight.Analytics.Models
             }
         }
 
-        public bool HasIndicators
-        {
-            get
-            {
-                bool bHasIndicators = true;
-
-                if ((myres == null) || (myres.Indicators == null) || (myres.Indicators.Length == 0))
-                    bHasIndicators = false;
-
-                return bHasIndicators;
-            }
-        }
-
-        public string[] Indicators
-        {
-            get
-            {
-                return myres.Indicators;
-            }
-        }
-
         #endregion
 
         #region Private Members
@@ -80,11 +59,8 @@ namespace DarkLight.Analytics.Models
         int _date = 0;
         string _responseName = "";
         string _playToString = "Play +";
-        string _nowTime = "0";
-        string _programName = "Incepto.Analytics";
 
-        PlayTo _playTo = PlayTo.Hour;
-
+        PlayTo _playTo = PlayTo.Hour;        
         List<string> _historicalDataFiles = new List<string>();
 
         #endregion
@@ -262,6 +238,14 @@ namespace DarkLight.Analytics.Models
 
         void bindresponseevents()
         {
+            myres.SendDebugEvent -= myres_GotDebug;
+            myres.SendCancelEvent -= myres_CancelOrderSource;
+            myres.SendOrderEvent -= myres_SendOrder;
+            myres.SendIndicatorsEvent -= myres_SendIndicators;
+            myres.SendMessageEvent -= myres_SendMessage;
+            myres.SendBasketEvent -= myres_SendBasket;
+            myres.SendChartLabelEvent -= myres_SendChartLabel;
+
             myres.SendOrderEvent += new OrderSourceDelegate(myres_SendOrder);
             myres.SendDebugEvent += new DebugDelegate(myres_GotDebug);
             myres.SendCancelEvent += new LongSourceDelegate(myres_CancelOrderSource);
@@ -270,7 +254,12 @@ namespace DarkLight.Analytics.Models
             myres.SendBasketEvent += new BasketDelegate(myres_SendBasket);
             myres.SendChartLabelEvent += new ChartLabelDelegate(myres_SendChartLabel);
 
-            //GotTick: cannot bind response due to new additional int argument (percentcomplete) for report so can't include response in delegate list
+            GotTick -= myres.GotTick;
+            GotOrder -= myres.GotOrder;
+            GotOrderCancel -= myres.GotOrderCancel;
+            GotFill -= myres.GotFill;
+
+            GotTick += myres.GotTick;
             GotOrder += myres.GotOrder;
             GotOrderCancel += myres.GotOrderCancel;
             GotFill += myres.GotFill;
@@ -430,10 +419,12 @@ namespace DarkLight.Analytics.Models
 
         void historicalSimulator_GotTick(Tick t)
         {
-            _broker.Execute(t);
-            myres.GotTick(t);
+            _date = t.date;
+            _time = t.time;
 
-            //fire event consumed by report
+            _broker.Execute(t);
+            
+            //fire event consumed by response and report
             GotTick(t);
         }
 
@@ -442,19 +433,19 @@ namespace DarkLight.Analytics.Models
 
         void broker_GotFill(Trade t)
         {
-            //fire event consumed by report
+            //fire event consumed by response and report
             GotFill(t);
         }
 
         void broker_GotOrder(Order o)
         {
-            //fire event consumed by report
+            //fire event consumed by response and report
             GotOrder(o);
         }
 
         void broker_GotOrderCancel(string sym, bool side, long id)
         {
-            //fire event consumed by report
+            //fire event consumed by response and report
             GotOrderCancel(id);
         }
 

@@ -129,10 +129,9 @@ namespace DarkLight.Analytics
 
             _backtestingModel = new BacktestingModel();
 
-            Action updatePlots = () => { UpdateBacktestPlots(); }; //TODO: refactor this lambda out
+            Action updatePlots = () => { UpdateBacktestPlots(); }; 
             _reportModel = new BatchReportModel(_backtestingModel, _activityModel, updatePlots);
 
-            //following individual registrations not needed when running in one window since all these tabs are running on same UI thread (?)
             _reportModel.RegisterDispatcher(DispatchableType.Fill, FillsTab.Dispatcher);
             _reportModel.RegisterDispatcher(DispatchableType.Indicator, IndicatorTab.Dispatcher);
             _reportModel.RegisterDispatcher(DispatchableType.Message, MessagesTab.Dispatcher);

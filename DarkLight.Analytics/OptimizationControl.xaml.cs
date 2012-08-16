@@ -29,16 +29,17 @@ namespace DarkLight.Analytics
         static ActivityModel _activityModel = new ActivityModel();
 
         // Optimization Models:
-        static OptimizationModel _optimizationModel;
+        static BacktestingModel _backtestModel;
+        static OptimizationBatchReportModel _reportModel;
         static OptimizationConfigurationModel _optimizationConfigurationModel = new OptimizationConfigurationModel();
         static TickDataFileList _optimizationTickDataFileList = new TickDataFileList();
         static ResponseLibraryList _optimizationResponseLibraryList = new ResponseLibraryList();
-
-        static List<PlottableValue<DarkLightResults>> _optimizationResults = new List<PlottableValue<DarkLightResults>>();
+        
         static AutoResetEvent _optimizationResetEvent = new AutoResetEvent(false);
 
         bool _initializationModelsUnbound = false;
-        bool _optimizationModelsUnbound = false;
+        bool _backtestModelsUnbound = false;
+
         bool _responseModelsUnbound = false;
 
         public OptimizationControl()
@@ -127,19 +128,21 @@ namespace DarkLight.Analytics
                 _activityModel.Optimizing = true;
                 int numberUniformSamples = _optimizationConfigurationModel.NumberUniformSamples;
                 //int runCount = 1;
-                _activityModel.PercentComplete = 0;
-                _optimizationResults.Clear();
+                _activityModel.PercentComplete = 0;                
 
-                Action<string> onStatusUpdate = s =>
-                {
-                    _activityModel.Status = s;
-                };
+                _backtestModel = new BacktestingModel();
 
-                _optimizationModel = new OptimizationModel(onStatusUpdate);
+                Action updatePlots = () =>
+                                         {
+                                             UpdateOptimizationPlot(); 
+                                             _optimizationResetEvent.Set();
+                                         };
+                _reportModel = new OptimizationBatchReportModel(_backtestModel, _activityModel, updatePlots);
+
                 BindOptimizationModel();
-                Action<Response, double> doWork = (response, d) =>
+                Action<Response> doWork = (response) =>
                 {
-                    RunOptimizationModel(response, d);
+                    RunOptimizationModel(response);
                     _optimizationResetEvent.WaitOne(30000);
                 };
                 RunOptimization1D(numberUniformSamples, doWork);
@@ -197,14 +200,14 @@ namespace DarkLight.Analytics
         {
             OptimizationTabControl.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
             {
-                OptimizationTabControl.DataContext = _optimizationModel;
+                OptimizationTabControl.DataContext = _backtestModel;
             }));
-            _optimizationModelsUnbound = false;
+            _backtestModelsUnbound = false;
         }
 
         private void UnbindOptimizationModel()
         {
-            _optimizationModelsUnbound = true;
+            _backtestModelsUnbound = true;
             OptimizationTabControl.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
             {
                 OptimizationTabControl.DataContext = null;
@@ -237,7 +240,7 @@ namespace DarkLight.Analytics
 
                     foreach (var plottableValue in plottableValues)
                     {
-                        var pointList = PlottingUtilities.ToPlottable(_optimizationResults, plottableValue);
+                        var pointList = PlottingUtilities.ToPlottable(_reportModel.OptimizationResults, plottableValue);
                         var dataSource = CreateResultsDataSource(pointList.OrderBy(p => p.X));
                         OptimizationPlotter.AddLineGraph(dataSource, plottableValue.PlotColor, 1,
                                                             plottableValue.PropertyName);
@@ -246,12 +249,13 @@ namespace DarkLight.Analytics
                         minX = Math.Min(pointList.Min(r => r.X), minX);
                         maxY = Math.Max(pointList.Max(r => r.Y), maxY);
                         minY = Math.Min(pointList.Min(r => r.Y), minY);
+
                     }
                 }
                 else
                 {
                     var plottableValue = _optimizationConfigurationModel.PlottableValues[0];
-                    var pointList = PlottingUtilities.ToPlottable(_optimizationResults, plottableValue);
+                    var pointList = PlottingUtilities.ToPlottable(_reportModel.OptimizationResults, plottableValue);
                     var dataSource = CreateResultsDataSource(pointList.OrderBy(p => p.X));
                     OptimizationPlotter.AddLineGraph(dataSource, Colors.GreenYellow, 1,
                                                      plottableValue.PropertyName);
@@ -265,6 +269,7 @@ namespace DarkLight.Analytics
                 var viewWidth = maxX - minX;
                 var viewHeight = maxY - minY;
                 OptimizationPlotter.Viewport.Domain = new DataRect(minX, minY, viewWidth, viewHeight);
+
             }));
         }
 
@@ -276,36 +281,26 @@ namespace DarkLight.Analytics
             return ds;
         }
 
-        private void RunOptimization1D(int numberUniformSamples, Action<Response, double> doWork)
+        private void RunOptimization1D(int numberUniformSamples, Action<Response> doWork)
         {
             var adjustableProperty = _optimizationConfigurationModel.AdjustableProperty1;
             foreach (var val in adjustableProperty.GetRange(numberUniformSamples))
             {
                 adjustableProperty.CurrentValue = val;
                 adjustableProperty.SetCurrentValue(_optimizationConfigurationModel.SelectedResponse);
-                doWork(_optimizationConfigurationModel.SelectedResponse, Convert.ToDouble(val));
+                _reportModel.xValue = Convert.ToDouble(val);
+                doWork(_optimizationConfigurationModel.SelectedResponse);
             }
-            _optimizationModel.Dispose();
+            _backtestModel.Dispose();
         }
 
-        private void RunOptimizationModel(Response response, double xValue)
+        private void RunOptimizationModel(Response response)
         {
             var tickDataFileNames = _optimizationTickDataFileList.Where(f => f.Checked).Select(f => f.LongFileName).ToList();
-            _optimizationModel.Reset();
-            _optimizationModel.LoadResponse(response);
-            _optimizationModel.LoadTickData(tickDataFileNames);
-            Action<Results> onCompleted = r =>
-            {
-                var darkLightResults = new DarkLightResults(r);
-                _optimizationResults.Add(new PlottableValue<DarkLightResults> { X = xValue, Value = darkLightResults });
-                _optimizationResetEvent.Set();
-                UpdateOptimizationPlot();
-            };
-            Action<int> onPercentComplete = i =>
-            {
-                _activityModel.PercentComplete = i;
-            };
-            _optimizationModel.Play(_optimizationConfigurationModel.SelectedPlayToValue, onCompleted, onPercentComplete);
+            _backtestModel.Reset();
+            _backtestModel.LoadResponse(response);
+            _backtestModel.LoadTickData(tickDataFileNames);
+            _backtestModel.Play(_optimizationConfigurationModel.SelectedPlayToValue);
         }
 
         #endregion

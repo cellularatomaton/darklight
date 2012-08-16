@@ -31,10 +31,14 @@ namespace DarkLight.Utilities
 
     public class ReportModel : INotifyPropertyChanged, IDisposable
     {
+        #region Protected Members
+
         protected IReportable _engine;
         protected ActivityModel _activityModel;
         protected Dictionary<DispatchableType, Dispatcher> _dispatchingMap = new Dictionary<DispatchableType, Dispatcher>();
         protected EngineInfo _engineInfo = new EngineInfo();
+
+        #endregion
 
         #region Constructors
 
@@ -350,9 +354,9 @@ namespace DarkLight.Utilities
         Dictionary<string, PositionImpl> _positionList = new Dictionary<string, PositionImpl>();
         List<Trade> _tradeList = new List<Trade>();
         ResultsModel _resultsModel = new ResultsModel();
+        StringBuilder _messageBuilder = new StringBuilder();
         Action _updatePlots;
 
-        StringBuilder _messageBuilder = new StringBuilder();
         DataTable _indicatorTable = new DataTable();// = new DataTable("indicatorTable");
         ObservableCollection<DataGridTick> _tickCollection = new ObservableCollection<DataGridTick>();
         ObservableCollection<DataGridPosition> _positionCollection = new ObservableCollection<DataGridPosition>();
@@ -360,10 +364,7 @@ namespace DarkLight.Utilities
         ObservableCollection<DataGridFill> _fillCollection = new ObservableCollection<DataGridFill>();
 
         bool _missingIndicatorWarn = true;
-        int _time = 0;
-        int _date = 0;
         int _decimalPrecision = 2;
-        double _numberTicksProcessed;
         string _decimalPrecisionString = "N2";
         string _nowTime = "0";
         string _programName = "Incepto.Analytics";
@@ -382,6 +383,19 @@ namespace DarkLight.Utilities
         #endregion
 
         #region Public Methods
+
+        public void Reset()
+        {
+            _positionList.Clear();
+            _tradeList.Clear();
+            _messageBuilder = new StringBuilder();
+            engine_MessageUpdate(Util.TLSIdentity());
+            engine_MessageUpdate(RunTracker.CountNewGetPrettyRuns(_programName, Util.PROGRAM));
+            initializeTables();
+            initializeIndicators();
+            _plotMap.Clear();
+            _nowTime = "0";
+        }
 
         #endregion
 
@@ -430,7 +444,7 @@ namespace DarkLight.Utilities
                 _positionList[t.symbol] = mypos;
             }
 
-            _positionCollection.Add(new DataGridPosition(mypos, cpl, cpt, _decimalPrecisionString));
+            _positionCollection.Add(new DataGridPosition(_nowTime, mypos, cpl, cpt, _decimalPrecisionString));
             _fillCollection.Add(new DataGridFill(t, _decimalPrecisionString));
         }
 
@@ -473,16 +487,7 @@ namespace DarkLight.Utilities
         protected override void engine_Reset(EngineInfo engineInfo)
         {
             _engineInfo = engineInfo;
-
-            _positionList.Clear();
-            _tradeList.Clear();
-            _messageBuilder = new StringBuilder();
-            engine_MessageUpdate(Util.TLSIdentity());
-            engine_MessageUpdate(RunTracker.CountNewGetPrettyRuns(_programName, Util.PROGRAM));
-            initializeTables();
-            initializeIndicators();
-            _plotMap.Clear();
-            _nowTime = "0";
+            Reset();
         }
 
         protected override void engine_Complete(RunWorkerCompletedEventArgs e)
@@ -529,11 +534,6 @@ namespace DarkLight.Utilities
             _fillCollection.Clear();
             _tickCollection.Clear();
 
-            // results
-            /*
-            ResultsTable.Clear();
-            ResultsTable.Columns.Clear();
-            */
             _resultsModel.Clear();
 
         }
@@ -574,6 +574,143 @@ namespace DarkLight.Utilities
         #endregion
     }
 
+    public class OptimizationBatchReportModel : ReportModel
+    {
+        #region Public Members
+
+        List<PlottableValue<DarkLightResults>> _optimizationResults = new List<PlottableValue<DarkLightResults>>();
+        public List<PlottableValue<DarkLightResults>> OptimizationResults { get { return _optimizationResults; } }
+        public double xValue { get; set; }
+
+        #endregion
+
+        #region Private Members
+       
+        List<Trade> _tradeList = new List<Trade>();
+        ResultsModel _resultsModel = new ResultsModel();                
+        Action _updatePlots;
+
+        decimal _rfr = 0.00m;
+        decimal _comm = .0012m;
+        string _nowTime = "0";
+
+        #endregion
+
+        #region Constructors
+
+        public OptimizationBatchReportModel(IReportable engine, ActivityModel activityModel, Action updatePlots)
+            : base(engine, activityModel)
+        {
+            _updatePlots = updatePlots;
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void Reset()
+        {
+            _tradeList.Clear();
+            _resultsModel.Clear();
+            //_optimizationResults.Clear();
+            _nowTime = "0";
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        protected override void engine_GotPosition(Position obj)
+        {
+
+        }
+
+        protected override void engine_GotIndicators(string[] values)
+        {
+
+        }
+
+        protected override void engine_GotOrder(Order order)
+        {
+            
+        }
+
+        protected override void engine_GotFill(Trade t)
+        {
+            _tradeList.Add(t);
+        }
+
+        protected override void engine_GotTick(Tick tick)
+        {
+            _nowTime = tick.time.ToString();
+            
+            double numberTicksProcessed = Convert.ToDouble(_engineInfo.HistoricalSimulator.TicksProcessed);  //TODO: refactor out HistSim
+            double totalNumberTicks = Convert.ToDouble(_engineInfo.HistoricalSimulator.TicksPresent);
+            int percentComplete = Convert.ToInt32(Math.Round((numberTicksProcessed / totalNumberTicks) * 100));
+            _activityModel.PercentComplete = percentComplete;
+        }
+
+        protected override void engine_GotPlot(TimePlot plot)
+        {
+
+        }
+
+        protected override void engine_StatusUpdate(string status)
+        {
+            _activityModel.Status = status;
+        }
+
+        protected override void engine_MessageUpdate(string msg)
+        {
+            
+        }
+
+        protected override void engine_Reset(EngineInfo engineInfo)
+        {
+            _engineInfo = engineInfo;
+            Reset();
+        }
+
+        protected override void engine_Complete(RunWorkerCompletedEventArgs e)
+        {
+            _resultsModel.Clear();
+            var newResults = TradeResult.ResultsFromTradeList(_tradeList);
+            _tradeList.Clear();
+            var results = Results.FetchResults(newResults, _rfr, _comm, engine_MessageUpdate);
+            var darkLightResults = new DarkLightResults(results);
+            _optimizationResults.Add(new PlottableValue<DarkLightResults> { X = xValue, Value = darkLightResults });
+
+            _updatePlots();
+
+            if (e.Error != null)
+            {
+                engine_MessageUpdate(e.Error.Message + e.Error.StackTrace);
+                engine_StatusUpdate("Terminated because of an Exception.  See messages.");
+            }
+            else if (e.Cancelled)
+                engine_StatusUpdate("Canceled play.");
+            else
+            {
+                string playToString = _engineInfo.PlayToString;
+                engine_StatusUpdate("Reached next " + playToString + " at time " + KadTime);
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        string KadTime
+        {
+            get
+            {
+                return _nowTime != "" ? _nowTime : "(none)";
+            }
+        }
+
+        #endregion
+    }
+
     /// <summary>
     /// The streaming report model updates its observable collections continuously.
     /// </summary>
@@ -585,7 +722,7 @@ namespace DarkLight.Utilities
         }
     }
 
-
+    #region HELPER CLASSES
 
     public class EngineInfo
     {
@@ -701,9 +838,9 @@ namespace DarkLight.Utilities
         public string Profit { get; set; }
         public string Points { get; set; }
 
-        public DataGridPosition(PositionImpl mypos, decimal cpl, decimal cpt, string decimalPrecisionString)
+        public DataGridPosition(string nowTime, PositionImpl mypos, decimal cpl, decimal cpt, string decimalPrecisionString)
         {
-            Time = "";
+            Time = nowTime;
             Symbol = mypos.Symbol;
             Side = mypos.isFlat ? "FLAT" : (mypos.isLong ? "LONG" : "SHORT");
             Size = mypos.Size;
@@ -712,4 +849,7 @@ namespace DarkLight.Utilities
             Points = cpt.ToString(decimalPrecisionString);
         }
     }
+    
+    #endregion
+
 }
