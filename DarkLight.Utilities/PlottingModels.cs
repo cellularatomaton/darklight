@@ -152,18 +152,18 @@ namespace DarkLight.Utilities
             List<Descriptive> DescriptiveStats = new List<Descriptive>();
             ArrayList consecWinners = new ArrayList();
             ArrayList consecLosers = new ArrayList();
-            ArrayList loserSum = new ArrayList();
-            ArrayList winnerSum = new ArrayList();
-            ArrayList grossPLSum = new ArrayList();
+            ArrayList Losses = new ArrayList();
+            ArrayList Wins = new ArrayList();
+            ArrayList grossPL = new ArrayList();
             
             //get summations
             foreach (var result in results)
             {
                 consecWinners.Add(result.ConsecWin);
                 consecLosers.Add(result.ConsecLose);
-                if (result.GrossPL < 0) loserSum.Add(result.GrossPL);
-                if (result.GrossPL > 0) winnerSum.Add(result.GrossPL);
-                grossPLSum.Add(result.GrossPL);
+                if (result.GrossPL < 0) Losses.Add(result.GrossPL);
+                if (result.GrossPL > 0) Wins.Add(result.GrossPL);
+                grossPL.Add(result.GrossPL);
             }
             //get descriptive stats
             double[] consecWins = consecWinners.ToArray(typeof(double)) as double[];
@@ -176,8 +176,8 @@ namespace DarkLight.Utilities
             consecLossStats.Analyze();
             DescriptiveStats.Add(consecLossStats);
 
-            double[] grossPL = consecWinners.ToArray(typeof(double)) as double[];
-            Descriptive GrossPLStats = new Descriptive(grossPL);
+            double[] grossPnL = consecWinners.ToArray(typeof(double)) as double[];
+            Descriptive GrossPLStats = new Descriptive(grossPnL);
             GrossPLStats.Analyze();
             DescriptiveStats.Add(GrossPLStats);
 
