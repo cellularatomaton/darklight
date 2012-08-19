@@ -97,13 +97,13 @@ namespace DarkLight.Utilities
     {
         
         public decimal NetProfitOrLoss { get; set; }
-        public decimal ProfitPerShare { get; set; }
+        public decimal NetPerShare { get; set; }
 
         public DarkLightResults(Results results)
         {
             PlottingUtilities.CopyParameters(results, this);
             NetProfitOrLoss = GrossPL - (HundredLots*100*ComPerShare);
-            ProfitPerShare = NetProfitOrLoss / SharesTraded;
+            NetPerShare = SharesTraded != 0 ? NetProfitOrLoss/SharesTraded : 0.0m;
         }
 
         public static DarkLightResults AddResults(DarkLightResults r1, DarkLightResults r2)
