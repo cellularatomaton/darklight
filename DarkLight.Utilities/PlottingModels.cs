@@ -132,7 +132,7 @@ namespace DarkLight.Utilities
             dLResults.MinPL = Math.Min(r1.MinPL, r2.MinPL);
             //dLResults.NetPL = r1.NetPL + r2.NetPL;
             dLResults.NetProfitOrLoss = r1.NetProfitOrLoss + r2.NetProfitOrLoss;
-            dLResults.ProfitPerShare = r1.ProfitPerShare + r2.ProfitPerShare;
+            dLResults.NetPerShare = r1.NetPerShare + r2.NetPerShare;
             dLResults.RoundLosers = r1.RoundLosers + r2.RoundLosers;
             dLResults.RoundTurns = r1.RoundTurns + r2.RoundTurns;
             dLResults.RoundWinners = r1.RoundWinners + r2.RoundWinners;
