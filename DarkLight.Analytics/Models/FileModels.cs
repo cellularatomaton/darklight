@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
+using System.Windows.Controls;
 using TradeLink.Common;
+using System.Linq;
+using DarkLight.Utilities;
 
 namespace DarkLight.Analytics.Models
 {
@@ -154,6 +158,309 @@ namespace DarkLight.Analytics.Models
                     _checked = value;
                     NotifyPropertyChanged("Checked");
                 }
+            }
+        }
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+        #endregion
+    }
+
+    public class SymbolModel : INotifyPropertyChanged
+    {
+        private string _symbol = string.Empty;
+        public string Symbol
+        {
+            get { return _symbol; }
+            set
+            {
+                if (value != _symbol)
+                {
+                    _symbol = value;
+                    NotifyPropertyChanged("Symbol");
+                }
+            }
+        }
+
+        private bool _selected = false;
+        public bool Selected
+        {
+            get { return _selected; }
+            set
+            {
+                if (value != _selected)
+                {
+                    _selected = value;
+                    NotifyPropertyChanged("Selected");
+                }
+            }
+        }
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+        #endregion
+    }
+
+    public class TickFileModel : INotifyPropertyChanged
+    {
+        private SymbolModel _symbol;
+        public SymbolModel Symbol
+        {
+            get { return _symbol; }
+            set
+            {
+                if (value != _symbol)
+                {
+                    _symbol = value;
+                    NotifyPropertyChanged("Symbol");
+                }
+            }
+        }
+
+        private FileModel _file;
+        public FileModel File
+        {
+            get { return _file; }
+            set
+            {
+                if (value != _file)
+                {
+                    _file = value;
+                    NotifyPropertyChanged("File");
+                }
+            }
+        }
+
+        private DateTime _dateForFile;
+        public DateTime DateForFile
+        {
+            get { return _dateForFile; }
+            set
+            {
+                if (value != _dateForFile)
+                {
+                    _dateForFile = value;
+                    NotifyPropertyChanged("DateForFile");
+                }
+            }
+        }
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+        #endregion
+    }
+
+    public class TickDataModel : INotifyPropertyChanged
+    {
+        private static string tikFilePattern = @"^.*\d{8}\.TIK$";
+        private Regex tikFileRegex = new Regex(tikFilePattern);
+
+        private string _tickDataDirectory = "";
+        public string TickDataDirectory
+        {
+            get
+            {
+                return _tickDataDirectory;
+            }
+
+            set
+            {
+                if (value != _tickDataDirectory)
+                {
+                    _tickDataDirectory = value;
+                    NotifyPropertyChanged("TickDataDirectory");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Symbol models are used to show which symbols are available in the given tick data directory.
+        /// </summary>
+        private ObservableCollection<SymbolModel> _symbolModels = new ObservableCollection<SymbolModel>();
+        public ObservableCollection<SymbolModel> SymbolModels
+        {
+            get { return _symbolModels; }
+            set
+            {
+                if (value != _symbolModels)
+                {
+                    _symbolModels = value;
+                    NotifyPropertyChanged("SymbolModels");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Tick file models contain all the data necessary to access the tick files.
+        /// </summary>
+        private List<TickFileModel> _tickFileModels = new List<TickFileModel>();
+        public List<TickFileModel> TickFileModels
+        {
+            get { return _tickFileModels; }
+            set
+            {
+                if (value != _tickFileModels)
+                {
+                    _tickFileModels = value;
+                    NotifyPropertyChanged("TickFileModels");
+                }
+            }
+        }
+
+        private ObservableCollection<DateTime> _availableDates;
+        public ObservableCollection<DateTime> AvailableDates
+        {
+            get { return _availableDates; }
+            set
+            {
+                if (value != _availableDates)
+                {
+                    _availableDates = value;
+                    NotifyPropertyChanged("AvailableDates");
+                }
+            }
+        }
+
+        private DateTime _firstDate;
+        public DateTime FirstDate
+        {
+            get { return _firstDate; }
+            set
+            {
+                if (value != _firstDate)
+                {
+                    _firstDate = value;
+                    NotifyPropertyChanged("FirstDate");
+                }
+            }
+        }
+
+        private DateTime _lastDate;
+        public DateTime LastDate
+        {
+            get { return _lastDate; }
+            set
+            {
+                if (value != _lastDate)
+                {
+                    _lastDate = value;
+                    NotifyPropertyChanged("LastDate");
+                }
+            }
+        }
+
+        public void SetDates()
+        {
+            var selectedSymbols = SymbolModels.Where(s => s.Selected).ToList();
+            var displayDates = TickFileModels.Join(
+                selectedSymbols,
+                tickFileModel => tickFileModel.Symbol.Symbol,
+                symbolModel => symbolModel.Symbol,
+                (model, symbolModel) => model.DateForFile).Distinct().ToList();
+
+            // Set min and max dates:
+            if (displayDates.Count != 0)
+            {
+                FirstDate = displayDates.Min();
+                LastDate = displayDates.Max();
+            }
+            else if(TickFileModels.Count != 0)
+            {
+                FirstDate = TickFileModels.Select(m => m.DateForFile).Min();
+                LastDate = TickFileModels.Select(m => m.DateForFile).Max();
+            }
+            AvailableDates = new ObservableCollection<DateTime>(displayDates);
+        }
+
+        public void LoadPath(string path)
+        {
+            TickFileModels.Clear();
+            // Load tick files:
+            LoadFiles(path);
+            // Get unique symbols:
+            var symbolModels =
+                TickFileModels.Select(m => m.Symbol).Distinct((s1, s2) => s1.Symbol == s2.Symbol).ToList();
+            SymbolModels = new ObservableCollection<SymbolModel>(symbolModels);
+            SetDates();
+        }
+
+        private void LoadFiles(string path)
+        {
+            var files = System.IO.Directory.GetFiles(path, "*.TIK");
+            TickDataDirectory = path;
+            
+            // Load any tick files in this directory:
+            foreach (var file in files)
+            {
+                var shortName = System.IO.Path.GetFileName(file);
+                if( tikFileRegex.IsMatch(shortName) )
+                {
+                    var name = System.IO.Path.GetFileNameWithoutExtension(shortName);
+                    var dateString = name.Substring(name.Length - 8);
+                    var symString = name.Substring(0, name.Length - 8);
+                    var year = Convert.ToInt32(dateString.Substring(0, 4));
+                    var month = Convert.ToInt32(dateString.Substring(4, 2));
+                    var day = Convert.ToInt32(dateString.Substring(6, 2));
+                    var date = new DateTime(year, month, day);
+
+                    var fileModel = new FileModel
+                    {
+                        LongFileName = file,
+                        ShortFileName = shortName,
+                    };
+
+                    var symbolModel = new SymbolModel
+                    {
+                        Symbol = symString,
+                        Selected = false,
+                    };
+                    symbolModel.PropertyChanged += (sender, args) =>
+                    {
+                        if(args.PropertyName == "Selected")
+                        {
+                           SetDates();
+                        }
+                    };
+
+                    var tickFileModel = new TickFileModel
+                    {
+                        DateForFile = date,
+                        File = fileModel,
+                        Symbol = symbolModel,
+                    };
+                    TickFileModels.Add(tickFileModel);
+                }
+            }
+
+            // Recursively load any tick files in subdirectories:
+            var directories = System.IO.Directory.GetDirectories(path);
+            foreach (var _directory in directories)
+            {
+                LoadFiles(_directory);
             }
         }
 

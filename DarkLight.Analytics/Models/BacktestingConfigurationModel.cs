@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using TradeLink.API;
+using DarkLight.Utilities;
 
 namespace DarkLight.Analytics.Models
 {
