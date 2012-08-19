@@ -147,9 +147,9 @@ namespace DarkLight.Utilities
             return dLResults;
         }
 
-        public static List<Descriptive> GetResultStatistics(List<DarkLightResults> results)
+        public static List<DescriptiveResult> GetResultStatistics(List<DarkLightResults> results)
         {
-            List<Descriptive> DescriptiveStats = new List<Descriptive>();
+            List<DescriptiveResult> DescriptiveStats = new List<DescriptiveResult>();
             ArrayList consecWinners = new ArrayList();
             ArrayList consecLosers = new ArrayList();
             ArrayList Losses = new ArrayList();
@@ -169,27 +169,27 @@ namespace DarkLight.Utilities
             double[] consecWins = consecWinners.ToArray(typeof(double)) as double[];
             Descriptive consecWinsStats = new Descriptive(consecWins);
             consecWinsStats.Analyze();
-            DescriptiveStats.Add(consecWinsStats);
+            DescriptiveStats.Add(consecWinsStats.Result);
 
             double[] consecLoss = consecWinners.ToArray(typeof(double)) as double[];
             Descriptive consecLossStats = new Descriptive(consecLoss);
             consecLossStats.Analyze();
-            DescriptiveStats.Add(consecLossStats);
+            DescriptiveStats.Add(consecLossStats.Result);
 
             double[] grossPnL = consecWinners.ToArray(typeof(double)) as double[];
             Descriptive GrossPLStats = new Descriptive(grossPnL);
             GrossPLStats.Analyze();
-            DescriptiveStats.Add(GrossPLStats);
+            DescriptiveStats.Add(GrossPLStats.Result);
 
             double[] lossPL = consecWinners.ToArray(typeof(double)) as double[];
             Descriptive LoserStats = new Descriptive(lossPL);
             LoserStats.Analyze();
-            DescriptiveStats.Add(LoserStats);
+            DescriptiveStats.Add(LoserStats.Result);
 
             double[] winPL = consecWinners.ToArray(typeof(double)) as double[];
             Descriptive WinnerStats = new Descriptive(winPL);
             WinnerStats.Analyze();
-            DescriptiveStats.Add(WinnerStats);
+            DescriptiveStats.Add(WinnerStats.Result);
 
             return DescriptiveStats;
         }
