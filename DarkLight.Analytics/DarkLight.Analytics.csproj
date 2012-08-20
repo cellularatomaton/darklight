@@ -85,6 +85,9 @@
     <Compile Include="AnalyticsStatusBar.xaml.cs">
       <DependentUpon>AnalyticsStatusBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ResultsControl.xaml.cs">
+      <DependentUpon>ResultsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TickFileControl.xaml.cs">
       <DependentUpon>TickFileControl.xaml</DependentUpon>
     </Compile>
@@ -145,6 +148,10 @@
     <Compile Include="Models\OptimizationModel.cs" />
     <Compile Include="Models\OptimizationConfigurationModel.cs" />
     <Page Include="OptimizationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResultsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

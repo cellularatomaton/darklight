@@ -247,6 +247,20 @@ namespace DarkLight.Utilities
     {
         #region Public Members
 
+        private ObservableCollection<DarkLightResults> _reportResults;
+        public ObservableCollection<DarkLightResults> ReportResults
+        {
+            get { return _reportResults; }
+            set
+            {
+                if (value != _reportResults)
+                {
+                    _reportResults = value;
+                    NotifyPropertyChanged("ReportResults");
+                }
+            }
+        }
+
         //private DataTable _completedTickTable;
         private ObservableCollection<DataGridTick> _completedTickTable;
         public ObservableCollection<DataGridTick> TickTable
@@ -507,7 +521,7 @@ namespace DarkLight.Utilities
 
             string responseName = _engineInfo.ResponseName;
             string prettyTickFiles = _engineInfo.PrettyTickFiles;
-            ResultsTable = _resultsModel.RunResults(responseName + "." + prettyTickFiles, _tradeList);
+            ResultsTable = _resultsModel.GetResultsDataTable(responseName + "." + prettyTickFiles, _tradeList);
 
             if (e.Error != null)
             {
