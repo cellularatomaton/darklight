@@ -32,7 +32,7 @@ namespace DarkLight.Analytics.Models
             _resultlists.Clear();
         }
 
-        public DataTable RunResults(string name, List<Trade> trades)
+        public Results GetResults(string name, List<Trade> trades)
         {
             name = System.IO.Path.GetFileNameWithoutExtension(name);
             List<TradeResult> newResults;
@@ -45,7 +45,13 @@ namespace DarkLight.Analytics.Models
             {
                 newResults = TradeResult.ResultsFromTradeList(trades);
             }
-            FillDataTableWithResults(Results.FetchResults(newResults, _rfr, _comm, debug));
+            return Results.FetchResults(newResults, _rfr, _comm, debug);
+        }
+
+        public DataTable GetResultsDataTable(string name, List<Trade> trades)
+        {
+            var tradeLinkResults = GetResults(name, trades);
+            FillDataTableWithResults(tradeLinkResults);
             return _resultsTable;
         }
 
