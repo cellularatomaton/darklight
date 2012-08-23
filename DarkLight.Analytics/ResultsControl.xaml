@@ -24,7 +24,24 @@
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="20"/>
                         </Grid.RowDefinitions>
-                        <d3:ChartPlotter Grid.ColumnSpan="2"/>
+                        <d3:ChartPlotter Grid.Row="0" Grid.ColumnSpan="2" Height="150" >
+                            <d3:HorizontalColumnChart Name="Histogram" ItemsSource="{Binding}">
+                                <d3:TemplateMarkerGenerator>
+                                    <DataTemplate>
+                                        <Rectangle Fill="{d3:SelfBinding (d3:PointChartBase.Index), Converter={StaticResource fillsConverter}}" d3:ViewportPanel.ViewportWidth="1">
+                                            <!--<d3:LiveToolTipService.ToolTip>
+                                                <d3:LiveToolTip Background="{d3:SelfBinding Path=Owner.Fill, Converter={StaticResource lighterConverter}}" TextBlock.Foreground="{d3:SelfBinding Path=Owner.Fill, Converter={StaticResource backToForeConv}}">
+                                                    <TextBlock>
+                                                        <Run Text="X="/><TextBlock Text="{Binding Path=Owner.(d3:PointChartBase.Index), RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1, AncestorType={x:Type d3:LiveToolTip}}}"/>
+                                                        <Run Text="; Y="/><TextBlock Text="{Binding}"/>
+                                                    </TextBlock>
+                                                </d3:LiveToolTip>
+                                            </d3:LiveToolTipService.ToolTip>-->
+                                        </Rectangle>
+                                    </DataTemplate>
+                                </d3:TemplateMarkerGenerator>
+                            </d3:HorizontalColumnChart>
+                        </d3:ChartPlotter>
                         <ComboBox Grid.Row="1" Grid.ColumnSpan="2"/>
                         <TextBlock Grid.Row="2" Text="Mean: "/>
                         <TextBlock Grid.Row="3" Text="Variance: "/>
@@ -46,7 +63,8 @@
                     </Grid.ColumnDefinitions>
                     <ListBox Grid.Column="0"/>
                     <GridSplitter Grid.Column="1" Margin="3" HorizontalAlignment="Stretch" Width="3" Background="#FF434343"/>
-                    <DataGrid Grid.Column="2" Margin="3" ItemsSource="{Binding ResultsTable}"/>
+                    <DataGrid Grid.Column="2" Margin="3" ItemsSource="{Binding ResultsTable}">
+                    </DataGrid>
                 </Grid>
             </TabItem>
         </TabControl>

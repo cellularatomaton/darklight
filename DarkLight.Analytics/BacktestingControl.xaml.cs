@@ -1,16 +1,19 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
 using DarkLight.Analytics.Models;
 using DarkLight.Utilities;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
+using Microsoft.Research.DynamicDataDisplay.Markers2;
 using Microsoft.Win32;
 using TradeLink.Common;
 
@@ -204,40 +207,69 @@ namespace DarkLight.Analytics
 
         #region Private Backtesting Methods
 
+        private List<IPlotterElement> _charts = new List<IPlotterElement>(); 
         private void UpdateBacktestPlots()
         {
-            BacktestPlotter.Children.RemoveAll(typeof(LineGraph));
-
-            double maxTime = double.MinValue;
-            double minTime = double.MaxValue;
-            double maxValue = double.MinValue;
-            double minValue = double.MaxValue;
-
-            foreach (var plot in _reportModel.Plots.Where(p => p.Selected))
+            if (_reportModel.Plots.Count != 0)
             {
-                var cleanedData = plot.PlotPoints.GroupBy(point => point.Time).Select(group => group.First()).OrderBy(point => point.Time).ToList();
+                //BacktestPlotter.Children.RemoveAll(typeof(LineGraph));
+                BacktestPlotter.Children.RemoveAll(_charts.ToArray());
+                _charts.Clear();
 
-                // Viewport info:
-                maxTime = Math.Max(DateAxis.ConvertToDouble(cleanedData.Max(point => point.Time)), maxTime);
-                minTime = Math.Min(DateAxis.ConvertToDouble(cleanedData.Min(point => point.Time)), minTime);
-                maxValue = Math.Max(Convert.ToDouble(cleanedData.Max(point => point.Value)), maxValue);
-                minValue = Math.Min(Convert.ToDouble(cleanedData.Min(point => point.Value)), minValue);
+                double maxTime = double.MinValue;
+                double minTime = double.MaxValue;
+                double maxValue = double.MinValue;
+                double minValue = double.MaxValue;
 
-                var dataSource = CreateBacktestPlottDataSource(cleanedData);
-                BacktestPlotter.AddLineGraph(dataSource, plot.PointColor, 1, plot.Label);
+                foreach (var plot in _reportModel.Plots.Where(p => p.Selected))
+                {
+                    var cleanedData =
+                        plot.PlotPoints.GroupBy(point => point.Time).Select(group => group.First()).OrderBy(
+                            point => point.Time).ToList();
+
+                    // Viewport info:
+                    maxTime = Math.Max(dateAxis.ConvertToDouble(cleanedData.Max(point => point.Time)), maxTime);
+                    minTime = Math.Min(dateAxis.ConvertToDouble(cleanedData.Min(point => point.Time)), minTime);
+                    maxValue = Math.Max(Convert.ToDouble(cleanedData.Max(point => point.Value)), maxValue);
+                    minValue = Math.Min(Convert.ToDouble(cleanedData.Min(point => point.Value)), minValue);
+
+                    //var dataSource = CreateBacktestPlottDataSource(cleanedData);
+                    var dataSource = CreateBacktestPlotDataSource(cleanedData);
+                    LineChart chart = new LineChart
+                    {
+                        ItemsSource = dataSource,
+                        StrokeThickness = 2,
+                        Stroke = new SolidColorBrush(plot.PointColor),
+                        Description = plot.Label,
+                    };
+                    _charts.Add(chart);
+                    BacktestPlotter.Children.Add(chart);
+
+                    //BacktestPlotter.AddLineGraph(dataSource, plot.PointColor, 1, plot.Label);
+                }
+
+                var viewWidth = maxTime - minTime;
+                var viewHeight = maxValue - minValue;
+                BacktestPlotter.Viewport.Domain = new DataRect(minTime, minValue, viewWidth, viewHeight);
             }
-
-            var viewWidth = maxTime - minTime;
-            var viewHeight = maxValue - minValue;
-            BacktestPlotter.Viewport.Domain = new DataRect(minTime, minValue, viewWidth, viewHeight);
+            else
+            {
+                _activityModel.Status = "No data to plot.";
+            }
         }
 
-        private EnumerableDataSource<TimePlotPoint> CreateBacktestPlottDataSource(IEnumerable<TimePlotPoint> plots)
+        //private EnumerableDataSource<TimePlotPoint> CreateBacktestPlottDataSource(IEnumerable<TimePlotPoint> plots)
+        //{
+        //    var ds = new EnumerableDataSource<TimePlotPoint>(plots);
+        //    ds.SetXMapping(p => DateAxis.ConvertToDouble(p.Time));
+        //    ds.SetYMapping(p => Convert.ToDouble(p.Value));
+        //    return ds;
+        //}
+
+        private ObservableCollection<Point> CreateBacktestPlotDataSource(IEnumerable<TimePlotPoint> plots)
         {
-            var ds = new EnumerableDataSource<TimePlotPoint>(plots);
-            ds.SetXMapping(p => DateAxis.ConvertToDouble(p.Time));
-            ds.SetYMapping(p => Convert.ToDouble(p.Value));
-            return ds;
+            var points = plots.Select(p => new Point(dateAxis.ConvertToDouble(p.Time), Convert.ToDouble(p.Value)));
+            return new ObservableCollection<Point>(points);
         }
 
         #endregion

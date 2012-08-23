@@ -601,7 +601,7 @@ namespace DarkLight.Utilities
         #region Private Members
        
         List<Trade> _tradeList = new List<Trade>();
-        ResultsModel _resultsModel = new ResultsModel();                
+        ResultsModel _resultsModel = new ResultsModel();
         Action _updatePlots;
 
         decimal _rfr = 0.00m;

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0" 
+             xmlns:d3a="http://research.microsoft.com/DynamicDataDisplay/1.1"
              xmlns:wpg="clr-namespace:WPG;assembly=WPG" 
              xmlns:local="clr-namespace:DarkLight.Analytics"
              mc:Ignorable="d" 
@@ -72,8 +73,9 @@
         <GridSplitter Grid.Column="1" Margin="3" HorizontalAlignment="Stretch" Width="3" Grid.RowSpan="2" Background="#FF434343"/>
         <TabControl x:Name="BacktestingTabControl" Margin="3" Grid.Column="2" >
             <TabItem x:Name="PlotsTab" Header="Visualization">
-                <d3:ChartPlotter x:Name="BacktestPlotter" Grid.ColumnSpan="1" Grid.Column="1" Margin="3" LegendVisibility="Hidden" NewLegendVisible="False" Background="#FF333333" Foreground="#525252">
-                    <d3:HorizontalDateTimeAxis Name="DateAxis" ShowMajorLabels="False"/>
+                <d3:ChartPlotter x:Name="BacktestPlotter" Grid.ColumnSpan="1" Grid.Column="1" Margin="3" LegendVisibility="Hidden" LegendVisible="False" Background="#FF333333" Foreground="#525252">
+                    <d3:CursorCoordinateGraph/>
+                    <d3:HorizontalDateTimeAxis Name="dateAxis"/>
                 </d3:ChartPlotter>
             </TabItem>
             <TabItem x:Name="MessagesTab" Header="Messages">
