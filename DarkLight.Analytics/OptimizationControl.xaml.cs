@@ -13,6 +13,7 @@ using DarkLight.Analytics.Models;
 using DarkLight.Utilities;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
+using Microsoft.Research.DynamicDataDisplay.Markers2;
 using Microsoft.Win32;
 using TradeLink.API;
 using TradeLink.AppKit;
@@ -222,8 +223,9 @@ namespace DarkLight.Analytics
         {
             OptimizationPlotter.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
             {
-                OptimizationPlotter.Children.RemoveAll(typeof(LineGraph));
-                
+                //OptimizationPlotter.Children.RemoveAll(typeof(LineGraph));
+                OptimizationPlotter.Children.RemoveAll(OptimizationPlotter.Children.ToArray());
+
                 double maxX = double.MinValue;
                 double minX = double.MaxValue;
                 double maxY = double.MinValue;
@@ -242,8 +244,17 @@ namespace DarkLight.Analytics
                     {
                         var pointList = PlottingUtilities.ToPlottable(_reportModel.OptimizationResults, plottableValue);
                         var dataSource = CreateResultsDataSource(pointList.OrderBy(p => p.X));
-                        OptimizationPlotter.AddLineGraph(dataSource, plottableValue.PlotColor, 1,
-                                                            plottableValue.PropertyName);
+
+                        LineChart chart = new LineChart
+                        {
+                            ItemsSource = dataSource,
+                            StrokeThickness = 2,
+                            Stroke = new SolidColorBrush(plottableValue.PlotColor),
+                            Description = plottableValue.PropertyName,
+                        };
+                        OptimizationPlotter.Children.Add(chart);
+
+                        //OptimizationPlotter.AddLineGraph(dataSource, plottableValue.PlotColor, 1, plottableValue.PropertyName);
 
                         maxX = Math.Max(pointList.Max(r => r.X), maxX);
                         minX = Math.Min(pointList.Min(r => r.X), minX);
@@ -257,8 +268,17 @@ namespace DarkLight.Analytics
                     var plottableValue = _optimizationConfigurationModel.PlottableValues[0];
                     var pointList = PlottingUtilities.ToPlottable(_reportModel.OptimizationResults, plottableValue);
                     var dataSource = CreateResultsDataSource(pointList.OrderBy(p => p.X));
-                    OptimizationPlotter.AddLineGraph(dataSource, Colors.GreenYellow, 1,
-                                                     plottableValue.PropertyName);
+
+                    LineChart chart = new LineChart
+                    {
+                        ItemsSource = dataSource,
+                        StrokeThickness = 2,
+                        Stroke = new SolidColorBrush(Colors.GreenYellow),
+                        Description = plottableValue.PropertyName,
+                    };
+                    OptimizationPlotter.Children.Add(chart);
+                    
+                    //OptimizationPlotter.AddLineGraph(dataSource, Colors.GreenYellow, 1, plottableValue.PropertyName);
 
                     maxX = Math.Max(pointList.Max(r => r.X), maxX);
                     minX = Math.Min(pointList.Min(r => r.X), minX);

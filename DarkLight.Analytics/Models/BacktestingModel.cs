@@ -405,9 +405,11 @@ namespace DarkLight.Analytics.Models
                 Selected = true,
             };
 
+            var plotDateTime = Util.ToDateTime(_date, bar);
             var point = new TimePlotPoint
             {
-                Time = Util.FT2DT(bar),
+                //Time = Util.FT2DT(bar),
+                Time = plotDateTime,
                 Value = price,
             };
             plot.PlotPoints.Add(point);

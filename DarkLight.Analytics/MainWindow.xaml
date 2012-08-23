@@ -9,7 +9,7 @@
 	xmlns:local="clr-namespace:DarkLight.Analytics" x:Class="DarkLight.Analytics.MainWindow"
 	x:Name="Window" 
 	Title="DarkLight.Analytics"
-	Width="1000" Height="800" Loaded="Window_Loaded">
+	Width="1200" Height="800" Loaded="Window_Loaded">
     <Window.Resources>
         <ResourceDictionary >
             <ResourceDictionary.MergedDictionaries>
