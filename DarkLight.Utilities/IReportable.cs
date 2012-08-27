@@ -285,8 +285,8 @@ namespace DarkLight.Utilities
             }
         }
 
-        DarkLightResults _results;
-        public DarkLightResults Results
+        ObservableCollection<KeyValuePair<string,string>> _results = new ObservableCollection<KeyValuePair<string, string>>();
+        public ObservableCollection<KeyValuePair<string, string>> Results
         {
             get { return _results; }
             set
@@ -298,6 +298,20 @@ namespace DarkLight.Utilities
                 }
             }
         }
+ 
+        //DarkLightResults _results;
+        //public DarkLightResults Results
+        //{
+        //    get { return _results; }
+        //    set
+        //    {
+        //        if (value != _results)
+        //        {
+        //            _results = value;
+        //            NotifyPropertyChanged("Results");
+        //        }
+        //    }
+        //}
 
         ObservableCollection<ObservableMessage> _messages = new ObservableCollection<ObservableMessage>();
         public ObservableCollection<ObservableMessage> Messages
@@ -577,7 +591,9 @@ namespace DarkLight.Utilities
             string prettyTickFiles = _engineInfo.PrettyTickFiles;
             //ResultsTable = _reportResultsModel.GetResultsDataTable(responseName + "." + prettyTickFiles, _tradeList);
             var name = responseName + "." + prettyTickFiles;
-            Results = DarkLightResults.GetDarkLightResults(name, _tradeList, engine_MessageUpdate, 0.0001m, 0.12m);
+            var resultInstance = DarkLightResults.GetDarkLightResults(name, _tradeList, engine_MessageUpdate, 0.0001m, 0.12m);
+            Results = new ObservableCollection<KeyValuePair<string, string>>(PlottingUtilities.GetFieldAndPropertyValueList(resultInstance));
+
             _activityModel.NumberTestsCompleted = _activityModel.NumberTestsCompleted + 1;
             if (e.Error != null)
             {

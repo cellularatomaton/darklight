@@ -168,8 +168,6 @@ namespace DarkLight.Utilities
                         }
                     }
                 }
-                
-                
             }
             return pointList;
         }
@@ -200,6 +198,38 @@ namespace DarkLight.Utilities
                     }
                 }
             }
+        }
+
+        public static List<KeyValuePair<string,string>> GetFieldAndPropertyValueList<T>(T instance)
+        {
+            var valueList = new List<KeyValuePair<string, string>>();
+            var instanceType = instance.GetType();
+            var memberInfos = GetFieldsAndProperties(instanceType, BindingFlags.Instance | BindingFlags.Public);
+            foreach (var memberInfo in memberInfos)
+            {
+                switch (memberInfo.MemberType)
+                {
+                    case MemberTypes.Property:
+                        {
+                            var propertyInfo = memberInfo as PropertyInfo;
+                            var propertyValue = Convert.ToString(propertyInfo.GetValue(instance, null));
+                            valueList.Add(new KeyValuePair<string, string>(propertyInfo.Name,propertyValue));
+                            break;
+                        }
+                    case MemberTypes.Field:
+                        {
+                            var fieldInfo = memberInfo as FieldInfo;
+                            var propertyValue = Convert.ToString(fieldInfo.GetValue(instance));
+                            valueList.Add(new KeyValuePair<string, string>(fieldInfo.Name,propertyValue));
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
+            }
+            return valueList;
         }
     }
 }
