@@ -200,6 +200,7 @@ namespace DarkLight.Analytics
             BacktestingTabControl.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
             {
                 MessagesDataGrid.DataContext = _backtest.SelectedReport;
+                //ResultPropertyGrid.DataContext = _backtest.SelectedReport;
                 BacktestingTabControl.DataContext = _backtest.SelectedReport;
                 BacktestingPlotExpander.DataContext = _backtest.SelectedReport;
                 _reportModelsUnbound = false;
