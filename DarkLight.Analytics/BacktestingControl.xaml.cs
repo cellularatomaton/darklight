@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -67,6 +68,16 @@ namespace DarkLight.Analytics
             BacktestPlotter.AxisGrid.DrawVerticalMinorTicks = false;
             BacktestPlotter.AxisGrid.DrawVerticalTicks = false;
 
+            _backtest = new Backtest();
+            _backtest.PropertyChanged += (o, args) =>
+            {
+                if (args.PropertyName == "SelectedReport")
+                {
+                    UpdateBacktestPlots();
+                    BindReportModels();
+                }
+            };
+
             BindInitializationModels();
         }
 
@@ -91,11 +102,11 @@ namespace DarkLight.Analytics
                 return;
             }
             UnbindResponseModels();
-            var responseName = _backtestingResponseLibraryList.SelectedResponse;
-            var fileName = _backtestingResponseLibraryList.FileName;
-            if (responseName != ResponseLibraryList._header)
+            _backtestingConfigurationModel.ResponseName = _backtestingResponseLibraryList.SelectedResponse;
+            _backtestingConfigurationModel.ResponsePath = _backtestingResponseLibraryList.FileName;
+            if (_backtestingConfigurationModel.ResponseName != ResponseLibraryList._header)
             {
-                _backtestingConfigurationModel.SelectedResponse = ResponseLoader.FromDLL(responseName, fileName);
+                _backtestingConfigurationModel.SelectedResponse = ResponseLoader.FromDLL(_backtestingConfigurationModel.ResponseName, _backtestingConfigurationModel.ResponsePath);
             }
             BindResponseModels();
         }
@@ -116,6 +127,9 @@ namespace DarkLight.Analytics
             {
                 var _backtestingModel = new BacktestingModel();
                 var _reportModel = new BatchReportModel(_backtestingModel, _activityModel /*, updatePlots*/);
+                var info = TickFileNameInfo.GetTickFileInfoFromLongName(_tickDataGroup.First());
+                _reportModel.ReportName = "Y:" + info.Year.ToString() + ",M:" + info.Month.ToString() + ",D:" + info.Day.ToString();
+                
                 _backtest.AddRun(_backtestingModel,_reportModel);
 
                 _reportModel.RegisterDispatcher(DispatchableType.Fill, FillsTab.Dispatcher);
@@ -127,20 +141,21 @@ namespace DarkLight.Analytics
             
                 BindInitializationModels();
             
-                _backtestingModel.LoadResponse(_backtestingConfigurationModel.SelectedResponse);
+                _backtestingModel.LoadResponse(_backtestingConfigurationModel.GetFreshResponseInstance());
                 _backtestingModel.LoadTickData(_tickDataGroup);
                 _backtestingModel.Play(_backtestingConfigurationModel.SelectedPlayToValue);
             }
 
-            _activityModel.AllRunsCompleted.WaitOne();
-            if(_backtest.BacktestReports.Any())
+            Task.Factory.StartNew(() =>
             {
-                var report = _backtest.BacktestReports.First();
-                report.Selected = true;
-                UpdateBacktestPlots();
-                BindReportModels();
-            }
-            
+                _activityModel.AllRunsCompleted.WaitOne();
+                if (_backtest.BacktestReports.Any())
+                {
+                    //var report = _backtest.BacktestReports.First();
+                    //report.Selected = true;
+                    _backtest.SelectedReport = _backtest.BacktestReports.First();
+                }
+            });
         }
 
         private void BacktestingPlotUpdateButton_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -152,6 +167,7 @@ namespace DarkLight.Analytics
 
         private void BindInitializationModels()
         {
+            ResultsSelectionListBox.DataContext = _backtest;
             BacktestingResponseExpander.DataContext = _backtestingResponseLibraryList;
             BacktestingRunExpander.DataContext = _backtestingConfigurationModel;
             BacktestingStatusBar.DataContext = _activityModel;
@@ -181,10 +197,13 @@ namespace DarkLight.Analytics
 
         private void BindReportModels()
         {
-            MessagesDataGrid.DataContext = _backtest.SelectedReport;
-            BacktestingTabControl.DataContext = _backtest.SelectedReport;
-            BacktestingPlotExpander.DataContext = _backtest.SelectedReport;
-            _reportModelsUnbound = false;
+            BacktestingTabControl.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                MessagesDataGrid.DataContext = _backtest.SelectedReport;
+                BacktestingTabControl.DataContext = _backtest.SelectedReport;
+                BacktestingPlotExpander.DataContext = _backtest.SelectedReport;
+                _reportModelsUnbound = false;
+            }));
         }
 
         private void UnbindReportModels()
@@ -200,51 +219,54 @@ namespace DarkLight.Analytics
         private List<IPlotterElement> _charts = new List<IPlotterElement>();
         private void UpdateBacktestPlots()
         {
-            if (_backtest.SelectedReport != null)
+            BacktestPlotter.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
             {
-                if (_backtest.SelectedReport.Plots.Count != 0)
+                if (_backtest.SelectedReport != null)
                 {
-                    BacktestPlotter.Children.RemoveAll(_charts.ToArray());
-                    _charts.Clear();
-
-                    double maxTime = double.MinValue;
-                    double minTime = double.MaxValue;
-                    double maxValue = double.MinValue;
-                    double minValue = double.MaxValue;
-
-                    foreach (var plot in _backtest.SelectedReport.Plots.Where(p => p.Selected))
+                    if (_backtest.SelectedReport.Plots.Count != 0)
                     {
-                        var cleanedData =
-                            plot.PlotPoints.GroupBy(point => point.Time).Select(group => group.First()).OrderBy(
-                                point => point.Time).ToList();
+                        BacktestPlotter.Children.RemoveAll(_charts.ToArray());
+                        _charts.Clear();
 
-                        // Viewport info:
-                        maxTime = Math.Max(dateAxis.ConvertToDouble(cleanedData.Max(point => point.Time)), maxTime);
-                        minTime = Math.Min(dateAxis.ConvertToDouble(cleanedData.Min(point => point.Time)), minTime);
-                        maxValue = Math.Max(Convert.ToDouble(cleanedData.Max(point => point.Value)), maxValue);
-                        minValue = Math.Min(Convert.ToDouble(cleanedData.Min(point => point.Value)), minValue);
+                        double maxTime = double.MinValue;
+                        double minTime = double.MaxValue;
+                        double maxValue = double.MinValue;
+                        double minValue = double.MaxValue;
 
-                        var dataSource = CreateBacktestPlotDataSource(cleanedData);
-                        LineChart chart = new LineChart
+                        foreach (var plot in _backtest.SelectedReport.Plots.Where(p => p.Selected))
                         {
-                            ItemsSource = dataSource,
-                            StrokeThickness = 2,
-                            Stroke = new SolidColorBrush(plot.PointColor),
-                            Description = plot.Label,
-                        };
-                        _charts.Add(chart);
-                        BacktestPlotter.Children.Add(chart);
-                    }
+                            var cleanedData =
+                                plot.PlotPoints.GroupBy(point => point.Time).Select(group => group.First()).OrderBy(
+                                    point => point.Time).ToList();
 
-                    var viewWidth = maxTime - minTime;
-                    var viewHeight = maxValue - minValue;
-                    BacktestPlotter.Viewport.Domain = new DataRect(minTime, minValue, viewWidth, viewHeight);
+                            // Viewport info:
+                            maxTime = Math.Max(dateAxis.ConvertToDouble(cleanedData.Max(point => point.Time)), maxTime);
+                            minTime = Math.Min(dateAxis.ConvertToDouble(cleanedData.Min(point => point.Time)), minTime);
+                            maxValue = Math.Max(Convert.ToDouble(cleanedData.Max(point => point.Value)), maxValue);
+                            minValue = Math.Min(Convert.ToDouble(cleanedData.Min(point => point.Value)), minValue);
+
+                            var dataSource = CreateBacktestPlotDataSource(cleanedData);
+                            LineChart chart = new LineChart
+                            {
+                                ItemsSource = dataSource,
+                                StrokeThickness = 2,
+                                Stroke = new SolidColorBrush(plot.PointColor),
+                                Description = plot.Label,
+                            };
+                            _charts.Add(chart);
+                            BacktestPlotter.Children.Add(chart);
+                        }
+
+                        var viewWidth = maxTime - minTime;
+                        var viewHeight = maxValue - minValue;
+                        BacktestPlotter.Viewport.Domain = new DataRect(minTime, minValue, viewWidth, viewHeight);
+                    }
+                    else
+                    {
+                        _activityModel.Status = "No data to plot.";
+                    }
                 }
-                else
-                {
-                    _activityModel.Status = "No data to plot.";
-                }
-            }
+            }));
         }
 
         private ObservableCollection<Point> CreateBacktestPlotDataSource(IEnumerable<TimePlotPoint> plots)
@@ -286,28 +308,28 @@ namespace DarkLight.Analytics
 
         public void AddRun(BacktestingModel testModel, BatchReportModel reportModel)
         {
-            reportModel.BeforeSelected += () =>
-            {
-                foreach (var _batchReportModel in BacktestReports)
-                {
-                    _batchReportModel.DeSelect();
-                }
-            };
+            //reportModel.BeforeSelected += () =>
+            //{
+            //    foreach (var _batchReportModel in BacktestReports)
+            //    {
+            //        _batchReportModel.DeSelect();
+            //    }
+            //};
 
-            reportModel.PropertyChanged += (sender, args) =>
-            {
-                if(args.PropertyName == "Selected")
-                {
-                    var report = sender as BatchReportModel;
-                    if(report != null)
-                    {
-                        if(report.Selected)
-                        {
-                            SelectedReport = report;
-                        }
-                    }
-                }
-            };
+            //reportModel.PropertyChanged += (sender, args) =>
+            //{
+            //    if(args.PropertyName == "Selected")
+            //    {
+            //        var report = sender as BatchReportModel;
+            //        if(report != null)
+            //        {
+            //            if(report.Selected)
+            //            {
+            //                SelectedReport = report;
+            //            }
+            //        }
+            //    }
+            //};
 
             _backtestModels.Add(testModel);
             _backtestReports.Add(reportModel);
