@@ -94,8 +94,8 @@
     <Compile Include="AnalyticsStatusBar.xaml.cs">
       <DependentUpon>AnalyticsStatusBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ResultsControl.xaml.cs">
-      <DependentUpon>ResultsControl.xaml</DependentUpon>
+    <Compile Include="StatisticsControl.xaml.cs">
+      <DependentUpon>StatisticsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="TickFileControl.xaml.cs">
       <DependentUpon>TickFileControl.xaml</DependentUpon>
@@ -160,7 +160,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResultsControl.xaml">
+    <Page Include="StatisticsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

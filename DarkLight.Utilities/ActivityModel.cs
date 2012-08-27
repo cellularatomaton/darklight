@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading;
 
 namespace DarkLight.Analytics.Models
 {
@@ -62,6 +63,46 @@ namespace DarkLight.Analytics.Models
             }
         }
 
+        private int _numberTestsToRun = 0;
+        public int NumberTestsToRun
+        {
+            get { return _numberTestsToRun; }
+            set
+            {
+                if (value != _numberTestsToRun)
+                {
+                    _numberTestsToRun = value;
+                    PercentComplete = Convert.ToInt32(Math.Round((Convert.ToDouble(_numberTestsCompleted) / Convert.ToDouble(_numberTestsToRun)) * 100.0));
+                    NotifyPropertyChanged("NumberTestsToRun");
+                }
+            }
+        }
+
+        private int _numberTestsCompleted = 0;
+        public int NumberTestsCompleted
+        {
+            get { return _numberTestsCompleted; }
+            set
+            {
+                if (value != _numberTestsCompleted)
+                {
+                    _numberTestsCompleted = value;
+                    PercentComplete = Convert.ToInt32(Math.Round((Convert.ToDouble(_numberTestsCompleted) / Convert.ToDouble(_numberTestsToRun)) * 100.0));
+                    if(_numberTestsCompleted == _numberTestsToRun)
+                    {
+                        _allRunsCompleted.Set();
+                    }
+                    NotifyPropertyChanged("NumberTestsCompleted");
+                }
+            }
+        }
+
+        private AutoResetEvent _allRunsCompleted = new AutoResetEvent(false);
+        public AutoResetEvent AllRunsCompleted 
+        {
+            get { return _allRunsCompleted; }
+        }
+
         private string _status = "Idle";
         public string Status
         {
@@ -72,49 +113,6 @@ namespace DarkLight.Analytics.Models
                 {
                     _status = value;
                     NotifyPropertyChanged("Status");
-                }
-            }
-        }
-
-        ObservableCollection<ObservableMessage> _messages = new ObservableCollection<ObservableMessage>();
-        public ObservableCollection<ObservableMessage> Messages
-        {
-            get { return _messages; }
-            set
-            {
-                if (value != _messages)
-                {
-                    _messages = value;
-                    NotifyPropertyChanged("Messages");
-                }
-            }
-        }
-
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void NotifyPropertyChanged(String info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
-        }
-        #endregion
-    }
-
-    public class ObservableMessage : INotifyPropertyChanged
-    {
-        private string _message = string.Empty;
-        public string Message
-        {
-            get { return _message; }
-            set
-            {
-                if (value != _message)
-                {
-                    _message = value;
-                    NotifyPropertyChanged("Message");
                 }
             }
         }

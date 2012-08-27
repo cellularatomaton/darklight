@@ -138,7 +138,7 @@ namespace DarkLight.Analytics
                                              UpdateOptimizationPlot(); 
                                              _optimizationResetEvent.Set();
                                          };
-                _reportModel = new OptimizationBatchReportModel(_backtestModel, _activityModel, updatePlots);
+                _reportModel = new OptimizationBatchReportModel(_backtestModel, _activityModel /*, updatePlots*/);
 
                 BindOptimizationModel();
                 Action<Response> doWork = (response) =>

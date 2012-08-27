@@ -76,5 +76,12 @@ namespace DarkLight.Analytics
                 _tickDataModel.LoadPath(folderName);
             }
         }
+
+        public List<List<string>> GetSelectedFilePaths()
+        {
+            var firstDate = FirstDatePicker.SelectedDate;
+            var lastDate = LastDatePicker.SelectedDate;
+            return _tickDataModel.GetGroupedFilePaths(firstDate, lastDate);
+        }
     }
 }

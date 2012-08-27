@@ -25,7 +25,7 @@ namespace DarkLight.Analytics.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\TickData\\TradeLinkTicks")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\TickData\\TradeStationData\\TradeStationData")]
         public string TickDataDirectory {
             get {
                 return ((string)(this["TickDataDirectory"]));

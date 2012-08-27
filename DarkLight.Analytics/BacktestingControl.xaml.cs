@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -29,12 +30,8 @@ namespace DarkLight.Analytics
     {
         // Shared Models:
         static ActivityModel _activityModel = new ActivityModel();
-
-        // Backtesting Models:
-        static BatchReportModel _reportModel;
-        static BacktestingModel _backtestingModel;
+        static Backtest _backtest = new Backtest();
         static BacktestingConfigurationModel _backtestingConfigurationModel = new BacktestingConfigurationModel();
-        static TickDataFileList _backtestingTickDataFileList = new TickDataFileList();
         static ResponseLibraryList _backtestingResponseLibraryList = new ResponseLibraryList();
 
         bool _initializationModelsUnbound = false;
@@ -63,7 +60,6 @@ namespace DarkLight.Analytics
         {
             UnbindInitializationModels();
 
-            _backtestingTickDataFileList.LoadPath(Properties.Settings.Default.TickDataDirectory);
             _backtestingResponseLibraryList.LoadResponseListFromFileName(Properties.Settings.Default.ResponseFileName);
 
             BacktestPlotter.AxisGrid.DrawHorizontalMinorTicks = false;
@@ -75,16 +71,6 @@ namespace DarkLight.Analytics
         }
 
         #region Backtesting GUI Event Handlers
-
-        private void BacktestingDataDirButton_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            var openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "TickFiles|" + TikConst.WILDCARD_EXT + "|AllFiles|*.*";
-            if (openFileDialog.ShowDialog() == true)
-            {
-                _backtestingTickDataFileList.LoadPathFromFileName(openFileDialog.FileName);
-            }
-        }
 
         private void BacktestingResponseButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -117,39 +103,44 @@ namespace DarkLight.Analytics
         private void RunBacktestButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             UnbindInitializationModels();
-            _activityModel.Messages.Clear();
-            _activityModel.Status = "Backtest started.";
-            var tickDataFileNames = _backtestingTickDataFileList.Where(f => f.Checked).Select(f => f.LongFileName).ToList();
-
-            if (_reportModel != null)
-            {
-                _reportModel.Dispose();
-            }
-            if (_backtestingModel != null)
-            {
-                _backtestingModel.Dispose();
-            }
-
-            _backtestingModel = new BacktestingModel();
-
-            Action updatePlots = () => { UpdateBacktestPlots(); }; 
-            _reportModel = new BatchReportModel(_backtestingModel, _activityModel, updatePlots);
-
-            _reportModel.RegisterDispatcher(DispatchableType.Fill, FillsTab.Dispatcher);
-            _reportModel.RegisterDispatcher(DispatchableType.Indicator, IndicatorTab.Dispatcher);
-            _reportModel.RegisterDispatcher(DispatchableType.Message, MessagesTab.Dispatcher);
-            _reportModel.RegisterDispatcher(DispatchableType.Order, OrdersTab.Dispatcher);
-            _reportModel.RegisterDispatcher(DispatchableType.Plot, PlotsTab.Dispatcher);
-            _reportModel.RegisterDispatcher(DispatchableType.Position, PositionTab.Dispatcher);
-
-            _backtestingModel.LoadResponse(_backtestingConfigurationModel.SelectedResponse);
-            _backtestingModel.LoadTickData(tickDataFileNames);
-
-            BindInitializationModels();
-
             UnbindReportModels();
-            _backtestingModel.Play(_backtestingConfigurationModel.SelectedPlayToValue);
-            BindReportModels();
+
+            _backtest.Clear();
+            _activityModel.Status = "Backtest started.";
+            var tickDataGroups = BacktestingTickFileControl.GetSelectedFilePaths();
+
+            _activityModel.NumberTestsToRun = tickDataGroups.Count;
+            _activityModel.NumberTestsCompleted = 0;
+
+            foreach (var _tickDataGroup in tickDataGroups)
+            {
+                var _backtestingModel = new BacktestingModel();
+                var _reportModel = new BatchReportModel(_backtestingModel, _activityModel /*, updatePlots*/);
+                _backtest.AddRun(_backtestingModel,_reportModel);
+
+                _reportModel.RegisterDispatcher(DispatchableType.Fill, FillsTab.Dispatcher);
+                _reportModel.RegisterDispatcher(DispatchableType.Indicator, IndicatorTab.Dispatcher);
+                _reportModel.RegisterDispatcher(DispatchableType.Message, MessagesTab.Dispatcher);
+                _reportModel.RegisterDispatcher(DispatchableType.Order, OrdersTab.Dispatcher);
+                _reportModel.RegisterDispatcher(DispatchableType.Plot, PlotsTab.Dispatcher);
+                _reportModel.RegisterDispatcher(DispatchableType.Position, PositionTab.Dispatcher);
+            
+                BindInitializationModels();
+            
+                _backtestingModel.LoadResponse(_backtestingConfigurationModel.SelectedResponse);
+                _backtestingModel.LoadTickData(_tickDataGroup);
+                _backtestingModel.Play(_backtestingConfigurationModel.SelectedPlayToValue);
+            }
+
+            _activityModel.AllRunsCompleted.WaitOne();
+            if(_backtest.BacktestReports.Any())
+            {
+                var report = _backtest.BacktestReports.First();
+                report.Selected = true;
+                UpdateBacktestPlots();
+                BindReportModels();
+            }
+            
         }
 
         private void BacktestingPlotUpdateButton_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -162,7 +153,6 @@ namespace DarkLight.Analytics
         private void BindInitializationModels()
         {
             BacktestingResponseExpander.DataContext = _backtestingResponseLibraryList;
-            BacktestingTickDataExpander.DataContext = _backtestingTickDataFileList;
             BacktestingRunExpander.DataContext = _backtestingConfigurationModel;
             BacktestingStatusBar.DataContext = _activityModel;
             _initializationModelsUnbound = false;
@@ -191,9 +181,9 @@ namespace DarkLight.Analytics
 
         private void BindReportModels()
         {
-            MessagesDataGrid.DataContext = _activityModel;
-            BacktestingTabControl.DataContext = _reportModel;
-            BacktestingPlotExpander.DataContext = _reportModel;
+            MessagesDataGrid.DataContext = _backtest.SelectedReport;
+            BacktestingTabControl.DataContext = _backtest.SelectedReport;
+            BacktestingPlotExpander.DataContext = _backtest.SelectedReport;
             _reportModelsUnbound = false;
         }
 
@@ -207,64 +197,55 @@ namespace DarkLight.Analytics
 
         #region Private Backtesting Methods
 
-        private List<IPlotterElement> _charts = new List<IPlotterElement>(); 
+        private List<IPlotterElement> _charts = new List<IPlotterElement>();
         private void UpdateBacktestPlots()
         {
-            if (_reportModel.Plots.Count != 0)
+            if (_backtest.SelectedReport != null)
             {
-                //BacktestPlotter.Children.RemoveAll(typeof(LineGraph));
-                BacktestPlotter.Children.RemoveAll(_charts.ToArray());
-                _charts.Clear();
-
-                double maxTime = double.MinValue;
-                double minTime = double.MaxValue;
-                double maxValue = double.MinValue;
-                double minValue = double.MaxValue;
-
-                foreach (var plot in _reportModel.Plots.Where(p => p.Selected))
+                if (_backtest.SelectedReport.Plots.Count != 0)
                 {
-                    var cleanedData =
-                        plot.PlotPoints.GroupBy(point => point.Time).Select(group => group.First()).OrderBy(
-                            point => point.Time).ToList();
+                    BacktestPlotter.Children.RemoveAll(_charts.ToArray());
+                    _charts.Clear();
 
-                    // Viewport info:
-                    maxTime = Math.Max(dateAxis.ConvertToDouble(cleanedData.Max(point => point.Time)), maxTime);
-                    minTime = Math.Min(dateAxis.ConvertToDouble(cleanedData.Min(point => point.Time)), minTime);
-                    maxValue = Math.Max(Convert.ToDouble(cleanedData.Max(point => point.Value)), maxValue);
-                    minValue = Math.Min(Convert.ToDouble(cleanedData.Min(point => point.Value)), minValue);
+                    double maxTime = double.MinValue;
+                    double minTime = double.MaxValue;
+                    double maxValue = double.MinValue;
+                    double minValue = double.MaxValue;
 
-                    //var dataSource = CreateBacktestPlottDataSource(cleanedData);
-                    var dataSource = CreateBacktestPlotDataSource(cleanedData);
-                    LineChart chart = new LineChart
+                    foreach (var plot in _backtest.SelectedReport.Plots.Where(p => p.Selected))
                     {
-                        ItemsSource = dataSource,
-                        StrokeThickness = 2,
-                        Stroke = new SolidColorBrush(plot.PointColor),
-                        Description = plot.Label,
-                    };
-                    _charts.Add(chart);
-                    BacktestPlotter.Children.Add(chart);
+                        var cleanedData =
+                            plot.PlotPoints.GroupBy(point => point.Time).Select(group => group.First()).OrderBy(
+                                point => point.Time).ToList();
 
-                    //BacktestPlotter.AddLineGraph(dataSource, plot.PointColor, 1, plot.Label);
+                        // Viewport info:
+                        maxTime = Math.Max(dateAxis.ConvertToDouble(cleanedData.Max(point => point.Time)), maxTime);
+                        minTime = Math.Min(dateAxis.ConvertToDouble(cleanedData.Min(point => point.Time)), minTime);
+                        maxValue = Math.Max(Convert.ToDouble(cleanedData.Max(point => point.Value)), maxValue);
+                        minValue = Math.Min(Convert.ToDouble(cleanedData.Min(point => point.Value)), minValue);
+
+                        var dataSource = CreateBacktestPlotDataSource(cleanedData);
+                        LineChart chart = new LineChart
+                        {
+                            ItemsSource = dataSource,
+                            StrokeThickness = 2,
+                            Stroke = new SolidColorBrush(plot.PointColor),
+                            Description = plot.Label,
+                        };
+                        _charts.Add(chart);
+                        BacktestPlotter.Children.Add(chart);
+                    }
+
+                    var viewWidth = maxTime - minTime;
+                    var viewHeight = maxValue - minValue;
+                    BacktestPlotter.Viewport.Domain = new DataRect(minTime, minValue, viewWidth, viewHeight);
                 }
-
-                var viewWidth = maxTime - minTime;
-                var viewHeight = maxValue - minValue;
-                BacktestPlotter.Viewport.Domain = new DataRect(minTime, minValue, viewWidth, viewHeight);
-            }
-            else
-            {
-                _activityModel.Status = "No data to plot.";
+                else
+                {
+                    _activityModel.Status = "No data to plot.";
+                }
             }
         }
-
-        //private EnumerableDataSource<TimePlotPoint> CreateBacktestPlottDataSource(IEnumerable<TimePlotPoint> plots)
-        //{
-        //    var ds = new EnumerableDataSource<TimePlotPoint>(plots);
-        //    ds.SetXMapping(p => DateAxis.ConvertToDouble(p.Time));
-        //    ds.SetYMapping(p => Convert.ToDouble(p.Value));
-        //    return ds;
-        //}
 
         private ObservableCollection<Point> CreateBacktestPlotDataSource(IEnumerable<TimePlotPoint> plots)
         {
@@ -273,10 +254,117 @@ namespace DarkLight.Analytics
         }
 
         #endregion
+    }
 
-        private void BacktestingRunExpander_Expanded(object sender, RoutedEventArgs e)
+    public class Backtest : INotifyPropertyChanged, IDisposable
+    {
+        BatchReportModel _selectedReport;
+        public BatchReportModel SelectedReport
         {
-
+            get { return _selectedReport; }
+            set
+            {
+                if (value != _selectedReport)
+                {
+                    _selectedReport = value;
+                    NotifyPropertyChanged("SelectedReport");
+                }
+            }
         }
+
+        private ObservableCollection<BatchReportModel> _backtestReports = new ObservableCollection<BatchReportModel>();
+        public ObservableCollection<BatchReportModel> BacktestReports
+        {
+            get { return _backtestReports; }
+        }
+
+        private ObservableCollection<BacktestingModel> _backtestModels = new ObservableCollection<BacktestingModel>();
+        public ObservableCollection<BacktestingModel> BacktestModels
+        {
+            get { return _backtestModels; }
+        }
+
+        public void AddRun(BacktestingModel testModel, BatchReportModel reportModel)
+        {
+            reportModel.BeforeSelected += () =>
+            {
+                foreach (var _batchReportModel in BacktestReports)
+                {
+                    _batchReportModel.DeSelect();
+                }
+            };
+
+            reportModel.PropertyChanged += (sender, args) =>
+            {
+                if(args.PropertyName == "Selected")
+                {
+                    var report = sender as BatchReportModel;
+                    if(report != null)
+                    {
+                        if(report.Selected)
+                        {
+                            SelectedReport = report;
+                        }
+                    }
+                }
+            };
+
+            _backtestModels.Add(testModel);
+            _backtestReports.Add(reportModel);
+        }
+
+        public void Clear()
+        {
+            foreach (var _batchReportModel in BacktestReports)
+            {
+                _batchReportModel.Dispose();
+            }
+            BacktestReports.Clear();
+            foreach (var _backtestingModel in BacktestModels)
+            {
+                _backtestingModel.Dispose();
+            }
+            BacktestModels.Clear();
+        }
+
+        #region Implementation of IDisposable
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    Clear();
+                }
+                disposed = true;
+            }
+        }
+
+        ~Backtest()
+        {
+            Dispose(false);
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+        #endregion
     }
 }

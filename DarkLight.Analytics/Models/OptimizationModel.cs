@@ -36,7 +36,7 @@ namespace DarkLight.Analytics.Models
         BackgroundWorker _backgroundWorker;
         HistSim _historicalSimulator;
         Broker _broker;
-        ResultsModel _resultsModel;
+        //ResultsModel _resultsModel;
         Action<Results> _onCompleted;
         Action<string> _onStatusUpdate;
         Action<int> _onPercentComplete;
@@ -147,7 +147,7 @@ namespace DarkLight.Analytics.Models
             {
                 _positionList.Clear();
                 _tradeList.Clear();
-                _resultsModel.Clear();
+                //_resultsModel.Clear();
                 disposeAll();
                 initializeSim();
                 _nowTime = "0";
@@ -168,7 +168,7 @@ namespace DarkLight.Analytics.Models
             _backgroundWorker = new BackgroundWorker();
             _historicalSimulator = new MultiSimImpl();
             _broker = new Broker();
-            _resultsModel = new ResultsModel();
+            //_resultsModel = new ResultsModel();
 
             _broker.UseBidAskFills = _useBidAskFills;
             _backgroundWorker.DoWork += play;
@@ -394,7 +394,7 @@ namespace DarkLight.Analytics.Models
 
         void PlayComplete(object sender, RunWorkerCompletedEventArgs e)
         {
-            _resultsModel.Clear();
+            //_resultsModel.Clear();
             var newResults = TradeResult.ResultsFromTradeList(_tradeList);
             var results = Results.FetchResults(newResults, _rfr, _comm, debug);
             _onCompleted(results);

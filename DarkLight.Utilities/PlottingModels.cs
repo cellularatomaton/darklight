@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Media;
+using TradeLink.API;
 using TradeLink.AppKit;
 
 namespace DarkLight.Utilities
@@ -93,9 +95,27 @@ namespace DarkLight.Utilities
         #endregion
     }
 
-    public class DarkLightResults : Results
+    public class DarkLightResults : Results, INotifyPropertyChanged
     {
-        
+        private bool _selected = false;
+        public bool Selected
+        {
+            get { return _selected; }
+            set
+            {
+                if (value != _selected)
+                {
+                    _selected = value;
+                    NotifyPropertyChanged("Selected");
+                }
+            }
+        }
+
+        public string Name
+        {
+            get { return ToString(); }
+        }
+
         public decimal NetProfitOrLoss { get; set; }
         public decimal NetPerShare { get; set; }
 
@@ -147,7 +167,7 @@ namespace DarkLight.Utilities
             return dLResults;
         }
 
-        public static List<DescriptiveResult> GetResultStatistics(List<DarkLightResults> results)
+        public static List<DescriptiveResult> GetResultStatistics(IEnumerable<DarkLightResults> results)
         {
             List<DescriptiveResult> DescriptiveStats = new List<DescriptiveResult>();
             ArrayList consecWinners = new ArrayList();
@@ -194,5 +214,37 @@ namespace DarkLight.Utilities
             return DescriptiveStats;
         }
 
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+        #endregion
+
+        public static DarkLightResults GetDarkLightResults(string name, List<Trade> trades, DebugDelegate gotDebug, decimal riskFreeRate = .01m, decimal commissionPerShare = .01m)
+        {
+            return new DarkLightResults(GetResults(name, trades, gotDebug, riskFreeRate, commissionPerShare));
+        }
+
+        public static Results GetResults(string name, List<Trade> trades, DebugDelegate gotDebug, decimal riskFreeRate = .01m, decimal commissionPerShare = .01m)
+        {
+            name = Path.GetFileNameWithoutExtension(name);
+            List<TradeResult> newResults;
+            if (trades.Count == 0)
+            {
+                gotDebug("No results found for: " + name);
+                newResults = new List<TradeResult>();
+            }
+            else
+            {
+                newResults = TradeResult.ResultsFromTradeList(trades);
+            }
+            return FetchResults(newResults, riskFreeRate, commissionPerShare, gotDebug);
+        }
     }
 }

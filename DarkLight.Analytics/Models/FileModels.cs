@@ -419,13 +419,17 @@ namespace DarkLight.Analytics.Models
                 var shortName = System.IO.Path.GetFileName(file);
                 if( tikFileRegex.IsMatch(shortName) )
                 {
-                    var name = System.IO.Path.GetFileNameWithoutExtension(shortName);
-                    var dateString = name.Substring(name.Length - 8);
-                    var symString = name.Substring(0, name.Length - 8);
-                    var year = Convert.ToInt32(dateString.Substring(0, 4));
-                    var month = Convert.ToInt32(dateString.Substring(4, 2));
-                    var day = Convert.ToInt32(dateString.Substring(6, 2));
-                    var date = new DateTime(year, month, day);
+                    var tickInfo = TickFileNameInfo.GetTickFileInfoFromShortName(shortName);
+
+                    //var name = System.IO.Path.GetFileNameWithoutExtension(shortName);
+                    //var dateString = name.Substring(name.Length - 8);
+                    //var symString = name.Substring(0, name.Length - 8);
+                    //var year = Convert.ToInt32(dateString.Substring(0, 4));
+                    //var month = Convert.ToInt32(dateString.Substring(4, 2));
+                    //var day = Convert.ToInt32(dateString.Substring(6, 2));
+                    //var date = new DateTime(year, month, day);
+
+                    var date = new DateTime(tickInfo.Year,tickInfo.Month,tickInfo.Day);
 
                     var fileModel = new FileModel
                     {
@@ -435,7 +439,7 @@ namespace DarkLight.Analytics.Models
 
                     var symbolModel = new SymbolModel
                     {
-                        Symbol = symString,
+                        Symbol = tickInfo.Symbol,
                         Selected = false,
                     };
                     symbolModel.PropertyChanged += (sender, args) =>
@@ -464,6 +468,55 @@ namespace DarkLight.Analytics.Models
             }
         }
 
+        
+
+        //public IEnumerable<string> GetFilePaths(DateTime? firstDate, DateTime? lastDate)
+        //{
+        //    IEnumerable<string> paths;
+        //    if (firstDate.HasValue && lastDate.HasValue)
+        //    {
+        //        var lowerBound = firstDate.Value.Ticks;
+        //        var upperBound = lastDate.Value.Ticks;
+        //        paths = TickFileModels
+        //            .Where(file => lowerBound < file.DateForFile.Ticks && file.DateForFile.Ticks < upperBound)
+        //            .Select(file => file.File.LongFileName);
+        //    }
+        //    else
+        //    {
+        //        paths = new List<string> { };
+        //    }
+        //    return paths;
+        //}
+
+        public List<List<string>> GetGroupedFilePaths(DateTime? firstDate, DateTime? lastDate)
+        {
+            List<List<string>> groups = new List<List<string>>{};
+            if (firstDate.HasValue && lastDate.HasValue)
+            {
+                var lowerBound = firstDate.Value.Ticks;
+                var upperBound = lastDate.Value.Ticks;
+                var selectedSymbols = SymbolModels.Where(s => s.Selected).ToList();
+                var fileModels = TickFileModels
+                    .Where(file => lowerBound < file.DateForFile.Ticks && file.DateForFile.Ticks < upperBound);
+                var symbolFilteredFileModels = fileModels.Join(
+                    selectedSymbols,
+                    outerModel => outerModel.Symbol.Symbol,
+                    innerModel => innerModel.Symbol,
+                    (outerModel, innerModel) => outerModel);
+                var distinctDates = fileModels
+                    .Distinct((model1, model2) => model1.DateForFile.Date == model2.DateForFile.Date)
+                    .Select(model => model.DateForFile);
+                foreach (var _dateTime in distinctDates)
+                {
+                    var dateGroup = symbolFilteredFileModels
+                        .Where(model => model.DateForFile.Date == _dateTime.Date)
+                        .Select(model => model.File.LongFileName).ToList();
+                    groups.Add(dateGroup);
+                }
+            }
+            return groups;
+        }
+
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -475,5 +528,31 @@ namespace DarkLight.Analytics.Models
             }
         }
         #endregion
+    }
+
+    public class TickFileNameInfo
+    {
+        public string Symbol { get; set; }
+        public int Day { get; set; }
+        public int Month { get; set; }
+        public int Year { get; set; }
+
+        public static TickFileNameInfo GetTickFileInfoFromShortName(string shortName)
+        {
+            var name = System.IO.Path.GetFileNameWithoutExtension(shortName);
+            var dateString = name.Substring(name.Length - 8);
+            var symString = name.Substring(0, name.Length - 8);
+            var year = Convert.ToInt32(dateString.Substring(0, 4));
+            var month = Convert.ToInt32(dateString.Substring(4, 2));
+            var day = Convert.ToInt32(dateString.Substring(6, 2));
+
+            return new TickFileNameInfo
+            {
+                Symbol = symString,
+                Day = day,
+                Month = month,
+                Year = year,
+            };
+        }
     }
 }

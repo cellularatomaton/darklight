@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace DarkLight.Analytics
 {
     /// <summary>
-    /// Interaction logic for ResultsControl.xaml
+    /// Interaction logic for StatisticsControl.xaml
     /// </summary>
-    public partial class ResultsControl : UserControl
+    public partial class StatisticsControl : UserControl
     {
-        public ResultsControl()
+        public StatisticsControl()
         {
             InitializeComponent();
         }
