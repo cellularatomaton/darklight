@@ -175,6 +175,10 @@ namespace DarkLight.Utilities
             ArrayList Losses = new ArrayList();
             ArrayList Wins = new ArrayList();
             ArrayList grossPL = new ArrayList();
+            ArrayList NetPnL = new ArrayList();
+            ArrayList NetProfits = new ArrayList();
+            ArrayList NetLosses = new ArrayList();
+            ArrayList NetPLPerShare = new ArrayList();
             
             //get summations
             foreach (var result in results)
@@ -184,6 +188,10 @@ namespace DarkLight.Utilities
                 if (result.GrossPL < 0) Losses.Add(result.GrossPL);
                 if (result.GrossPL > 0) Wins.Add(result.GrossPL);
                 grossPL.Add(result.GrossPL);
+                if (result.NetProfitOrLoss < 0) NetLosses.Add(result.NetProfitOrLoss);
+                if (result.NetProfitOrLoss > 0) NetProfits.Add(result.NetProfitOrLoss);
+                NetPnL.Add(result.NetProfitOrLoss);
+                NetPLPerShare.Add(result.NetPerShare);
             }
             //get descriptive stats
             double[] consecWins = consecWinners.ToArray(typeof(double)) as double[];
@@ -210,6 +218,26 @@ namespace DarkLight.Utilities
             Descriptive WinnerStats = new Descriptive(winPL);
             WinnerStats.Analyze();
             DescriptiveStats.Add(WinnerStats.Result);
+            
+            double[] netLosses = consecWinners.ToArray(typeof(double)) as double[];
+            Descriptive netLossesStats = new Descriptive(netLosses);
+            netLossesStats.Analyze();
+            DescriptiveStats.Add(netLossesStats.Result);
+
+            double[] netProfits = consecWinners.ToArray(typeof(double)) as double[];
+            Descriptive netProfitsStats = new Descriptive(netProfits);
+            netProfitsStats.Analyze();
+            DescriptiveStats.Add(netProfitsStats.Result);
+
+            double[] netPnL = consecWinners.ToArray(typeof(double)) as double[];
+            Descriptive netPnLStats = new Descriptive(netPnL);
+            netPnLStats.Analyze();
+            DescriptiveStats.Add(netPnLStats.Result);
+
+            double[] netPLPerShare = consecWinners.ToArray(typeof(double)) as double[];
+            Descriptive netPLPerShareStats = new Descriptive(netPLPerShare);
+            netPLPerShareStats.Analyze();
+            DescriptiveStats.Add(netPLPerShareStats.Result);
 
             return DescriptiveStats;
         }
