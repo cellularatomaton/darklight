@@ -42,7 +42,7 @@ namespace DarkLight.Utilities
 
         #region Constructors
 
-        public ReportModel(IReportable engine, ActivityModel activityModel)
+        public ReportModel(IReportable engine , ActivityModel activityModel)
         {
             _activityModel = activityModel;
 
@@ -247,16 +247,54 @@ namespace DarkLight.Utilities
     {
         #region Public Members
 
-        private ObservableCollection<DarkLightResults> _reportResults;
-        public ObservableCollection<DarkLightResults> ReportResults
+        public Action BeforeSelected;  // Before this report is selected in the GUI, we want to unselect all others.
+        bool _selected;
+        public bool Selected
         {
-            get { return _reportResults; }
+            get { return _selected; }
             set
             {
-                if (value != _reportResults)
+                if (value != _selected)
                 {
-                    _reportResults = value;
-                    NotifyPropertyChanged("ReportResults");
+                    if(BeforeSelected != null)
+                    {
+                        BeforeSelected();
+                    }
+                    _selected = value;
+                    NotifyPropertyChanged("Selected");
+                }
+            }
+        }
+
+        public void DeSelect()
+        {
+            _selected = false;
+        }
+
+        DarkLightResults _results;
+        public DarkLightResults Results
+        {
+            get { return _results; }
+            set
+            {
+                if (value != _results)
+                {
+                    _results = value;
+                    NotifyPropertyChanged("Results");
+                }
+            }
+        }
+
+        ObservableCollection<ObservableMessage> _messages = new ObservableCollection<ObservableMessage>();
+        public ObservableCollection<ObservableMessage> Messages
+        {
+            get { return _messages; }
+            set
+            {
+                if (value != _messages)
+                {
+                    _messages = value;
+                    NotifyPropertyChanged("Messages");
                 }
             }
         }
@@ -332,19 +370,19 @@ namespace DarkLight.Utilities
             }
         }
 
-        DataTable _completedResultsTable;
-        public DataTable ResultsTable
-        {
-            get { return _completedResultsTable; }
-            set
-            {
-                if (value != _completedResultsTable)
-                {
-                    _completedResultsTable = value;
-                    NotifyPropertyChanged("ResultsTable");
-                }
-            }
-        }
+        //DataTable _completedResultsTable;
+        //public DataTable ResultsTable
+        //{
+        //    get { return _completedResultsTable; }
+        //    set
+        //    {
+        //        if (value != _completedResultsTable)
+        //        {
+        //            _completedResultsTable = value;
+        //            NotifyPropertyChanged("ResultsTable");
+        //        }
+        //    }
+        //}
 
         Dictionary<string, TimePlot> _plotMap = new Dictionary<string, TimePlot>();
         private ObservableCollection<TimePlot> _completedPlots;
@@ -367,9 +405,9 @@ namespace DarkLight.Utilities
 
         Dictionary<string, PositionImpl> _positionList = new Dictionary<string, PositionImpl>();
         List<Trade> _tradeList = new List<Trade>();
-        ResultsModel _resultsModel = new ResultsModel();
+        
         StringBuilder _messageBuilder = new StringBuilder();
-        Action _updatePlots;
+        //Action _updatePlots;
 
         DataTable _indicatorTable = new DataTable();// = new DataTable("indicatorTable");
         ObservableCollection<DataGridTick> _tickCollection = new ObservableCollection<DataGridTick>();
@@ -387,10 +425,10 @@ namespace DarkLight.Utilities
 
         #region Constructors
 
-        public BatchReportModel(IReportable engine, ActivityModel activityModel, Action updatePlots)
-            : base(engine, activityModel)
+        public BatchReportModel(IReportable engine, ActivityModel activityModel /*, Action updatePlots*/)
+            : base(engine , activityModel)
         {
-            _updatePlots = updatePlots;
+            //_updatePlots = updatePlots;
             _decimalPrecisionString = "N" + _decimalPrecision;
         }
 
@@ -467,10 +505,10 @@ namespace DarkLight.Utilities
             _nowTime = tick.time.ToString();
             _tickCollection.Add(new DataGridTick(tick, _decimalPrecisionString));
 
-            double numberTicksProcessed = Convert.ToDouble(_engineInfo.HistoricalSimulator.TicksProcessed);  //TODO: refactor out HistSim
-            double totalNumberTicks = Convert.ToDouble(_engineInfo.HistoricalSimulator.TicksPresent);
-            int percentComplete = Convert.ToInt32(Math.Round((numberTicksProcessed / totalNumberTicks) * 100));
-            _activityModel.PercentComplete = percentComplete;
+            //double numberTicksProcessed = Convert.ToDouble(_engineInfo.HistoricalSimulator.TicksProcessed);  //TODO: refactor out HistSim
+            //double totalNumberTicks = Convert.ToDouble(_engineInfo.HistoricalSimulator.TicksPresent);
+            //int percentComplete = Convert.ToInt32(Math.Round((numberTicksProcessed / totalNumberTicks) * 100));
+            //_activityModel.PercentComplete = percentComplete;
         }
 
         protected override void engine_GotPlot(TimePlot plot)
@@ -490,7 +528,7 @@ namespace DarkLight.Utilities
 
         protected override void engine_StatusUpdate(string status)
         {
-            _activityModel.Status = status;
+            //_activityModel.Status = status;
         }
 
         protected override void engine_MessageUpdate(string msg)
@@ -508,8 +546,10 @@ namespace DarkLight.Utilities
         {
             string[] r = _messageBuilder.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             foreach (string l in r)
-                _activityModel.Messages.Add(new ObservableMessage { Message = l });
-
+            {
+                //_activityModel.Messages.Add(new ObservableMessage {Message = l});
+                Messages.Add(new ObservableMessage { Message = l });
+            }
             IndicatorTable = _indicatorTable;
             TickTable = _tickCollection;
             OrderTable = _orderCollection;
@@ -517,12 +557,14 @@ namespace DarkLight.Utilities
             PositionTable = _positionCollection;
 
             Plots = new ObservableCollection<TimePlot>(_plotMap.Values);
-            _updatePlots();
+            //_updatePlots();
 
             string responseName = _engineInfo.ResponseName;
             string prettyTickFiles = _engineInfo.PrettyTickFiles;
-            ResultsTable = _resultsModel.GetResultsDataTable(responseName + "." + prettyTickFiles, _tradeList);
-
+            //ResultsTable = _reportResultsModel.GetResultsDataTable(responseName + "." + prettyTickFiles, _tradeList);
+            var name = responseName + "." + prettyTickFiles;
+            Results = DarkLightResults.GetDarkLightResults(name, _tradeList, engine_MessageUpdate, 0.0001m, 0.12m);
+            _activityModel.NumberTestsCompleted = _activityModel.NumberTestsCompleted + 1;
             if (e.Error != null)
             {
                 engine_MessageUpdate(e.Error.Message + e.Error.StackTrace);
@@ -547,9 +589,7 @@ namespace DarkLight.Utilities
             _orderCollection.Clear();
             _fillCollection.Clear();
             _tickCollection.Clear();
-
-            _resultsModel.Clear();
-
+            //_reportResultsModel.Clear();
         }
 
         void initializeIndicators()
@@ -601,7 +641,7 @@ namespace DarkLight.Utilities
         #region Private Members
        
         List<Trade> _tradeList = new List<Trade>();
-        ResultsModel _resultsModel = new ResultsModel();
+        //ResultsModel _resultsModel = new ResultsModel();
         Action _updatePlots;
 
         decimal _rfr = 0.00m;
@@ -612,10 +652,10 @@ namespace DarkLight.Utilities
 
         #region Constructors
 
-        public OptimizationBatchReportModel(IReportable engine, ActivityModel activityModel, Action updatePlots)
-            : base(engine, activityModel)
+        public OptimizationBatchReportModel(IReportable engine , ActivityModel activityModel /*, Action updatePlots*/)
+            : base(engine , activityModel)
         {
-            _updatePlots = updatePlots;
+            //_updatePlots = updatePlots;
         }
 
         #endregion
@@ -625,7 +665,7 @@ namespace DarkLight.Utilities
         public void Reset()
         {
             _tradeList.Clear();
-            _resultsModel.Clear();
+            //_resultsModel.Clear();
             //_optimizationResults.Clear();
             _nowTime = "0";
         }
@@ -658,10 +698,10 @@ namespace DarkLight.Utilities
         {
             _nowTime = tick.time.ToString();
             
-            double numberTicksProcessed = Convert.ToDouble(_engineInfo.HistoricalSimulator.TicksProcessed);  //TODO: refactor out HistSim
-            double totalNumberTicks = Convert.ToDouble(_engineInfo.HistoricalSimulator.TicksPresent);
-            int percentComplete = Convert.ToInt32(Math.Round((numberTicksProcessed / totalNumberTicks) * 100));
-            _activityModel.PercentComplete = percentComplete;
+            //double numberTicksProcessed = Convert.ToDouble(_engineInfo.HistoricalSimulator.TicksProcessed);  //TODO: refactor out HistSim
+            //double totalNumberTicks = Convert.ToDouble(_engineInfo.HistoricalSimulator.TicksPresent);
+            //int percentComplete = Convert.ToInt32(Math.Round((numberTicksProcessed / totalNumberTicks) * 100));
+            //_activityModel.PercentComplete = percentComplete;
         }
 
         protected override void engine_GotPlot(TimePlot plot)
@@ -671,7 +711,7 @@ namespace DarkLight.Utilities
 
         protected override void engine_StatusUpdate(string status)
         {
-            _activityModel.Status = status;
+            //_activityModel.Status = status;
         }
 
         protected override void engine_MessageUpdate(string msg)
@@ -687,7 +727,7 @@ namespace DarkLight.Utilities
 
         protected override void engine_Complete(RunWorkerCompletedEventArgs e)
         {
-            _resultsModel.Clear();
+            //_resultsModel.Clear();
             var newResults = TradeResult.ResultsFromTradeList(_tradeList);
             _tradeList.Clear();
             var results = Results.FetchResults(newResults, _rfr, _comm, engine_MessageUpdate);
@@ -730,8 +770,8 @@ namespace DarkLight.Utilities
     /// </summary>
     public class StreamingReportModel : ReportModel
     {
-        public StreamingReportModel(IReportable engine, ActivityModel activityModel)
-            : base(engine, activityModel)
+        public StreamingReportModel(IReportable engine , ActivityModel activityModel)
+            : base(engine , activityModel)
         {
         }
     }
@@ -863,7 +903,36 @@ namespace DarkLight.Utilities
             Points = cpt.ToString(decimalPrecisionString);
         }
     }
-    
+
+    public class ObservableMessage : INotifyPropertyChanged
+    {
+        private string _message = string.Empty;
+        public string Message
+        {
+            get { return _message; }
+            set
+            {
+                if (value != _message)
+                {
+                    _message = value;
+                    NotifyPropertyChanged("Message");
+                }
+            }
+        }
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+        #endregion
+    }
+
     #endregion
 
 }
