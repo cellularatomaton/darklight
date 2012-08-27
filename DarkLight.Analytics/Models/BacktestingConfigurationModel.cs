@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using TradeLink.API;
 using DarkLight.Utilities;
+using TradeLink.Common;
 
 namespace DarkLight.Analytics.Models
 {
@@ -33,6 +34,34 @@ namespace DarkLight.Analytics.Models
             }
         }
 
+        string _responsePath;
+        public string ResponsePath
+        {
+            get { return _responsePath; }
+            set
+            {
+                if (value != _responsePath)
+                {
+                    _responsePath = value;
+                    NotifyPropertyChanged("ResponsePath");
+                }
+            }
+        }
+
+        string _responseName;
+        public string ResponseName
+        {
+            get { return _responseName; }
+            set
+            {
+                if (value != _responseName)
+                {
+                    _responseName = value;
+                    NotifyPropertyChanged("ResponseName");
+                }
+            }
+        }
+
         Response _selectedResponse;
         public Response SelectedResponse
         {
@@ -45,6 +74,13 @@ namespace DarkLight.Analytics.Models
                     NotifyPropertyChanged("SelectedResponse");
                 }
             }
+        }
+
+        public Response GetFreshResponseInstance()
+        {
+            var freshResponse = ResponseLoader.FromDLL(ResponseName, ResponsePath);
+            PlottingUtilities.CopyParameters(SelectedResponse,freshResponse);
+            return freshResponse;
         }
 
         #region INotifyPropertyChanged

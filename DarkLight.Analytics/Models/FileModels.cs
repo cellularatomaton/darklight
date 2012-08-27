@@ -537,6 +537,12 @@ namespace DarkLight.Analytics.Models
         public int Month { get; set; }
         public int Year { get; set; }
 
+        public static TickFileNameInfo GetTickFileInfoFromLongName(string longName)
+        {
+            var shortName = System.IO.Path.GetFileName(longName);
+            return GetTickFileInfoFromShortName(shortName);
+        }
+
         public static TickFileNameInfo GetTickFileInfoFromShortName(string shortName)
         {
             var name = System.IO.Path.GetFileNameWithoutExtension(shortName);

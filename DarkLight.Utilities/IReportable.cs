@@ -247,28 +247,42 @@ namespace DarkLight.Utilities
     {
         #region Public Members
 
-        public Action BeforeSelected;  // Before this report is selected in the GUI, we want to unselect all others.
-        bool _selected;
-        public bool Selected
+        //public Action BeforeSelected;  // Before this report is selected in the GUI, we want to unselect all others.
+        //bool _selected;
+        //public bool Selected
+        //{
+        //    get { return _selected; }
+        //    set
+        //    {
+        //        if (value != _selected)
+        //        {
+        //            //if(BeforeSelected != null)
+        //            //{
+        //            //    BeforeSelected();
+        //            //}
+        //            _selected = value;
+        //            NotifyPropertyChanged("Selected");
+        //        }
+        //    }
+        //}
+
+        //public void DeSelect()
+        //{
+        //    _selected = false;
+        //}
+
+        private string _reportName;
+        public string ReportName
         {
-            get { return _selected; }
+            get { return _reportName; }
             set
             {
-                if (value != _selected)
+                if (value != _reportName)
                 {
-                    if(BeforeSelected != null)
-                    {
-                        BeforeSelected();
-                    }
-                    _selected = value;
-                    NotifyPropertyChanged("Selected");
+                    _reportName = value;
+                    NotifyPropertyChanged("ReportName");
                 }
             }
-        }
-
-        public void DeSelect()
-        {
-            _selected = false;
         }
 
         DarkLightResults _results;

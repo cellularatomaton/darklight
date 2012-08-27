@@ -21,9 +21,9 @@
     </UserControl.Resources>
     <Grid Background="#FF333333">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="200"/>
+            <ColumnDefinition Width=".25*"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*" MinWidth="600"/>
+            <ColumnDefinition Width=".75*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -67,12 +67,12 @@
                     <StackPanel Margin="3">
                         <ComboBox x:Name="BacktestingPlayToComboBox" Margin="3" SelectedItem="{Binding SelectedPlayToValue, Mode=TwoWay}" ItemsSource="{Binding PlayToValues}"/>
                         <Button x:Name="RunBacktestButton" Content="Run" Margin="3" Click="RunBacktestButton_Click"/>
-                        <ListBox x:Name="ResultsSelectionListBox">
+                        <ListBox x:Name="ResultsSelectionListBox" ItemsSource="{Binding BacktestReports}" SelectedItem="{Binding SelectedReport}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <CheckBox IsChecked="{Binding Selected, Mode=TwoWay}"/>
-                                        <TextBlock Text="{Binding Results.Name}"/>
+                                        <!--<CheckBox IsChecked="{Binding Selected, Mode=TwoWay}"/>-->
+                                        <TextBlock Text="{Binding ReportName}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>

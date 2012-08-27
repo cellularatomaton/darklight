@@ -111,11 +111,6 @@ namespace DarkLight.Utilities
             }
         }
 
-        public string Name
-        {
-            get { return ToString(); }
-        }
-
         public decimal NetProfitOrLoss { get; set; }
         public decimal NetPerShare { get; set; }
 
