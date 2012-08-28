@@ -497,7 +497,7 @@ namespace DarkLight.Analytics.Models
                 var upperBound = lastDate.Value.Ticks;
                 var selectedSymbols = SymbolModels.Where(s => s.Selected).ToList();
                 var fileModels = TickFileModels
-                    .Where(file => lowerBound < file.DateForFile.Ticks && file.DateForFile.Ticks < upperBound);
+                    .Where(file => lowerBound <= file.DateForFile.Ticks && file.DateForFile.Ticks <= upperBound);
                 var symbolFilteredFileModels = fileModels.Join(
                     selectedSymbols,
                     outerModel => outerModel.Symbol.Symbol,

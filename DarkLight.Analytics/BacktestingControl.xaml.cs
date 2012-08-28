@@ -200,9 +200,24 @@ namespace DarkLight.Analytics
             BacktestingTabControl.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
             {
                 MessagesDataGrid.DataContext = _backtest.SelectedReport;
-                //ResultPropertyGrid.DataContext = _backtest.SelectedReport;
                 BacktestingTabControl.DataContext = _backtest.SelectedReport;
                 BacktestingPlotExpander.DataContext = _backtest.SelectedReport;
+
+                var results = _backtest.BacktestReports.Select(r => r.Results).ToList();
+                var statsModel = new StatisticsModel<DarkLightResults>(results);
+                statsModel.PropertyChanged += (sender, args) =>
+                {
+                    if(args.PropertyName == "Statistics")
+                    {
+                        var model = sender as StatisticsModel<DarkLightResults>;
+                        if (model != null)
+                        {
+                            BacktestingStatisticsControl.SetHistogramPlotterDomain(model.Statistics);
+                        }
+                    }
+                };
+                BacktestingStatisticsControl.DataContext = statsModel;
+
                 _reportModelsUnbound = false;
             }));
         }
@@ -309,29 +324,6 @@ namespace DarkLight.Analytics
 
         public void AddRun(BacktestingModel testModel, BatchReportModel reportModel)
         {
-            //reportModel.BeforeSelected += () =>
-            //{
-            //    foreach (var _batchReportModel in BacktestReports)
-            //    {
-            //        _batchReportModel.DeSelect();
-            //    }
-            //};
-
-            //reportModel.PropertyChanged += (sender, args) =>
-            //{
-            //    if(args.PropertyName == "Selected")
-            //    {
-            //        var report = sender as BatchReportModel;
-            //        if(report != null)
-            //        {
-            //            if(report.Selected)
-            //            {
-            //                SelectedReport = report;
-            //            }
-            //        }
-            //    }
-            //};
-
             _backtestModels.Add(testModel);
             _backtestReports.Add(reportModel);
         }

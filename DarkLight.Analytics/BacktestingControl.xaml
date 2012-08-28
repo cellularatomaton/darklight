@@ -73,7 +73,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <local:StatisticsControl Margin="3" />
+            <local:StatisticsControl x:Name="BacktestingStatisticsControl" Margin="3" />
             <GridSplitter Grid.Row="1" Margin="3" HorizontalAlignment="Stretch" Height="3" Background="#FF434343"/>
             <TabControl x:Name="BacktestingTabControl" Grid.Row="2" Margin="3">
                 <TabItem x:Name="PlotsTab" Header="Visualization">
@@ -83,7 +83,7 @@
                     </d3:ChartPlotter>
                 </TabItem>
                 <TabItem x:Name="ResultsTab" Header="Results">
-                    <DataGrid Margin="3" ItemsSource="{Binding Results}"/>
+                    <DataGrid Margin="3" ItemsSource="{Binding ResultsList}"/>
                 </TabItem>
                 <TabItem x:Name="MessagesTab" Header="Messages">
                     <DataGrid x:Name="MessagesDataGrid" Margin="3" ItemsSource="{Binding Messages}"/>

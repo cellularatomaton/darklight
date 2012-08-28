@@ -6,7 +6,7 @@
              xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
              xmlns:wpg="clr-namespace:WPG;assembly=WPG" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="600">
+             d:DesignHeight="300" d:DesignWidth="600" Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <ResourceDictionary >
             <ResourceDictionary.MergedDictionaries>
@@ -18,35 +18,38 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Background="#FF333333">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.25*"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="0.25*"/>
         </Grid.ColumnDefinitions>
-        <d3:ChartPlotter Grid.RowSpan="2" Background="#FF333333" Foreground="#525252">
-            <d3:HorizontalColumnChart Name="Histogram" ItemsSource="{Binding}">
+        <ListBox x:Name="StatisticSelectionListBox" ItemsSource="{Binding ViewableProperties}" SelectedItem="{Binding SelectedViewableProperty,Mode=TwoWay}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding PropertyName}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <GridSplitter Grid.Column="1" Margin="3" HorizontalAlignment="Stretch" Width="3" Background="#FF434343"/>
+        <d3:ChartPlotter x:Name="HistogramPlotter" Grid.Column="2" Background="#FF333333" Foreground="#525252">
+            <!--<d3:CursorCoordinateGraph/>-->
+            <d3:BarChart Name="barChart">
                 <d3:TemplateMarkerGenerator>
                     <DataTemplate>
-                        <Rectangle Fill="{d3:SelfBinding (d3:PointChartBase.Index), Converter={StaticResource fillsConverter}}" d3:ViewportPanel.ViewportWidth="1">
-                            <!--<d3:LiveToolTipService.ToolTip>
-                                <d3:LiveToolTip Background="{d3:SelfBinding Path=Owner.Fill, Converter={StaticResource lighterConverter}}" TextBlock.Foreground="{d3:SelfBinding Path=Owner.Fill, Converter={StaticResource backToForeConv}}">
-                                    <TextBlock>
-                                        <Run Text="X="/><TextBlock Text="{Binding Path=Owner.(d3:PointChartBase.Index), RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1, AncestorType={x:Type d3:LiveToolTip}}}"/>
-                                        <Run Text="; Y="/><TextBlock Text="{Binding}"/>
-                                    </TextBlock>
-                                </d3:LiveToolTip>
-                            </d3:LiveToolTipService.ToolTip>-->
+                        <Rectangle Fill="Aqua" Width="{Binding Width}" Height="{Binding Height}"
+								   d3:ViewportPanel.Y="{Binding Y}" 
+								   d3:ViewportPanel.X="{Binding X}"
+								   d3:ViewportPanel.ViewportVerticalAlignment="Bottom">
                         </Rectangle>
                     </DataTemplate>
                 </d3:TemplateMarkerGenerator>
-            </d3:HorizontalColumnChart>
+            </d3:BarChart>
         </d3:ChartPlotter>
-        <GridSplitter Grid.Column="1" Grid.RowSpan="2" Margin="3" HorizontalAlignment="Stretch" Width="3" Background="#FF434343"/>
-        <ComboBox Grid.Column="2" />
-        <wpg:PropertyGrid x:Name="ResultPropertyGrid" Grid.Column="2" Grid.Row="1" Margin="3" Instance="{Binding SelectedResult,Mode=OneWay}"  IsEnabled="True"></wpg:PropertyGrid>
+        <GridSplitter Grid.Column="3" Margin="3" HorizontalAlignment="Stretch" Width="3" Background="#FF434343"/>
+        <DataGrid Grid.Column="4" Margin="3" ItemsSource="{Binding StatisticsList}"/>
     </Grid>
 </UserControl>
