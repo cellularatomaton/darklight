@@ -285,8 +285,22 @@ namespace DarkLight.Utilities
             }
         }
 
-        ObservableCollection<KeyValuePair<string,string>> _results = new ObservableCollection<KeyValuePair<string, string>>();
-        public ObservableCollection<KeyValuePair<string, string>> Results
+        ObservableCollection<KeyValuePair<string,string>> _resultsList = new ObservableCollection<KeyValuePair<string, string>>();
+        public ObservableCollection<KeyValuePair<string, string>> ResultsList
+        {
+            get { return _resultsList; }
+            set
+            {
+                if (value != _resultsList)
+                {
+                    _resultsList = value;
+                    NotifyPropertyChanged("ResultsList");
+                }
+            }
+        }
+
+        DarkLightResults _results;
+        public DarkLightResults Results
         {
             get { return _results; }
             set
@@ -298,20 +312,6 @@ namespace DarkLight.Utilities
                 }
             }
         }
- 
-        //DarkLightResults _results;
-        //public DarkLightResults Results
-        //{
-        //    get { return _results; }
-        //    set
-        //    {
-        //        if (value != _results)
-        //        {
-        //            _results = value;
-        //            NotifyPropertyChanged("Results");
-        //        }
-        //    }
-        //}
 
         ObservableCollection<ObservableMessage> _messages = new ObservableCollection<ObservableMessage>();
         public ObservableCollection<ObservableMessage> Messages
@@ -592,7 +592,8 @@ namespace DarkLight.Utilities
             //ResultsTable = _reportResultsModel.GetResultsDataTable(responseName + "." + prettyTickFiles, _tradeList);
             var name = responseName + "." + prettyTickFiles;
             var resultInstance = DarkLightResults.GetDarkLightResults(name, _tradeList, engine_MessageUpdate, 0.0001m, 0.12m);
-            Results = new ObservableCollection<KeyValuePair<string, string>>(PlottingUtilities.GetFieldAndPropertyValueList(resultInstance));
+            ResultsList = new ObservableCollection<KeyValuePair<string, string>>(PlottingUtilities.GetFieldAndPropertyValueList(resultInstance));
+            Results = resultInstance;
 
             _activityModel.NumberTestsCompleted = _activityModel.NumberTestsCompleted + 1;
             if (e.Error != null)
