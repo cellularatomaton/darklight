@@ -25,12 +25,12 @@
             <TabItem Header="Backtesting">
                 <local:BacktestingControl x:Name="MainBacktestingControl"/>
             </TabItem>
-            <TabItem Header="Optimization">
+            <!--<TabItem Header="Optimization">
                 <local:OptimizationControl x:Name="MainOptimizationControl"/>
             </TabItem>
             <TabItem Header="Live Trading">
                 <local:LiveTradingControl x:Name="MainLiveTradingControl"/>
-            </TabItem>
+            </TabItem>-->
         </TabControl>
 	</Grid>
 </Window>

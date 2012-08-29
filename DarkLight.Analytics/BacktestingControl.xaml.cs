@@ -50,11 +50,18 @@ namespace DarkLight.Analytics
         // This method adds our selected reponse directory to the assembly search path.
         private Assembly LoadFromResponseFolder(object sender, ResolveEventArgs args)
         {
-            string folderPath = System.IO.Path.GetDirectoryName(_backtestingResponseLibraryList.FileName);
-            string assemblyPath = System.IO.Path.Combine(folderPath, new AssemblyName(args.Name).Name + ".dll");
-            if (File.Exists(assemblyPath) == false) return null;
-            Assembly assembly = Assembly.LoadFrom(assemblyPath);
-            return assembly;
+            if(!string.IsNullOrEmpty(_backtestingResponseLibraryList.FileName))
+            {
+                string folderPath = System.IO.Path.GetDirectoryName(_backtestingResponseLibraryList.FileName);
+                string assemblyPath = System.IO.Path.Combine(folderPath, new AssemblyName(args.Name).Name + ".dll");
+                if (File.Exists(assemblyPath) == false) return null;
+                Assembly assembly = Assembly.LoadFrom(assemblyPath);
+                return assembly;
+            }
+            else
+            {
+                return Assembly.GetExecutingAssembly();
+            }
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -126,6 +133,7 @@ namespace DarkLight.Analytics
             foreach (var _tickDataGroup in tickDataGroups)
             {
                 var _backtestingModel = new BacktestingModel();
+                _backtestingModel.CacheWait = _backtestingConfigurationModel.CacheWait;
                 var _reportModel = new BatchReportModel(_backtestingModel, _activityModel /*, updatePlots*/);
                 var info = TickFileNameInfo.GetTickFileInfoFromLongName(_tickDataGroup.First());
                 _reportModel.ReportName = "Y:" + info.Year.ToString() + ",M:" + info.Month.ToString() + ",D:" + info.Day.ToString();
@@ -136,7 +144,7 @@ namespace DarkLight.Analytics
                 _reportModel.RegisterDispatcher(DispatchableType.Indicator, IndicatorTab.Dispatcher);
                 _reportModel.RegisterDispatcher(DispatchableType.Message, MessagesTab.Dispatcher);
                 _reportModel.RegisterDispatcher(DispatchableType.Order, OrdersTab.Dispatcher);
-                _reportModel.RegisterDispatcher(DispatchableType.Plot, PlotsTab.Dispatcher);
+                _reportModel.RegisterDispatcher(DispatchableType.Plot, BacktestPlotter.Dispatcher);
                 _reportModel.RegisterDispatcher(DispatchableType.Position, PositionTab.Dispatcher);
             
                 BindInitializationModels();
@@ -151,9 +159,8 @@ namespace DarkLight.Analytics
                 _activityModel.AllRunsCompleted.WaitOne();
                 if (_backtest.BacktestReports.Any())
                 {
-                    //var report = _backtest.BacktestReports.First();
-                    //report.Selected = true;
                     _backtest.SelectedReport = _backtest.BacktestReports.First();
+                    BindStatisticsModels();
                 }
             });
         }
@@ -203,20 +210,7 @@ namespace DarkLight.Analytics
                 BacktestingTabControl.DataContext = _backtest.SelectedReport;
                 BacktestingPlotExpander.DataContext = _backtest.SelectedReport;
 
-                var results = _backtest.BacktestReports.Select(r => r.Results).ToList();
-                var statsModel = new StatisticsModel<DarkLightResults>(results);
-                statsModel.PropertyChanged += (sender, args) =>
-                {
-                    if(args.PropertyName == "Statistics")
-                    {
-                        var model = sender as StatisticsModel<DarkLightResults>;
-                        if (model != null)
-                        {
-                            BacktestingStatisticsControl.SetHistogramPlotterDomain(model.Statistics);
-                        }
-                    }
-                };
-                BacktestingStatisticsControl.DataContext = statsModel;
+                
 
                 _reportModelsUnbound = false;
             }));
@@ -228,6 +222,28 @@ namespace DarkLight.Analytics
             MessagesDataGrid.DataContext = null;
             BacktestingTabControl.DataContext = null;
             BacktestingPlotExpander.DataContext = null;
+        }
+
+        private void BindStatisticsModels()
+        {
+            BacktestingStatisticsControl.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+            { 
+                var results = _backtest.BacktestReports.Select(r => r.Results).ToList();
+                var statsModel = new StatisticsModel<DarkLightResults>(results);
+                statsModel.SelectedViewableProperty = statsModel.ViewableProperties.First();
+                statsModel.PropertyChanged += (sender, args) =>
+                {
+                    if (args.PropertyName == "Statistics")
+                    {
+                        var model = sender as StatisticsModel<DarkLightResults>;
+                        if (model != null)
+                        {
+                            BacktestingStatisticsControl.SetHistogramPlotterDomain(model.Statistics);
+                        }
+                    }
+                };
+                BacktestingStatisticsControl.DataContext = statsModel;
+            }));
         }
 
         #region Private Backtesting Methods
@@ -292,6 +308,12 @@ namespace DarkLight.Analytics
         }
 
         #endregion
+
+        private void StopBacktestButton_Click(object sender, RoutedEventArgs e)
+        {
+            _backtest.Stop();
+            _backtest.Clear();
+        }
     }
 
     public class Backtest : INotifyPropertyChanged, IDisposable
@@ -326,6 +348,14 @@ namespace DarkLight.Analytics
         {
             _backtestModels.Add(testModel);
             _backtestReports.Add(reportModel);
+        }
+
+        public void Stop()
+        {
+            foreach (var _backtestingModel in BacktestModels)
+            {
+                _backtestingModel.Stop();
+            }
         }
 
         public void Clear()

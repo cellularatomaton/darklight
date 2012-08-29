@@ -24,6 +24,20 @@ namespace DarkLight.Analytics.Models
             }
         }
 
+        private int _cacheWait = 10000;
+        public int CacheWait
+        {
+            get { return _cacheWait; }
+            set
+            {
+                if (value != _cacheWait)
+                {
+                    _cacheWait = value;
+                    NotifyPropertyChanged("CacheWait");
+                }
+            }
+        }
+
         public IEnumerable<PlayTo> PlayToValues
         {
             get
