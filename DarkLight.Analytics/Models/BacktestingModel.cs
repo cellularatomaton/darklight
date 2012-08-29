@@ -49,7 +49,7 @@ namespace DarkLight.Analytics.Models
 
         BackgroundWorker _backgroundWorker;
         Response myres = null;
-        HistSim _historicalSimulator;
+        MultiSimImpl _historicalSimulator;
         Broker _broker;
 
         bool _useBidAskFills = false;
@@ -130,6 +130,12 @@ namespace DarkLight.Analytics.Models
             StatusUpdate("Playing next " + pt.ToString().Replace(_playToString, string.Empty) + "...");
         }
 
+        public void Stop()
+        {
+            _historicalSimulator.Stop();
+            _backgroundWorker.CancelAsync();
+        }
+
         public void Reset()
         {
             try
@@ -161,9 +167,16 @@ namespace DarkLight.Analytics.Models
             _backgroundWorker.RunWorkerCompleted += PlayComplete;
         }
 
+        private int _cacheWait = 1000;
+        public int CacheWait
+        {
+            get { return _cacheWait; }
+            set { _cacheWait = value; }
+        }
         bool loadsim()
         {
             _historicalSimulator = new MultiSimImpl(_historicalDataFiles.ToArray());
+            _historicalSimulator.CacheWait = _cacheWait;
             _historicalSimulator.GotTick += historicalSimulator_GotTick;
 
             _broker = new Broker();
@@ -418,11 +431,16 @@ namespace DarkLight.Analytics.Models
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
         ///  SIMULATOR
-
+        private int tickCount = 0;
         void historicalSimulator_GotTick(Tick t)
         {
             _date = t.date;
             _time = t.time;
+            
+            if(tickCount++ % 1000 == 0)
+            {
+                MessageUpdate("Received Tick: " + tickCount);
+            }
 
             _broker.Execute(t);
             

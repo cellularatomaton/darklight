@@ -36,22 +36,15 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <GridSplitter Grid.Column="1" Margin="3" HorizontalAlignment="Stretch" Width="3" Background="#FF434343"/>
-        <oxy:Plot Grid.Column="2" Model="{Binding HistogramModel}" Background="#FF333333" Foreground="#525252"/>
-        <!--<d3:ChartPlotter x:Name="HistogramPlotter" Grid.Column="2" Background="#FF333333" Foreground="#525252">
-            <d3:CursorCoordinateGraph/>
-            <d3:BarChart Name="barChart">
-                <d3:TemplateMarkerGenerator>
-                    <DataTemplate>
-                        <Rectangle Fill="Aqua" Width="{Binding Width}" Height="{Binding Height}"
-								   d3:ViewportPanel.Y="{Binding Y}" 
-								   d3:ViewportPanel.X="{Binding X}"
-								   d3:ViewportPanel.ViewportVerticalAlignment="Bottom">
-                        </Rectangle>
-                    </DataTemplate>
-                </d3:TemplateMarkerGenerator>
-            </d3:BarChart>
-        </d3:ChartPlotter>-->
+        <oxy:Plot Grid.Column="2" Model="{Binding HistogramModel}" Background="#FF333333" Foreground="#525252" PlotAreaBorderColor="#525252" TextColor="#525252"/>
         <GridSplitter Grid.Column="3" Margin="3" HorizontalAlignment="Stretch" Width="3" Background="#FF434343"/>
-        <DataGrid Grid.Column="4" Margin="3" ItemsSource="{Binding StatisticsList}"/>
+        <StackPanel Grid.Column="4" >
+            <DataGrid Margin="3" ItemsSource="{Binding StatisticsList}"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Number Bins: "/>
+                <TextBox Text="{Binding NumberBins,Mode=TwoWay}" />
+            </StackPanel>
+        </StackPanel>
+        
     </Grid>
 </UserControl>

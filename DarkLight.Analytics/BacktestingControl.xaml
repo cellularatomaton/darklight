@@ -52,16 +52,12 @@
                 <Expander Name="BacktestingRunExpander" Header="Run Backtest" Margin="3" IsExpanded="True" BorderBrush="{StaticResource GradientBorderBrush}">
                     <StackPanel Margin="3">
                         <ComboBox x:Name="BacktestingPlayToComboBox" Margin="3" SelectedItem="{Binding SelectedPlayToValue, Mode=TwoWay}" ItemsSource="{Binding PlayToValues}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Cache Wait: "/>
+                            <TextBox Text="{Binding CacheWait,Mode=TwoWay}"/>
+                        </StackPanel>
                         <Button x:Name="RunBacktestButton" Content="Run" Margin="3" Click="RunBacktestButton_Click"/>
-                        <ListBox x:Name="ResultsSelectionListBox" ItemsSource="{Binding BacktestReports}" SelectedItem="{Binding SelectedReport}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding ReportName}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                        <Button x:Name="StopBacktestButton" Content="Stop" Margin="3" Click="StopBacktestButton_Click" />
                     </StackPanel>
                 </Expander>
             </StackPanel>
@@ -75,35 +71,54 @@
             </Grid.RowDefinitions>
             <local:StatisticsControl x:Name="BacktestingStatisticsControl" Margin="3" />
             <GridSplitter Grid.Row="1" Margin="3" HorizontalAlignment="Stretch" Height="3" Background="#FF434343"/>
-            <TabControl x:Name="BacktestingTabControl" Grid.Row="2" Margin="3">
-                <TabItem x:Name="PlotsTab" Header="Visualization">
-                    <d3:ChartPlotter x:Name="BacktestPlotter" Grid.ColumnSpan="1" Grid.Column="1" Margin="3" LegendVisibility="Hidden" LegendVisible="False" Background="#FF333333" Foreground="#525252">
-                        <d3:CursorCoordinateGraph/>
-                        <d3:HorizontalDateTimeAxis Name="dateAxis"/>
-                    </d3:ChartPlotter>
-                </TabItem>
-                <TabItem x:Name="ResultsTab" Header="Results">
-                    <DataGrid Margin="3" ItemsSource="{Binding ResultsList}"/>
-                </TabItem>
-                <TabItem x:Name="MessagesTab" Header="Messages">
-                    <DataGrid x:Name="MessagesDataGrid" Margin="3" ItemsSource="{Binding Messages}"/>
-                </TabItem>
-                <TabItem x:Name="TicksTab" Header="Ticks">
-                    <DataGrid Margin="3" ItemsSource="{Binding TickTable}"/>
-                </TabItem>
-                <TabItem x:Name="IndicatorTab" Header="Indicators">
-                    <DataGrid Margin="3" ItemsSource="{Binding IndicatorTable}"/>
-                </TabItem>
-                <TabItem x:Name="PositionTab" Header="Position">
-                    <DataGrid Margin="3" ItemsSource="{Binding PositionTable}"/>
-                </TabItem>
-                <TabItem x:Name="OrdersTab" Header="Orders">
-                    <DataGrid Margin="3" ItemsSource="{Binding OrderTable}"/>
-                </TabItem>
-                <TabItem x:Name="FillsTab" Header="Fills">
-                    <DataGrid Margin="3" ItemsSource="{Binding FillTable}"/>
-                </TabItem>
-            </TabControl>
+            <Grid Grid.Row="2" Margin="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width=".25*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width=".5*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width=".25*"/>
+                </Grid.ColumnDefinitions>
+                <ListBox x:Name="ResultsSelectionListBox" ItemsSource="{Binding BacktestReports}" SelectedItem="{Binding SelectedReport}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding ReportName}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <GridSplitter Grid.Column="1" Width="3" Margin="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FF434343"/>
+                <d3:ChartPlotter x:Name="BacktestPlotter" Grid.Column="2" Margin="3" LegendVisibility="Hidden" LegendVisible="False" Background="#FF333333" Foreground="#525252">
+                    <d3:CursorCoordinateGraph/>
+                    <d3:HorizontalDateTimeAxis Name="dateAxis"/>
+                </d3:ChartPlotter>
+                <GridSplitter Grid.Column="3" Width="3" Margin="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FF434343"/>
+                <TabControl x:Name="BacktestingTabControl" Grid.Column="4" Margin="3">
+                    <TabItem x:Name="ResultsTab" Header="Results">
+                        <DataGrid Margin="2" ItemsSource="{Binding ResultsList}"/>
+                    </TabItem>
+                    <TabItem x:Name="MessagesTab" Header="Messages">
+                        <DataGrid x:Name="MessagesDataGrid" Margin="3" ItemsSource="{Binding Messages}"/>
+                    </TabItem>
+                    <TabItem x:Name="TicksTab" Header="Ticks">
+                        <DataGrid Margin="3" ItemsSource="{Binding TickTable}"/>
+                    </TabItem>
+                    <TabItem x:Name="IndicatorTab" Header="Indicators">
+                        <DataGrid Margin="3" ItemsSource="{Binding IndicatorTable}"/>
+                    </TabItem>
+                    <TabItem x:Name="PositionTab" Header="Position">
+                        <DataGrid Margin="3" ItemsSource="{Binding PositionTable}"/>
+                    </TabItem>
+                    <TabItem x:Name="OrdersTab" Header="Orders">
+                        <DataGrid Margin="3" ItemsSource="{Binding OrderTable}"/>
+                    </TabItem>
+                    <TabItem x:Name="FillsTab" Header="Fills">
+                        <DataGrid Margin="3" ItemsSource="{Binding FillTable}"/>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+            
         </Grid>
         <local:AnalyticsStatusBar x:Name="BacktestingStatusBar" Grid.Row="1" Grid.ColumnSpan="3" />
     </Grid>

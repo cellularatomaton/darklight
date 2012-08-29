@@ -136,40 +136,6 @@ namespace DarkLight.Analytics
             }
         }
 
-        //private ObservableCollection<BarChartData> _bins = new ObservableCollection<BarChartData>();
-        //public ObservableCollection<BarChartData> Bins
-        //{
-        //    get
-        //    {
-        //        return _bins;
-        //    }
-        //    set
-        //    {
-        //        if (value != _bins)
-        //        {
-        //            _bins = value;
-        //            NotifyPropertyChanged("Bins");
-        //        }
-        //    }
-        //}
-
-        //EnumerableDataSource<BarChartData> _binDataSource;
-        //public EnumerableDataSource<BarChartData> BinDataSource
-        //{
-        //    get
-        //    {
-        //        return _binDataSource;
-        //    }
-        //    set
-        //    {
-        //        value.SetXMapping(bar => bar.X);
-        //        value.SetYMapping(bar => bar.Height);
-        //        _binDataSource = value;
-        //    }
-        //}
-
-        //public BarChartData[] BinArray { get; set; }
-
         private PlotModel _histogramModel;
         public PlotModel HistogramModel
         {
@@ -220,7 +186,7 @@ namespace DarkLight.Analytics
             var binRange = Range.Double(min, max, step);
 
             var model = new PlotModel(title) {};
-            var s1 = new RectangleBarSeries {};
+            var s1 = new RectangleBarSeries {FillColor = OxyColors.CornflowerBlue};
 
             foreach (var binMin in binRange)
             {

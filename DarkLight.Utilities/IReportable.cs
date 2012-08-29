@@ -247,30 +247,6 @@ namespace DarkLight.Utilities
     {
         #region Public Members
 
-        //public Action BeforeSelected;  // Before this report is selected in the GUI, we want to unselect all others.
-        //bool _selected;
-        //public bool Selected
-        //{
-        //    get { return _selected; }
-        //    set
-        //    {
-        //        if (value != _selected)
-        //        {
-        //            //if(BeforeSelected != null)
-        //            //{
-        //            //    BeforeSelected();
-        //            //}
-        //            _selected = value;
-        //            NotifyPropertyChanged("Selected");
-        //        }
-        //    }
-        //}
-
-        //public void DeSelect()
-        //{
-        //    _selected = false;
-        //}
-
         private string _reportName;
         public string ReportName
         {
@@ -327,7 +303,6 @@ namespace DarkLight.Utilities
             }
         }
 
-        //private DataTable _completedTickTable;
         private ObservableCollection<DataGridTick> _completedTickTable;
         public ObservableCollection<DataGridTick> TickTable
         {
@@ -398,20 +373,6 @@ namespace DarkLight.Utilities
             }
         }
 
-        //DataTable _completedResultsTable;
-        //public DataTable ResultsTable
-        //{
-        //    get { return _completedResultsTable; }
-        //    set
-        //    {
-        //        if (value != _completedResultsTable)
-        //        {
-        //            _completedResultsTable = value;
-        //            NotifyPropertyChanged("ResultsTable");
-        //        }
-        //    }
-        //}
-
         Dictionary<string, TimePlot> _plotMap = new Dictionary<string, TimePlot>();
         private ObservableCollection<TimePlot> _completedPlots;
         public ObservableCollection<TimePlot> Plots
@@ -470,7 +431,7 @@ namespace DarkLight.Utilities
             _tradeList.Clear();
             _messageBuilder = new StringBuilder();
             engine_MessageUpdate(Util.TLSIdentity());
-            engine_MessageUpdate(RunTracker.CountNewGetPrettyRuns(_programName, Util.PROGRAM));
+            //engine_MessageUpdate(RunTracker.CountNewGetPrettyRuns(_programName, Util.PROGRAM));
             initializeTables();
             initializeIndicators();
             _plotMap.Clear();
@@ -589,9 +550,8 @@ namespace DarkLight.Utilities
 
             string responseName = _engineInfo.ResponseName;
             string prettyTickFiles = _engineInfo.PrettyTickFiles;
-            //ResultsTable = _reportResultsModel.GetResultsDataTable(responseName + "." + prettyTickFiles, _tradeList);
             var name = responseName + "." + prettyTickFiles;
-            var resultInstance = DarkLightResults.GetDarkLightResults(name, _tradeList, engine_MessageUpdate, 0.0001m, 0.12m);
+            var resultInstance = DarkLightResults.GetDarkLightResults(name, _tradeList, engine_MessageUpdate, 0.0001m, 0.0012m);
             ResultsList = new ObservableCollection<KeyValuePair<string, string>>(PlottingUtilities.GetFieldAndPropertyValueList(resultInstance));
             Results = resultInstance;
 
