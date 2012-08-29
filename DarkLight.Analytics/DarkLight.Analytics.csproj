@@ -48,6 +48,12 @@
     <Reference Include="DynamicDataDisplay.Markers2">
       <HintPath>..\Lib\DynamicDataDisplay.Markers2.dll</HintPath>
     </Reference>
+    <Reference Include="OxyPlot">
+      <HintPath>..\Lib\OxyPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.Wpf">
+      <HintPath>..\Lib\OxyPlot.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Parser">
       <HintPath>..\Lib\Parser.dll</HintPath>
     </Reference>

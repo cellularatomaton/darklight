@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
-             xmlns:wpg="clr-namespace:WPG;assembly=WPG" 
+             xmlns:wpg="clr-namespace:WPG;assembly=WPG"
+             xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600" Loaded="UserControl_Loaded">
     <UserControl.Resources>
@@ -35,8 +36,9 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <GridSplitter Grid.Column="1" Margin="3" HorizontalAlignment="Stretch" Width="3" Background="#FF434343"/>
-        <d3:ChartPlotter x:Name="HistogramPlotter" Grid.Column="2" Background="#FF333333" Foreground="#525252">
-            <!--<d3:CursorCoordinateGraph/>-->
+        <oxy:Plot Grid.Column="2" Model="{Binding HistogramModel}" Background="#FF333333" Foreground="#525252"/>
+        <!--<d3:ChartPlotter x:Name="HistogramPlotter" Grid.Column="2" Background="#FF333333" Foreground="#525252">
+            <d3:CursorCoordinateGraph/>
             <d3:BarChart Name="barChart">
                 <d3:TemplateMarkerGenerator>
                     <DataTemplate>
@@ -48,7 +50,7 @@
                     </DataTemplate>
                 </d3:TemplateMarkerGenerator>
             </d3:BarChart>
-        </d3:ChartPlotter>
+        </d3:ChartPlotter>-->
         <GridSplitter Grid.Column="3" Margin="3" HorizontalAlignment="Stretch" Width="3" Background="#FF434343"/>
         <DataGrid Grid.Column="4" Margin="3" ItemsSource="{Binding StatisticsList}"/>
     </Grid>

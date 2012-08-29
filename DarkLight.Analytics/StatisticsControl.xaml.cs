@@ -18,6 +18,7 @@ using DarkLight.Utilities;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.Charts;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
+using OxyPlot;
 
 namespace DarkLight.Analytics
 {
@@ -135,39 +136,53 @@ namespace DarkLight.Analytics
             }
         }
 
-        private ObservableCollection<BarChartData> _bins = new ObservableCollection<BarChartData>();
-        public ObservableCollection<BarChartData> Bins
+        //private ObservableCollection<BarChartData> _bins = new ObservableCollection<BarChartData>();
+        //public ObservableCollection<BarChartData> Bins
+        //{
+        //    get
+        //    {
+        //        return _bins;
+        //    }
+        //    set
+        //    {
+        //        if (value != _bins)
+        //        {
+        //            _bins = value;
+        //            NotifyPropertyChanged("Bins");
+        //        }
+        //    }
+        //}
+
+        //EnumerableDataSource<BarChartData> _binDataSource;
+        //public EnumerableDataSource<BarChartData> BinDataSource
+        //{
+        //    get
+        //    {
+        //        return _binDataSource;
+        //    }
+        //    set
+        //    {
+        //        value.SetXMapping(bar => bar.X);
+        //        value.SetYMapping(bar => bar.Height);
+        //        _binDataSource = value;
+        //    }
+        //}
+
+        //public BarChartData[] BinArray { get; set; }
+
+        private PlotModel _histogramModel;
+        public PlotModel HistogramModel
         {
-            get
-            {
-                return _bins;
-            }
+            get { return _histogramModel; }
             set
             {
-                if (value != _bins)
+                if (value != _histogramModel)
                 {
-                    _bins = value;
-                    NotifyPropertyChanged("Bins");
+                    _histogramModel = value;
+                    NotifyPropertyChanged("HistogramModel");
                 }
             }
         }
-
-        EnumerableDataSource<BarChartData> _binDataSource;
-        public EnumerableDataSource<BarChartData> BinDataSource
-        {
-            get
-            {
-                return _binDataSource;
-            }
-            set
-            {
-                value.SetXMapping(bar => bar.X);
-                value.SetYMapping(bar => bar.Height);
-                _binDataSource = value;
-            }
-        }
-
-        public BarChartData[] BinArray { get; set; }
 
         private ObservableCollection<T> _sampleInstances = new ObservableCollection<T>();
         public ObservableCollection<T> SampleInstances
@@ -189,7 +204,7 @@ namespace DarkLight.Analytics
             var plottablePoints = PlottingUtilities.ToPlottable<T>(plottableValues, plottableProperty).Select(p => p.Y).ToArray();
             if(plottablePoints.Count() != 0)
             {
-                PopulateBins(plottablePoints, _numberBins);
+                PopulateBins(plottablePoints, _numberBins, plottableProperty.PropertyName);
                 Descriptive descriptiveStats = new Descriptive(plottablePoints);
                 descriptiveStats.Analyze();
                 Statistics = descriptiveStats.Result;
@@ -197,30 +212,72 @@ namespace DarkLight.Analytics
             }
         }
 
-        public void PopulateBins(IEnumerable<double> samples, int numBins)
+        public void PopulateBins(IEnumerable<double> samples, int numBins, string title)
         {
-            //Bins.Clear();
-            //BarSegments.Clear();
-            var bins = new List<BarChartData>();
             var max = samples.Max();
             var min = samples.Min();
             var step = (max - min)/Convert.ToDouble(numBins);
             var binRange = Range.Double(min, max, step);
-            var yMax = 0.0;
+
+            var model = new PlotModel(title) {};
+            var s1 = new RectangleBarSeries {};
+
             foreach (var binMin in binRange)
             {
                 var binMax = binMin + step;
-                var binSamples = samples.Where(v => binMin < v && v < binMax);
-                var binVal = (binMin + binMax)/2.0;
+                var binSamples = samples.Where(v => binMin <= v && v < binMax);
                 var binCount = Convert.ToDouble(binSamples.Count());
-                yMax = yMax < binCount ? binCount : yMax;
-                var bar = new BarChartData { X = binVal, Y = 0.0, Height = binCount, Width = step };
-                bins.Add(bar);
-                //var segment = new Segment {};
+                s1.Items.Add(new RectangleBarItem
+                {
+                    X0 = binMin, 
+                    X1 = binMax, 
+                    Y0 = 0, 
+                    Y1 = binCount,
+                });
             }
-            Bins = new ObservableCollection<BarChartData>(bins);
-            //BinDataSource = new EnumerableDataSource<BarChartData>(bins);
-            //BinArray = bins.ToArray();
+            model.Series.Add(s1);
+            model.PlotMargins = new OxyThickness(0, 30, 0, 0);
+            var xMin = s1.Items.Min(b => b.X0);
+            var xMax = s1.Items.Max(b => b.X1);
+            if(xMin < xMax)
+            {
+                var xAxis = new LinearAxis(AxisPosition.Bottom, xMin, xMax, "Value");
+                xAxis.AbsoluteMinimum = xMin;
+                xAxis.AbsoluteMaximum = xMax;
+                xAxis.TextColor = OxyColors.White;
+                xAxis.MajorGridlineColor = OxyColors.White;
+                xAxis.MinorGridlineColor = OxyColors.White;
+                xAxis.AxislineColor = OxyColors.White;
+                xAxis.TitleColor = OxyColors.White;
+                xAxis.TicklineColor = OxyColors.White;
+                xAxis.ExtraGridlineColor = OxyColors.White;
+                model.Axes.Add(xAxis);
+            }
+
+            var yMin = s1.Items.Min(b => b.Y0);
+            var yMax = s1.Items.Max(b => b.Y1);
+            if(yMin < yMax)
+            {
+                var yAxis = new LinearAxis(AxisPosition.Left, s1.Items.Min(b => b.Y0), s1.Items.Max(b => b.Y1), "Frequency");
+                yAxis.AbsoluteMinimum = s1.Items.Min(b => b.Y0);
+                yAxis.AbsoluteMaximum = s1.Items.Max(b => b.Y1);
+                yAxis.TextColor = OxyColors.White;
+                yAxis.MajorGridlineColor = OxyColors.White;
+                yAxis.MinorGridlineColor = OxyColors.White;
+                yAxis.AxislineColor = OxyColors.White;
+                yAxis.TitleColor = OxyColors.White;
+                yAxis.TicklineColor = OxyColors.White;
+                yAxis.ExtraGridlineColor = OxyColors.White;
+                model.Axes.Add(yAxis);
+            }
+            
+            model.LegendTitleColor = OxyColors.White;
+            model.PlotAreaBorderColor = OxyColors.White;
+            model.LegendTextColor = OxyColors.White;
+            model.SubtitleColor = OxyColors.White;
+            model.TextColor = OxyColors.White;
+            model.TitleColor = OxyColors.White;
+            HistogramModel = model;
         }
 
         #region INotifyPropertyChanged
