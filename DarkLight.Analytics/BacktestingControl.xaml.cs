@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -111,7 +112,8 @@ namespace DarkLight.Analytics
             UnbindResponseModels();
             _backtestingConfigurationModel.ResponseName = _backtestingResponseLibraryList.SelectedResponse;
             _backtestingConfigurationModel.ResponsePath = _backtestingResponseLibraryList.FileName;
-            if (_backtestingConfigurationModel.ResponseName != ResponseLibraryList._header)
+            if (_backtestingConfigurationModel.ResponseName != ResponseLibraryList._header &&
+                _backtestingConfigurationModel.ResponseName != null)
             {
                 _backtestingConfigurationModel.SelectedResponse = ResponseLoader.FromDLL(_backtestingConfigurationModel.ResponseName, _backtestingConfigurationModel.ResponsePath);
             }
@@ -160,7 +162,7 @@ namespace DarkLight.Analytics
                 if (_backtest.BacktestReports.Any())
                 {
                     _backtest.SelectedReport = _backtest.BacktestReports.First();
-                    BindStatisticsModels();
+                    BindStatisticsModels("Results");
                 }
             });
         }
@@ -224,25 +226,50 @@ namespace DarkLight.Analytics
             BacktestingPlotExpander.DataContext = null;
         }
 
-        private void BindStatisticsModels()
+        private void BindStatisticsModels(string statisticsTarget)
         {
             BacktestingStatisticsControl.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
-            { 
-                var results = _backtest.BacktestReports.Select(r => r.Results).ToList();
-                var statsModel = new StatisticsModel<DarkLightResults>(results);
-                statsModel.SelectedViewableProperty = statsModel.ViewableProperties.First();
-                statsModel.PropertyChanged += (sender, args) =>
+            {
+                if(statisticsTarget == "Plots") // Show statistics for any plotted points.
                 {
-                    if (args.PropertyName == "Statistics")
+                    var plotCollections = _backtest.GetPlotCollectionsByLabel();
+                    if (plotCollections.Count != 0)
                     {
-                        var model = sender as StatisticsModel<DarkLightResults>;
-                        if (model != null)
+                        var statsModel = new PrimativeTypeStatisticsModel(plotCollections);
+                        statsModel.SelectedViewableProperty = statsModel.ViewableProperties.First();
+                        statsModel.PropertyChanged += (sender, args) =>
                         {
-                            BacktestingStatisticsControl.SetHistogramPlotterDomain(model.Statistics);
-                        }
+                            if (args.PropertyName == "Statistics")
+                            {
+                                var model = sender as PrimativeTypeStatisticsModel;
+                                if (model != null)
+                                {
+                                    BacktestingStatisticsControl.SetHistogramPlotterDomain(model.Statistics);
+                                }
+                            }
+                        };
+                        BacktestingStatisticsControl.DataContext = statsModel;
                     }
-                };
-                BacktestingStatisticsControl.DataContext = statsModel;
+                }
+                else // Show statistics for results (default behavior)
+                {
+                    var results = _backtest.BacktestReports.Select(r => r.Results).ToList();
+                    var statsModel = new ComplexTypeStatisticsModel<DarkLightResults>(results);
+                    statsModel.SelectedViewableProperty = statsModel.ViewableProperties.First();
+                    statsModel.PropertyChanged += (sender, args) =>
+                    {
+                        if (args.PropertyName == "Statistics")
+                        {
+                            var model = sender as ComplexTypeStatisticsModel<DarkLightResults>;
+                            if (model != null)
+                            {
+                                BacktestingStatisticsControl.SetHistogramPlotterDomain(model.Statistics);
+                            }
+                        }
+                    };
+                    BacktestingStatisticsControl.DataContext = statsModel;
+                }
+                
             }));
         }
 
@@ -314,6 +341,12 @@ namespace DarkLight.Analytics
             _backtest.Stop();
             _backtest.Clear();
         }
+
+        private void StatisticsTartetRadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            RadioButton li = (sender as RadioButton);
+            BindStatisticsModels(li.Content.ToString());
+        }
     }
 
     public class Backtest : INotifyPropertyChanged, IDisposable
@@ -326,6 +359,7 @@ namespace DarkLight.Analytics
             {
                 if (value != _selectedReport)
                 {
+                    CopyPlotSelection(_selectedReport, value);
                     _selectedReport = value;
                     NotifyPropertyChanged("SelectedReport");
                 }
@@ -370,6 +404,55 @@ namespace DarkLight.Analytics
                 _backtestingModel.Dispose();
             }
             BacktestModels.Clear();
+        }
+
+        public static void CopyPlotSelection(BatchReportModel oldReport, BatchReportModel newReport)
+        {
+            if(oldReport != null && newReport != null)
+            {
+                foreach (var _plot in oldReport.Plots)
+                {
+                    var matchingPlots = newReport.Plots.Where(p => p.Label == _plot.Label);
+                    foreach (var _matchingPlot in matchingPlots)
+                    {
+                        _matchingPlot.Selected = _plot.Selected;
+                    }
+                }
+            }
+            
+        }
+
+        //public List<PlottableProperty> GetAllPlottableValues()
+        //{
+        //    var plottableValueList = BacktestReports.First()
+        //        .Plots
+        //        .Select(_plot => new PlottableProperty
+        //            {
+        //                PropertyName = _plot.Label, 
+        //                Selected = false,
+        //            })
+        //        .ToList();
+        //    return plottableValueList;
+        //}
+
+        public IDictionary<string, List<decimal>> GetPlotCollectionsByLabel()
+        {
+            Dictionary<string,List<decimal>> plotCollections = new Dictionary<string, List<decimal>>();
+            foreach (var _report in BacktestReports)
+            {
+                foreach (var _plot in _report.Plots)
+                {
+                    if(!plotCollections.ContainsKey(_plot.Label))
+                    {
+                        plotCollections[_plot.Label] = new List<decimal>();
+                    }
+                    foreach (var _point in _plot.PlotPoints)
+                    {
+                        plotCollections[_plot.Label].Add(_point.Value);
+                    }
+                }
+            }
+            return plotCollections;
         }
 
         #region Implementation of IDisposable

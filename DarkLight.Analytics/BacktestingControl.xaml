@@ -69,7 +69,18 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <local:StatisticsControl x:Name="BacktestingStatisticsControl" Margin="3" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Statistics Target: " Foreground="White"/>
+                    <RadioButton GroupName="StatisticsTarget" IsChecked="True" Click="StatisticsTartetRadioButton_Click">Results</RadioButton>
+                    <RadioButton GroupName="StatisticsTarget" IsChecked="False"  Click="StatisticsTartetRadioButton_Click">Plots</RadioButton>
+                </StackPanel>
+                <local:StatisticsControl x:Name="BacktestingStatisticsControl" Grid.Row="1" Margin="3" />
+            </Grid>
             <GridSplitter Grid.Row="1" Margin="3" HorizontalAlignment="Stretch" Height="3" Background="#FF434343"/>
             <Grid Grid.Row="2" Margin="3">
                 <Grid.ColumnDefinitions>
