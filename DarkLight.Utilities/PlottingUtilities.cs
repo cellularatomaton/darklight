@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Reflection;
 using System.Windows.Media;
 using TradeLink.AppKit;
@@ -59,7 +60,7 @@ namespace DarkLight.Utilities
 
         public static List<PlottableProperty> GetAllPlottableValues(Type plottableType)
         {
-            var plottableValueList = new List<PlottableProperty>();
+            var plottableValueList = new List<PlottableProperty>(); 
             var memberInfos = GetFieldsAndProperties(plottableType, BindingFlags.Instance | BindingFlags.Public);
             
             foreach (var memberInfo in memberInfos)
@@ -104,6 +105,21 @@ namespace DarkLight.Utilities
             }
             return plottableValueList;
         }
+
+        //public static List<PlottableProperty> GetAllPlottableValues(ExpandoObject instance)
+        //{
+        //    var plottableValueList = new List<PlottableProperty>();
+        //    var instanceDict = (IDictionary<string, object>) instance;
+        //    foreach (var _key in instanceDict.Keys)
+        //    {
+        //        plottableValueList.Add(new PlottableProperty
+        //        {
+        //            PropertyName = _key,
+        //            Selected = false,
+        //        });
+        //    }
+        //    return plottableValueList;
+        //}
 
         public static List<AdjustableProperty> GetAllAdjustableProperties(Type typeToAdjust)
         {

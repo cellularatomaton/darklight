@@ -41,7 +41,7 @@
         <StackPanel Grid.Column="4" >
             <DataGrid Margin="3" ItemsSource="{Binding StatisticsList}"/>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Number Bins: "/>
+                <TextBlock Text="Number Bins: " Foreground="White"/>
                 <TextBox Text="{Binding NumberBins,Mode=TwoWay}" />
             </StackPanel>
         </StackPanel>

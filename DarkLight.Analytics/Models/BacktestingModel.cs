@@ -431,17 +431,12 @@ namespace DarkLight.Analytics.Models
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
         ///  SIMULATOR
-        private int tickCount = 0;
+        
         void historicalSimulator_GotTick(Tick t)
         {
             _date = t.date;
             _time = t.time;
             
-            if(tickCount++ % 1000 == 0)
-            {
-                MessageUpdate("Received Tick: " + tickCount);
-            }
-
             _broker.Execute(t);
             
             //fire event consumed by response and report
