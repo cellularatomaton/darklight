@@ -33,6 +33,18 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="clrzmq">
+      <HintPath>..\packages\clrzmq.2.2.5\lib\clrzmq.dll</HintPath>
+    </Reference>
+    <Reference Include="clrzmq-ext">
+      <HintPath>..\packages\clrzmq.2.2.5\lib\clrzmq-ext.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\packages\mongocsharpdriver.1.6\lib\net35\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\packages\mongocsharpdriver.1.6\lib\net35\MongoDB.Driver.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -59,7 +71,10 @@
   <ItemGroup>
     <Compile Include="ActivityModel.cs" />
     <Compile Include="AdjustableProperties.cs" />
+    <Compile Include="EnumPROPOSED.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="HelpersPROPOSED.cs" />
+    <Compile Include="InterfacesPROPOSED.cs" />
     <Compile Include="IReportable.cs" />
     <Compile Include="LinqExtensions.cs" />
     <Compile Include="PlottingModels.cs" />
@@ -68,6 +83,14 @@
     <Compile Include="Range.cs" />
     <Compile Include="ResultsModel.cs" />
     <Compile Include="StatDescriptive.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libzmq.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
