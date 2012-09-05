@@ -39,6 +39,13 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="clrzmq">
+      <HintPath>..\packages\clrzmq.2.2.5\lib\clrzmq.dll</HintPath>
+    </Reference>
+    <Reference Include="clrzmq-ext">
+      <HintPath>..\packages\clrzmq.2.2.5\lib\clrzmq-ext.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DynamicDataDisplay">
       <HintPath>..\Lib\DynamicDataDisplay.dll</HintPath>
     </Reference>
@@ -47,6 +54,12 @@
     </Reference>
     <Reference Include="DynamicDataDisplay.Markers2">
       <HintPath>..\Lib\DynamicDataDisplay.Markers2.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\packages\mongocsharpdriver.1.6\lib\net35\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\packages\mongocsharpdriver.1.6\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="OxyPlot">
       <HintPath>..\Lib\OxyPlot.dll</HintPath>
@@ -101,6 +114,10 @@
       <DependentUpon>AnalyticsStatusBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Backtest.cs" />
+    <Compile Include="Models\HubModelPROPOSED.cs" />
+    <Compile Include="Models\ReportModelPROPOSED.cs" />
+    <Compile Include="Models\SessionModelPROPOSED.cs" />
+    <Compile Include="Models\WrapperModelsPROPOSED.cs" />
     <Compile Include="StatisticsControl.xaml.cs">
       <DependentUpon>StatisticsControl.xaml</DependentUpon>
     </Compile>
@@ -187,6 +204,7 @@
     <None Include="Application.ico">
       <Visible>false</Visible>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -197,6 +215,11 @@
       <Project>{377A079C-34EB-4CAC-9705-4106B1DBC54F}</Project>
       <Name>DarkLight.Utilities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libzmq.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
