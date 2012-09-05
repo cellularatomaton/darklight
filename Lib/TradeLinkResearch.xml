@@ -88,6 +88,61 @@
             volume to use on each tick
             </summary>
         </member>
+        <member name="T:TradeLink.Research.Fetch">
+            <summary>
+            obtains lists of symbols from on internet URLs
+            </summary>
+        </member>
+        <member name="M:TradeLink.Research.Fetch.NYSEFromURL(System.String)">
+            <summary>
+            gets approximate nyse symbols from a url
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TradeLink.Research.Fetch.NASDAQFromURL(System.String)">
+            <summary>
+            gets approximate NASDAQ symbols from a url
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TradeLink.Research.Fetch.FromURL(System.String)">
+            <summary>
+            gets approximate nyse and nasdaq symbols from url 
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TradeLink.Research.Fetch.LinkedNYSEFromURL(System.String)">
+            <summary>
+            gets any linked approximate nyse symbols from a url (approximate = unverified, any 1-3 all caps symbol)
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TradeLink.Research.Fetch.LinkedNASDAQFromURL(System.String)">
+            <summary>
+            gets any linked approximate nasdaq symbols from a url (approximate = unverified, any 1-3 all caps symbol)
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TradeLink.Research.Fetch.RemoveDupe(TradeLink.API.Basket)">
+            <summary>
+            removes duplicate symbols
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TradeLink.Research.Fetch.RemoveUnlisted(TradeLink.API.Basket)">
+            <summary>
+            remove unlisted symbols, leaving only verified symbols remaining.
+            tradelink has a list of verified nasdaq and nyse symbols, but it is not guaranteed to be all inclusive.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
         <member name="T:TradeLink.Research.RandomSymbol">
             <summary>
             used for generating random symbol names in studies.
@@ -154,61 +209,6 @@
             <summary>
             get random symbol
             </summary>
-            <returns></returns>
-        </member>
-        <member name="T:TradeLink.Research.Fetch">
-            <summary>
-            obtains lists of symbols from on internet URLs
-            </summary>
-        </member>
-        <member name="M:TradeLink.Research.Fetch.NYSEFromURL(System.String)">
-            <summary>
-            gets approximate nyse symbols from a url
-            </summary>
-            <param name="url"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TradeLink.Research.Fetch.NASDAQFromURL(System.String)">
-            <summary>
-            gets approximate NASDAQ symbols from a url
-            </summary>
-            <param name="url"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TradeLink.Research.Fetch.FromURL(System.String)">
-            <summary>
-            gets approximate nyse and nasdaq symbols from url 
-            </summary>
-            <param name="url"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TradeLink.Research.Fetch.LinkedNYSEFromURL(System.String)">
-            <summary>
-            gets any linked approximate nyse symbols from a url (approximate = unverified, any 1-3 all caps symbol)
-            </summary>
-            <param name="url"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TradeLink.Research.Fetch.LinkedNASDAQFromURL(System.String)">
-            <summary>
-            gets any linked approximate nasdaq symbols from a url (approximate = unverified, any 1-3 all caps symbol)
-            </summary>
-            <param name="url"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TradeLink.Research.Fetch.RemoveDupe(TradeLink.API.Basket)">
-            <summary>
-            removes duplicate symbols
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TradeLink.Research.Fetch.RemoveUnlisted(TradeLink.API.Basket)">
-            <summary>
-            remove unlisted symbols, leaving only verified symbols remaining.
-            tradelink has a list of verified nasdaq and nyse symbols, but it is not guaranteed to be all inclusive.
-            </summary>
-            <param name="input"></param>
             <returns></returns>
         </member>
         <member name="T:TradeLink.Research.ParseStocks">
@@ -286,6 +286,12 @@
             </summary>
             <param name="msg"></param>
             <returns></returns>
+        </member>
+        <member name="T:TradeLink.Research.SymbolList">
+            <summary>
+            get a list of verified NASDAQ or NYSE symbols.
+            (not guaranteed to be current, static list is distributed with Research components)
+            </summary>
         </member>
         <member name="T:TradeLink.Research.Properties.Resources">
             <summary>
@@ -403,30 +409,6 @@
             AAV|00762L101|Advantage Energy Incom [rest of string was truncated]&quot;;.
              </summary>
         </member>
-        <member name="T:TradeLink.Research.SymbolList">
-            <summary>
-            get a list of verified NASDAQ or NYSE symbols.
-            (not guaranteed to be current, static list is distributed with Research components)
-            </summary>
-        </member>
-        <member name="T:TradeLink.Research.QuickQuote">
-            <summary>
-            obtain a realtime quote from yahoo.
-            (take caution not to overuse this.  yahoo will rate limit you.)
-            </summary>
-        </member>
-        <member name="F:TradeLink.Research.QuickQuote.baseurl">
-            <summary>
-            base url for service
-            </summary>
-        </member>
-        <member name="M:TradeLink.Research.QuickQuote.Fetch(System.String)">
-            <summary>
-            fetch a quick quote from the yahoo service. returns a quick quote object.
-            </summary>
-            <param name="sym"></param>
-            <returns></returns>
-        </member>
         <member name="T:TradeLink.Research.FetchBasket">
             <summary>
             a handy popup box that lets a user fetch symbols from URL, using the Fetch class.
@@ -448,6 +430,24 @@
             Required method for Designer support - do not modify
             the contents of this method with the code editor.
             </summary>
+        </member>
+        <member name="T:TradeLink.Research.QuickQuote">
+            <summary>
+            obtain a realtime quote from yahoo.
+            (take caution not to overuse this.  yahoo will rate limit you.)
+            </summary>
+        </member>
+        <member name="F:TradeLink.Research.QuickQuote.baseurl">
+            <summary>
+            base url for service
+            </summary>
+        </member>
+        <member name="M:TradeLink.Research.QuickQuote.Fetch(System.String)">
+            <summary>
+            fetch a quick quote from the yahoo service. returns a quick quote object.
+            </summary>
+            <param name="sym"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>
