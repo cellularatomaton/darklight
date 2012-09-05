@@ -31,7 +31,7 @@ namespace DarkLight.Analytics.Models
         #region Constructors
 
         public DarkLightSimBroker(IHub hub, BrokerConfigurationModel config)
-            : base(hub)
+            : base(hub, config)
         {
             //Plug into Tradelink
             _broker = new Broker();
@@ -44,22 +44,6 @@ namespace DarkLight.Analytics.Models
             _historicalSimulator = new MultiSimImpl(_historicalDataFiles.ToArray());
             _historicalSimulator.GotTick += PublishTick;
 
-            //Plug into Hub
-            if (hub.EventDict[EventType.Basket] != null)
-                hub.EventDict[EventType.Basket] += OnBasket;
-            else
-                hub.EventDict[EventType.Basket] = OnBasket;
-
-            if (hub.EventDict[EventType.CancelOrder] != null)
-                hub.EventDict[EventType.CancelOrder] += OnCancelOrder;
-            else
-                hub.EventDict[EventType.CancelOrder] = OnCancelOrder;
-
-            if (hub.EventDict[EventType.Order] != null)
-                hub.EventDict[EventType.Order] += OnOrder;
-            else
-                hub.EventDict[EventType.Order] = OnOrder;
-
             //Set up tick player
             _backgroundWorker = new BackgroundWorker();
             _backgroundWorker.DoWork += play;
@@ -68,7 +52,6 @@ namespace DarkLight.Analytics.Models
             _backgroundWorker.RunWorkerCompleted += playComplete;
 
             _playTo = config.PlayToValue;
-            //_sessionRunning = config.SessionRunning;
         }
 
         #endregion
@@ -169,8 +152,9 @@ namespace DarkLight.Analytics.Models
 
         public override void Start()
         {
-            var de = new DarkLightEventArgs(EventType.ReportMessage);
-            de.ReportMessageType = ReportMessageType.BrokerInfo;
+            var de = new DarkLightEventArgs(EventType.ServiceTransition);
+            de.SenderType = ServiceType.Broker;
+            de.TransitionType = TransitionType.Begin;
             de.BrokerInfo = new BrokerInfo();
             de.BrokerInfo.SimPrettyTickFiles = ReportModel2.PrettyTickDataFiles(_historicalDataFiles);
             _publish(de);
@@ -217,8 +201,9 @@ namespace DarkLight.Analytics.Models
 
         public void PublishBacktestComplete()
         {
-            var de = new DarkLightEventArgs(EventType.ReportMessage);
-            de.ReportMessageType = ReportMessageType.BacktestComplete;
+            var de = new DarkLightEventArgs(EventType.ServiceTransition);
+            de.SenderType = ServiceType.Broker;
+            de.TransitionType = TransitionType.End;
             _publish(de);
         }
 
@@ -279,8 +264,9 @@ namespace DarkLight.Analytics.Models
 
         public override void Start()
         {
-            var de = new DarkLightEventArgs(EventType.ReportMessage);
-            de.ReportMessageType = ReportMessageType.ResponseInfo;
+            var de = new DarkLightEventArgs(EventType.ServiceTransition);
+            de.SenderType = ServiceType.Response;
+            de.TransitionType = TransitionType.Begin;
             de.ResponseInfo = new ResponseInfo();
             de.ResponseInfo.ResponseName = _response.Name;
             de.ResponseInfo.Indicators = getIndicators();
@@ -302,50 +288,19 @@ namespace DarkLight.Analytics.Models
 
         #region Constructors
 
-        public DarkLightResponse(IHub hub, Response response)
-            : base(hub)
+        public DarkLightResponse(IHub hub, ResponseConfigurationModel config)
+            : base(hub, config)
         {
             _type = ActorType.Response;
 
             //Plug into Tradelink
-            _response = response;
+            _response = config.ResponseList[0];
             _response.SendBasketEvent += PublishBasket;
             _response.SendCancelEvent += PublishCancelOrder;
             _response.SendChartLabelEvent += PublishChartLabel;
             _response.SendIndicatorsEvent += PublishIndicators;
             _response.SendDebugEvent += PublishMessage;
             _response.SendOrderEvent += PublishOrder;
-
-            //Plug into ZeroMQ
-            if (hub.EventDict[EventType.CancelOrderAck] != null)
-                hub.EventDict[EventType.CancelOrderAck] += OnCancelOrderAck;
-            else
-                hub.EventDict[EventType.CancelOrderAck] = OnCancelOrderAck;
-
-            if (hub.EventDict[EventType.Fill] != null)
-                hub.EventDict[EventType.Fill] += OnFill;
-            else
-                hub.EventDict[EventType.Fill] = OnFill;
-
-            if (hub.EventDict[EventType.Message] != null)
-                hub.EventDict[EventType.Message] += OnMessage;
-            else
-                hub.EventDict[EventType.Message] = OnMessage;
-
-            if (hub.EventDict[EventType.OrderAck] != null)
-                hub.EventDict[EventType.OrderAck] += OnOrderAck;
-            else
-                hub.EventDict[EventType.OrderAck] += OnOrderAck;
-
-            //if (hub.EventDict[EventType.ServiceTransition] != null)
-            //    hub.EventDict[EventType.ServiceTransition] += OnServiceTransition;
-            //else
-            //    hub.EventDict[EventType.ServiceTransition] += OnServiceTransition;
-
-            if (hub.EventDict[EventType.Tick] != null)
-                hub.EventDict[EventType.Tick] += OnTick;
-            else
-                hub.EventDict[EventType.Tick] = OnTick;
         }
 
         #endregion
@@ -452,36 +407,43 @@ namespace DarkLight.Analytics.Models
 
     public class Actor : IActor
     {
-        protected ActorType _type;
-        public ActorType Type { get { return _type; } }
+        #region Members
+
+        protected Dictionary<byte[], Action<DarkLightEventArgs>> _actionDict = new Dictionary<byte[], Action<DarkLightEventArgs>>();
 
         protected Action<DarkLightEventArgs> _publish;
 
+        protected ActorType _type;
+        public ActorType Type { get { return _type; } }
+
+        #endregion
+        
         #region Constructors
 
-        public Actor(IHub hub)
+        public Actor(IHub hub, ActorConfigurationModel config)
         {
             _publish = hub.Publish;
 
-            /*
-             *  RESPECTIVE EVENTS FROM BELOW SUBSCRIBED TO IN DERIVED CLASSES
-             *  
-                hub.EventDict[EventType.Basket] += OnBasket;
-                hub.EventDict[EventType.CancelOrder] += OnCancelOrder;
-                hub.EventDict[EventType.CancelOrderAck] += OnCancelOrderAck;
-                hub.EventDict[EventType.ChartLabel] += OnChartLabel;
-                hub.EventDict[EventType.Fill] += OnFill;
-                hub.EventDict[EventType.Indicator] += OnIndicator;
-                hub.EventDict[EventType.Message] += OnMessage;
-                hub.EventDict[EventType.Order] += OnOrder;
-                hub.EventDict[EventType.OrderAck] += OnOrderAck;
-                hub.EventDict[EventType.Plot] += OnPlot;
-                hub.EventDict[EventType.Position] += OnPosition;
-                hub.EventDict[EventType.ReportRegister] += OnReportRegister;
-                hub.EventDict[EventType.ServiceTransition] += OnServiceTransition;
-                hub.EventDict[EventType.Status] += OnStatus;
-                hub.EventDict[EventType.Tick] += OnTick;
-            */
+            intializeSubscriptionMethods();
+ 
+            //subscribe
+            foreach (var eventType in config.SubscriptionList)
+            {
+                if (config.FilterMode)
+                {
+                    if (hub.EventDict[eventType] != null)
+                        hub.EventDict[eventType] += EventFilter;
+                    else
+                        hub.EventDict[eventType] = EventFilter;  
+                }
+                else
+                {
+                    if (hub.EventDict[eventType] != null)
+                        hub.EventDict[eventType] += _actionDict[eventType];
+                    else
+                        hub.EventDict[eventType] = _actionDict[eventType];                  
+                }
+            }            
         }
 
         #endregion
@@ -499,6 +461,11 @@ namespace DarkLight.Analytics.Models
         #endregion
 
         #region Protected Methods: Packet Handlers
+
+        protected virtual void EventFilter(DarkLightEventArgs de)
+        {
+
+        }
 
         protected virtual void OnBasket(DarkLightEventArgs de)
         {
@@ -569,15 +536,15 @@ namespace DarkLight.Analytics.Models
             //subscribers: Broker, Response, Report 
         }
 
+        protected virtual void OnSessionEnd(DarkLightEventArgs de)
+        {
+            //publishers:  Broker, Response, Report 
+            //subscribers: Broker, Response, Report 
+        }
+        
         protected virtual void OnStatus(DarkLightEventArgs de)
         {
             //publishers:  Broker, Response, Report 
-            //subscribers: Report 
-        }
-
-        protected virtual void OnReportMessage(DarkLightEventArgs de)
-        {
-            //publishers:  Broker, Response
             //subscribers: Report 
         }
 
@@ -585,7 +552,7 @@ namespace DarkLight.Analytics.Models
         {
             //publishers:  Broker
             //subscribers: Response, Report 
-        }
+        }      
 
         #endregion
 
@@ -599,8 +566,38 @@ namespace DarkLight.Analytics.Models
             _publish(de);
         }
 
-        #endregion
+        protected virtual void PublishStatus(string msg)
+        {
+            var de = new DarkLightEventArgs(EventType.Status);
+            de.String = msg;
 
+            _publish(de);
+        }
+
+        #endregion
+        
+        #region Private Methods
+
+        void intializeSubscriptionMethods()
+        {
+            _actionDict[EventType.Basket] = OnBasket;
+            _actionDict[EventType.CancelOrder] = OnCancelOrder;
+            _actionDict[EventType.CancelOrderAck] = OnCancelOrderAck;
+            _actionDict[EventType.ChartLabel] = OnChartLabel;
+            _actionDict[EventType.Fill] = OnFill;
+            _actionDict[EventType.Indicator] = OnIndicator;
+            _actionDict[EventType.Message] = OnMessage;
+            _actionDict[EventType.Order] = OnOrder;
+            _actionDict[EventType.OrderAck] = OnOrderAck;
+            _actionDict[EventType.Plot] = OnPlot;
+            _actionDict[EventType.Position] = OnPosition;
+            _actionDict[EventType.ServiceTransition] = OnServiceTransition;
+            _actionDict[EventType.SessionEnd] = OnSessionEnd;
+            _actionDict[EventType.Status] = OnStatus;
+            _actionDict[EventType.Tick] = OnTick;
+        }
+    
+        #endregion
     }
     
 }

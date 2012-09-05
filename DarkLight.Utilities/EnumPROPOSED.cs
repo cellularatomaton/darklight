@@ -34,11 +34,19 @@ namespace DarkLight.Utilities
         Batch
     }
 
-    public enum ReportMessageType
+    public enum ServiceType
     {
-        BacktestComplete,
-        BrokerInfo,
-        ResponseInfo
+        Broker,
+        PortfolioManager,
+        Response,
+        Reporter,
+        RiskManager
+    }
+
+    public enum TransitionType
+    {
+        Begin,
+        End
     }
 
     public class EventType
@@ -54,10 +62,9 @@ namespace DarkLight.Utilities
         public static readonly byte[] OrderAck = new byte[] { 9 };
         public static readonly byte[] Plot = new byte[] { 10 };
         public static readonly byte[] Position = new byte[] { 11 };
-        public static readonly byte[] ReportMessage = new byte[] { 12 };
-        public static readonly byte[] ServiceTransition = new byte[] { 13 };
-        public static readonly byte[] SessionEnd = new byte[] { 14 };
-        public static readonly byte[] Status = new byte[] { 15 };
-        public static readonly byte[] Tick = new byte[] { 16 };
+        public static readonly byte[] ServiceTransition = new byte[] { 12 };
+        public static readonly byte[] SessionEnd = new byte[] { 13 };
+        public static readonly byte[] Status = new byte[] { 14 };
+        public static readonly byte[] Tick = new byte[] { 15 };
     }
 }

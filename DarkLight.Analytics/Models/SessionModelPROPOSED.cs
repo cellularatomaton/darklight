@@ -208,7 +208,7 @@ namespace DarkLight.Analytics.Models
 
             foreach (var response in config.ResponseList)
             {
-                IDarkLightResponse dlResponse = new DarkLightResponse(hub, response);
+                IDarkLightResponse dlResponse = new DarkLightResponse(hub, config);
                 dlResponseList.Add(dlResponse);
             }
 
