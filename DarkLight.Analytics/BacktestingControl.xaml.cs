@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
@@ -555,25 +556,9 @@ namespace DarkLight.Analytics
             RadioButton li = (sender as RadioButton);
             BindStatisticsModels(li.Content.ToString());
         }
+    
     }
-        {
-            Dispose(false);
-        }
-
-        #endregion
-
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void NotifyPropertyChanged(String info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
-        }
-        #endregion
-    }
+    
 
     public class Backtest2 : INotifyPropertyChanged, IDisposable
     {
@@ -732,6 +717,18 @@ namespace DarkLight.Analytics
 
         #endregion
 
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+        #endregion
+
         #region Implementation of IDisposable
 
         public void Dispose()
@@ -752,6 +749,12 @@ namespace DarkLight.Analytics
                 disposed = true;
             }
         }
-
+        
         ~Backtest2()
+        {
+            Dispose(false);
+        }
+
+        #endregion       
+    }
 }
