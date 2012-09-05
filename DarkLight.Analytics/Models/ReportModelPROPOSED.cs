@@ -176,27 +176,16 @@ namespace DarkLight.Analytics.Models
 
         #region Constructors
 
-        public ReportModel2(IHub hub, ActivityModel activityModel)
-            : base(hub)
+        public ReportModel2(IHub hub, ReportConfigurationModel config)
+            : base(hub, config)
         {
-            _activityModel = activityModel;
+            _activityModel = config.ActivityInstance;
 
             // Default each dispatchable type to the current thread's dispatcher.  Any controls which register a dispatcher will change this.
-            var eventTypeList = new List<byte[]> { EventType.ChartLabel, EventType.Fill, EventType.Indicator, EventType.Message, EventType.Order, EventType.Tick };
-            foreach (var _value in eventTypeList)
+            foreach (var eventType in config.SubscriptionList)
             {
-                _dispatchingMap[_value] = Dispatcher.CurrentDispatcher;
+                _dispatchingMap[eventType] = Dispatcher.CurrentDispatcher;
             }
-
-            _actionMap[EventType.ChartLabel] = ProcessChartLabel;
-            _actionMap[EventType.Fill] = ProcessFill;
-            _actionMap[EventType.Indicator] = ProcessIndicators;
-            _actionMap[EventType.Message] = ProcessMessage;
-            _actionMap[EventType.Order] = ProcessOrder;
-            _actionMap[EventType.Position] = ProcessPosition;
-            _actionMap[EventType.Status] = ProcessStatusUpdate;
-            _actionMap[EventType.Tick] = ProcessTick;
-
         }
 
         #endregion
@@ -219,25 +208,18 @@ namespace DarkLight.Analytics.Models
 
         #endregion
 
-        #region Subscription Methods
+        #region Protected Subscription Methods
 
-        protected void Dispatch(DarkLightEventArgs de)
+        protected override void EventFilter(DarkLightEventArgs de)
         {
-            //var dispatchType = _eventDispatchableMap[de.Type];
-
             if (_dispatchingMap[de.Type].CheckAccess() || _isBatch)
             {
-                _actionMap[de.Type](de);
+                _actionDict[de.Type](de);
             }
             else
             {
-                _dispatchingMap[de.Type].Invoke(_actionMap[de.Type], DispatcherPriority.Normal, de);
+                _dispatchingMap[de.Type].Invoke(_actionDict[de.Type], DispatcherPriority.Normal, de);
             }
-        }
-
-        protected override void OnReportMessage(DarkLightEventArgs de)
-        {
-            //HACK: not passed to gui, used for in-house initialization
         }
 
         #endregion
@@ -393,31 +375,16 @@ namespace DarkLight.Analytics.Models
         #region Constructors
 
         public BatchReportModel2(IHub hub, ReportConfigurationModel config)
-            : base(hub, config.ActivityInstance)
+            : base(hub, config)
         {
             _isBatch = true;
             ReportName = config.ReportName;
-            //_updatePlots = config.UpdatePlots;
-
-            //Plug into Hub                    
-            var eventTypeList = new List<byte[]> { EventType.ChartLabel, EventType.Fill, EventType.Indicator, EventType.Message, EventType.Order, EventType.Tick };
-            foreach (var eventType in eventTypeList)
-            {
-                if (hub.EventDict[eventType] != null)
-                    hub.EventDict[eventType] += Dispatch;
-                else
-                    hub.EventDict[eventType] = Dispatch;
-            }
-
-            //special case, not sent to gui, ugly
-            hub.EventDict[EventType.ReportMessage] = OnReportMessage;
-
         }
         #endregion
 
         #region Protected Subscription Methods
 
-        protected override void ProcessChartLabel(DarkLightEventArgs de)
+        protected override void OnChartLabel(DarkLightEventArgs de)
         {
             var col = de.Color;
             var price = de.Decimal;
@@ -453,7 +420,7 @@ namespace DarkLight.Analytics.Models
             }
         }
 
-        protected override void ProcessIndicators(DarkLightEventArgs de)
+        protected override void OnIndicator(DarkLightEventArgs de)
         {
             var index = de.Integer;
             var indicators = de.String;
@@ -469,14 +436,14 @@ namespace DarkLight.Analytics.Models
                 if (_missingIndicatorWarn && ex.Message.Contains("array is longer than the number of columns"))
                 {
                     _missingIndicatorWarn = false;
-                    report(DispatchableType.Message, "Your indicator names do not match the number of indicators you sent with sendindicators.");
-                    report(DispatchableType.Message, "Check to make sure you do not have commas in your sendindicator values.");
-                    report(DispatchableType.Status, "User error in specifying indicators.");
+                    PublishMessage("Your indicator names do not match the number of indicators you sent with sendindicators.");
+                    PublishMessage("Check to make sure you do not have commas in your sendindicator values.");
+                    PublishStatus("User error in specifying indicators.");
                 }
             }
         }
 
-        protected override void ProcessFill(DarkLightEventArgs de)
+        protected override void OnFill(DarkLightEventArgs de)
         {
             var trade = de.Trade;
 
@@ -500,28 +467,48 @@ namespace DarkLight.Analytics.Models
             _fillCollection.Add(new DataGridFill(trade, _decimalPrecisionString));
         }
 
-        protected override void ProcessMessage(DarkLightEventArgs de)
+        protected override void OnMessage(DarkLightEventArgs de)
         {
             var message = de.String;
             _messageBuilder.AppendFormat("{0}: {1}{2}", _nowTime, message, Environment.NewLine);
         }
 
-        protected override void ProcessOrder(DarkLightEventArgs de)
+        protected override void OnOrder(DarkLightEventArgs de)
         {
             _orderCollection.Add(new DataGridOrder(de.Order));
         }
 
-        protected override void ProcessPosition(DarkLightEventArgs de)
+        protected override void OnPosition(DarkLightEventArgs de)
         {
 
         }
 
-        protected override void ProcessStatusUpdate(DarkLightEventArgs de)
+        protected override void OnServiceTransition(DarkLightEventArgs de)
+        {
+            switch (de.SenderType)
+            {
+                case  ServiceType.Broker:
+                    if (de.TransitionType == TransitionType.Begin)
+                        _prettyTickDataFiles = de.BrokerInfo.SimPrettyTickFiles;
+                    else if (de.TransitionType == TransitionType.End)
+                        backtestComplete();
+                    break;
+                case ServiceType.Response:
+                    if (de.TransitionType == TransitionType.Begin)
+                    {
+                        _responseName = de.ResponseInfo.ResponseName;
+                        initializeIndicators(de.ResponseInfo.Indicators);
+                    }
+                    break;
+            }            
+        }
+
+        protected override void OnStatus(DarkLightEventArgs de)
         {
             _activityModel.Status = de.String;
         }
 
-        protected override void ProcessTick(DarkLightEventArgs de)
+        protected override void OnTick(DarkLightEventArgs de)
         {
             var tick = de.Tick;
 
@@ -531,27 +518,6 @@ namespace DarkLight.Analytics.Models
 
             int percentComplete = de.Integer; //hack
             _activityModel.PercentComplete = percentComplete;
-        }
-
-        #endregion
-
-        #region OnReportMessage
-
-        protected override void OnReportMessage(DarkLightEventArgs de)
-        {
-            switch (de.ReportMessageType)
-            {
-                case ReportMessageType.BacktestComplete:
-                    backtestComplete();
-                    break;
-                case ReportMessageType.BrokerInfo:
-                    _prettyTickDataFiles = de.BrokerInfo.SimPrettyTickFiles;
-                    break;
-                case ReportMessageType.ResponseInfo:
-                    _responseName = de.ResponseInfo.ResponseName;
-                    initializeIndicators(de.ResponseInfo.Indicators);
-                    break;
-            }
         }
 
         #endregion
@@ -617,21 +583,10 @@ namespace DarkLight.Analytics.Models
                     }
                     catch (DuplicateNameException)
                     {
-                        report(DispatchableType.Message, "You have duplicate column name: " + indicators[i] + " defined in your response.  Please remove this and try again.");
+                        PublishMessage("You have duplicate column name: " + indicators[i] + " defined in your response.  Please remove this and try again.");
                     }
                 }
             }
-        }
-
-        //TODO: route this thru hub like everything else (PublishMessage)
-        void report(DispatchableType dispatchType, string message)
-        {            
-            byte[] eventType = dispatchType == DispatchableType.Message ? EventType.Message : EventType.Status;
-
-            var de = new DarkLightEventArgs(eventType);
-            de.String = message;
-
-            Dispatch(de);
         }
 
         #endregion

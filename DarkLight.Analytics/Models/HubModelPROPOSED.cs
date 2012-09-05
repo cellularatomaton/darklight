@@ -33,7 +33,6 @@ namespace DarkLight.Analytics.Models
             EventDict.Add(EventType.OrderAck, null);
             EventDict.Add(EventType.Plot, null);
             EventDict.Add(EventType.Position, null);
-            EventDict.Add(EventType.ReportMessage, null);
             EventDict.Add(EventType.ServiceTransition, null);
             EventDict.Add(EventType.SessionEnd, null);            
             EventDict.Add(EventType.Status, null);

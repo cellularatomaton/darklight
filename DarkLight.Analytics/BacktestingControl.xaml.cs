@@ -224,16 +224,20 @@ namespace DarkLight.Analytics
                 brokerConfig.PlayToValue = _backtestingConfigurationModel.SelectedPlayToValue;
                 brokerConfig.SimUseBidAskFills = false;
                 brokerConfig.TickFiles = _tickDataGroup;
+                brokerConfig.SubscriptionList = new List<byte[]>{EventType.Basket, EventType.CancelOrder, EventType.Order};
                 
                 var responseConfig = new ResponseConfigurationModel();
                 responseConfig.ResponseList.Add(_backtestingConfigurationModel.GetFreshResponseInstance());
+                responseConfig.SubscriptionList = new List<byte[]> { EventType.CancelOrderAck, EventType.Fill, EventType.Message, EventType.OrderAck, EventType.Tick };
 
                 var reportConfig = new ReportConfigurationModel();
                 reportConfig.Type = ReportType.Batch;
                 reportConfig.ActivityInstance = _activityModel;
                 var info = TickFileNameInfo.GetTickFileInfoFromLongName(_tickDataGroup.First());
                 reportConfig.ReportName = "Y:" + info.Year.ToString() + ",M:" + info.Month.ToString() + ",D:" + info.Day.ToString();
-
+                reportConfig.SubscriptionList = new List<byte[]> { EventType.ChartLabel, EventType.Fill, EventType.Indicator, EventType.Message, EventType.Order, EventType.ServiceTransition, EventType.Tick };
+                reportConfig.FilterMode = true;
+                
                 var sessionModel = new SessionModel(hubConfig, brokerConfig, responseConfig, reportConfig);
 
                 _backtest2.AddRun(sessionModel);
@@ -246,9 +250,8 @@ namespace DarkLight.Analytics
                 sessionModel.Reporter.RegisterDispatcher(EventType.Position, PositionTab.Dispatcher);
             }
 
-            BindInitializationModels2();
+            BindInitializationModels2();            
             _backtest2.Start(0);
-
         }
 
         private void BacktestingPlotUpdateButton_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -707,6 +710,7 @@ namespace DarkLight.Analytics
         #region Private Members
 
         int _currentSession;
+        DateTime _startTime;
 
         #endregion
 
@@ -751,6 +755,8 @@ namespace DarkLight.Analytics
 
         public void Start(int iSession)
         {
+            if (iSession == 0) { _startTime = DateTime.Now;}
+            
             _currentSession = iSession;
             SessionModels[_currentSession].Subscribe(EventType.SessionEnd, onSessionEnd);
             SessionModels[_currentSession].Start();
@@ -846,6 +852,11 @@ namespace DarkLight.Analytics
                 _currentSession++;
                 SessionModels[_currentSession].Subscribe(EventType.SessionEnd, onSessionEnd);
                 SessionModels[_currentSession].Start();                
+            }
+            else
+            {
+                TimeSpan duration = DateTime.Now -  _startTime;
+                var seconds = duration.TotalSeconds;
             }
         }
 

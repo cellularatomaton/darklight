@@ -20,7 +20,7 @@ namespace DarkLight.Utilities
         }
     }
 
-    public class BrokerConfigurationModel
+    public class BrokerConfigurationModel : ActorConfigurationModel
     {
         public BrokerType Type;
 
@@ -40,12 +40,12 @@ namespace DarkLight.Utilities
         }
     }
 
-    public class ResponseConfigurationModel
+    public class ResponseConfigurationModel : ActorConfigurationModel
     {
         public List<Response> ResponseList = new List<Response>();
     }
 
-    public class ReportConfigurationModel
+    public class ReportConfigurationModel : ActorConfigurationModel
     {
         public ReportType Type;
         public Response ResponseInstance { get; set; }
@@ -56,6 +56,12 @@ namespace DarkLight.Utilities
         //Sim Settings
         public List<string> TickFiles { get; set; }
         public PlayTo PlayToValue { get; set; }
+    }
+
+    public class ActorConfigurationModel
+    {
+        public List<byte[]> SubscriptionList;
+        public bool FilterMode;
     }
 
     public class BrokerInfo
@@ -79,7 +85,8 @@ namespace DarkLight.Utilities
         public long Long;
         public Order Order;
         public byte[] Type;
-        public ReportMessageType ReportMessageType;
+        public ServiceType SenderType;
+        public TransitionType TransitionType;
         public BrokerInfo BrokerInfo;
         public ResponseInfo ResponseInfo;
         public string String;
