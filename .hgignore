@@ -1,0 +1,15 @@
+syntax: glob
+*.suo
+*.bak
+*.orig
+*.user
+*.pdb
+Documentation/PairsStateDiagram.png
+Documentation/OrderStateDiagram.png
+DarkLight.Analytics/bin
+DarkLight.Analytics/obj
+DarkLight.Responses/bin
+DarkLight.Responses/obj
+DarkLight.Utilities/bin
+DarkLight.Utilities/obj
+_ReSharper.DarkLight
