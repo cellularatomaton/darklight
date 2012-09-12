@@ -1,12 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="DarkLight.Analytics.BacktestingControl">
-    <Position X="7.25" Y="8.75" Width="2.5" />
-    <Compartments>
-      <Compartment Name="Methods" Collapsed="true" />
-    </Compartments>
+    <Position X="12.25" Y="8.75" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAIAEIAAgAAIIgKBKQIgAADCAACAIBAAAAAAgBIoAAA=</HashCode>
+      <HashCode>AAIAEIAAgAAIIgKBKQIgAADCAACAIBAAAAQAgJIoAAA=</HashCode>
       <FileName>BacktestingControl.xaml.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -14,10 +11,13 @@
       <Field Name="_backtestingResponseLibraryList" />
       <Field Name="_backtest" />
       <Field Name="_activityModel" />
+      <Property Name="AnalyticsStatusBar" />
+      <Property Name="TickFileControl" />
+      <Property Name="StatisticsControl" />
     </ShowAsAssociation>
   </Class>
   <Class Name="DarkLight.Analytics.Models.ResponseLibraryList">
-    <Position X="11" Y="8.75" Width="2.25" />
+    <Position X="19" Y="6.75" Width="2.25" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Methods" Collapsed="true" />
@@ -28,7 +28,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="DarkLight.Analytics.Models.BacktestingConfigurationModel">
-    <Position X="3.25" Y="7.5" Width="2.25" />
+    <Position X="8.25" Y="7.5" Width="2.25" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
       <Compartment Name="Events" Collapsed="true" />
@@ -41,7 +41,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="DarkLight.Analytics.Models.SymbolModel" BaseTypeListCollapsed="true">
-    <Position X="24" Y="3.5" Width="1.5" />
+    <Position X="28.25" Y="15.25" Width="1.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -52,7 +52,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="DarkLight.Analytics.Models.BacktestingModel" BaseTypeListCollapsed="true">
-    <Position X="6.75" Y="0.75" Width="1.75" />
+    <Position X="12.75" Y="0.75" Width="1.75" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
       <Compartment Name="Events" Collapsed="true" />
@@ -65,30 +65,36 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="DarkLight.Analytics.AnalyticsStatusBar">
-    <Position X="15" Y="12.25" Width="1.5" />
+    <Position X="18.75" Y="10.75" Width="1.5" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>AnalyticsStatusBar.xaml.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ActivityModel" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="DarkLight.Analytics.ComplexTypeStatisticsModel&lt;T&gt;" BaseTypeListCollapsed="true">
-    <Position X="12.25" Y="0.75" Width="2" />
+    <Position X="2.5" Y="17.25" Width="2" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
-      <Compartment Name="Methods" Collapsed="true" />
       <Compartment Name="Events" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
       <HashCode>AAEAAAAAAEAAAMBkCDBAABAAgAQAAAAAEAAAAAAAAYA=</HashCode>
       <FileName>ComplexTypeStatisticsModel.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="SelectedViewableProperty" />
+      <Property Name="HistogramModel" />
+    </ShowAsAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="DarkLight.Analytics.PrimativeTypeStatisticsModel" BaseTypeListCollapsed="true">
-    <Position X="9.5" Y="0.75" Width="2.25" />
+    <Position X="2.5" Y="11.75" Width="2.25" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Methods" Collapsed="true" />
@@ -98,30 +104,35 @@
       <HashCode>AAEAAAAAAEAAAMBkCDBAABAAgAQAAAAAEAAAAAAAAYA=</HashCode>
       <FileName>PrimativeTypeStatisticsModel.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="SelectedViewableProperty" />
+      <Property Name="HistogramModel" />
+    </ShowAsAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="DarkLight.Analytics.StatisticsControl">
-    <Position X="11.25" Y="4.75" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Methods" Collapsed="true" />
-    </Compartments>
+    <Position X="12.5" Y="17.25" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAABAAAAAAAAIAAAAAAAAAAA=</HashCode>
       <FileName>StatisticsControl.xaml.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="PrimativeTypeStatisticsModel" />
+      <Property Name="ComplexTypeStatisticsModel" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="DarkLight.Analytics.TickFileControl">
-    <Position X="18.25" Y="4.75" Width="2" />
-    <Compartments>
-      <Compartment Name="Methods" Collapsed="true" />
-    </Compartments>
+    <Position X="19.25" Y="13.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAQAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAgA=</HashCode>
       <FileName>TickFileControl.xaml.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_tickDataModel" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="DarkLight.Analytics.Models.FileModel">
-    <Position X="24" Y="1" Width="1.5" />
+    <Position X="28.25" Y="12.75" Width="1.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Methods" Collapsed="true" />
@@ -134,7 +145,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="DarkLight.Analytics.Models.TickDataModel">
-    <Position X="17.75" Y="1.5" Width="2" />
+    <Position X="22" Y="13.25" Width="2" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Methods" Collapsed="true" />
@@ -149,7 +160,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="DarkLight.Analytics.Models.TickFileModel">
-    <Position X="21.25" Y="2" Width="1.5" />
+    <Position X="25.5" Y="13.75" Width="1.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Methods" Collapsed="true" />
@@ -166,17 +177,17 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="DarkLight.Analytics.Backtest">
-    <Position X="7.75" Y="4.75" Width="1.5" />
+    <Position X="12.75" Y="4.75" Width="1.5" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <AssociationLine Name="SelectedReport" Type="DarkLight.Utilities.BatchReportModel">
       <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.185" Y="-1.317" />
+        <Position X="0.116" Y="0.16" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAIAAAABACAAAIMAAAAAADAAgARBAAAAIAAAAABACAA=</HashCode>
+      <HashCode>AAIAAAAAACAAAIMAAAAAADAAgARBAAAAIAAAAABACAA=</HashCode>
       <FileName>Backtest.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -184,19 +195,18 @@
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="BacktestModels" />
-      <Property Name="BacktestReports" />
     </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="DarkLight.Utilities.TimePlotPoint">
-    <Position X="1" Y="9.5" Width="1.25" />
+    <Position X="2" Y="5.5" Width="1.25" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier />
   </Class>
   <Class Name="DarkLight.Utilities.TimePlot">
-    <Position X="1" Y="6.75" Width="1.5" />
+    <Position X="4" Y="5.75" Width="1.5" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
@@ -206,7 +216,7 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="DarkLight.Utilities.ReportModel">
-    <Position X="3.25" Y="0.75" Width="2" />
+    <Position X="7.25" Y="0.75" Width="2" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Methods" Collapsed="true" />
@@ -215,22 +225,8 @@
     <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="DarkLight.Utilities.PlottableValue&lt;T&gt;">
-    <Position X="22.75" Y="8.25" Width="1.75" />
-    <Compartments>
-      <Compartment Name="Methods" Collapsed="true" />
-    </Compartments>
-    <TypeIdentifier />
-  </Class>
-  <Class Name="DarkLight.Utilities.PlottablePoint">
-    <Position X="22.75" Y="10.75" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Methods" Collapsed="true" />
-    </Compartments>
-    <TypeIdentifier />
-  </Class>
   <Class Name="DarkLight.Utilities.PlottableProperty">
-    <Position X="20.75" Y="10.75" Width="1.5" />
+    <Position X="9.75" Y="14" Width="1.5" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
       <Compartment Name="Events" Collapsed="true" />
@@ -239,18 +235,8 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="DarkLight.Utilities.DarkLightResults">
-    <Position X="0.75" Y="3.5" Width="1.5" />
+    <Position X="3.75" Y="2.75" Width="1.5" />
     <Compartments>
-      <Compartment Name="Methods" Collapsed="true" />
-      <Compartment Name="Events" Collapsed="true" />
-    </Compartments>
-    <TypeIdentifier />
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="DarkLight.Utilities.AdjustableProperty">
-    <Position X="24.5" Y="10.75" Width="2" />
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Methods" Collapsed="true" />
       <Compartment Name="Events" Collapsed="true" />
     </Compartments>
@@ -258,7 +244,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="DarkLight.Analytics.Models.ActivityModel">
-    <Position X="11" Y="11.5" Width="2" />
+    <Position X="22" Y="9" Width="2" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
       <Compartment Name="Events" Collapsed="true" />
@@ -267,17 +253,26 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="DarkLight.Utilities.BatchReportModel">
-    <Position X="3.5" Y="3.75" Width="2.5" />
+    <Position X="6.5" Y="3.75" Width="2.5" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier />
     <ShowAsAssociation>
       <Property Name="Results" />
+      <Property Name="ReportPlots" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="Plots" />
     </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="OxyPlot.PlotModel" Collapsed="true">
+    <Position X="6.5" Y="12" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+      <Compartment Name="Events" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier />
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

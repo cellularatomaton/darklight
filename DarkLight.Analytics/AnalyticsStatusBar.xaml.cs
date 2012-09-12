@@ -11,5 +11,16 @@ namespace DarkLight.Analytics
         {
             InitializeComponent();
         }
+
+        public DarkLight.Analytics.Models.ActivityModel ActivityModel
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
     }
 }

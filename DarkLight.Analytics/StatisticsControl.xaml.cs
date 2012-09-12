@@ -25,6 +25,28 @@ namespace DarkLight.Analytics
             InitializeComponent();
         }
 
+        public PrimativeTypeStatisticsModel PrimativeTypeStatisticsModel
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
+        public ComplexTypeStatisticsModel<object> ComplexTypeStatisticsModel
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
         }
