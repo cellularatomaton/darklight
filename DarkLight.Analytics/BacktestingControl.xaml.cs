@@ -49,6 +49,39 @@ namespace DarkLight.Analytics
             InitializeComponent();
         }
 
+        public AnalyticsStatusBar AnalyticsStatusBar
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
+        public TickFileControl TickFileControl
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
+        public StatisticsControl StatisticsControl
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
         // This method adds our selected reponse directory to the assembly search path.
         private Assembly LoadFromResponseFolder(object sender, ResolveEventArgs args)
         {
