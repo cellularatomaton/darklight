@@ -3,12 +3,41 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Reflection;
 using System.Windows.Media;
+using OxyPlot;
 using TradeLink.AppKit;
 
 namespace DarkLight.Utilities
 {
+    public static class OxyPlotExtensions
+    {
+        public static OxyColor OxyForegroundColor = OxyColors.White;
+
+        public static void SetColors(this Axis oxyAxis)
+        {
+            oxyAxis.TextColor = OxyForegroundColor;
+            oxyAxis.MajorGridlineColor = OxyForegroundColor;
+            oxyAxis.MinorGridlineColor = OxyForegroundColor;
+            oxyAxis.AxislineColor = OxyForegroundColor;
+            oxyAxis.TitleColor = OxyForegroundColor;
+            oxyAxis.TicklineColor = OxyForegroundColor;
+            oxyAxis.ExtraGridlineColor = OxyForegroundColor;
+        }
+
+        public static void SetColors(this PlotModel model)
+        {
+            model.LegendTitleColor = OxyForegroundColor;
+            model.PlotAreaBorderColor = OxyForegroundColor;
+            model.LegendTextColor = OxyForegroundColor;
+            model.SubtitleColor = OxyForegroundColor;
+            model.TextColor = OxyForegroundColor;
+            model.TitleColor = OxyForegroundColor;
+        }
+    }
+
     public class PlottingUtilities
     {
+        
+
         public static List<Color> GetColorList(int numberOfColors)
         {
             var colorList = new List<Color>();

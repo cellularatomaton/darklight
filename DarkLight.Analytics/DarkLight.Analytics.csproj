@@ -114,16 +114,19 @@
       <DependentUpon>AnalyticsStatusBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Backtest.cs" />
+    <Compile Include="ComplexTypeStatisticsModel.cs" />
     <Compile Include="Models\HubModelPROPOSED.cs" />
     <Compile Include="Models\ReportModelPROPOSED.cs" />
     <Compile Include="Models\SessionModelPROPOSED.cs" />
     <Compile Include="Models\WrapperModelsPROPOSED.cs" />
+    <Compile Include="PrimativeTypeStatisticsModel.cs" />
     <Compile Include="StatisticsControl.xaml.cs">
       <DependentUpon>StatisticsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="TickFileControl.xaml.cs">
       <DependentUpon>TickFileControl.xaml</DependentUpon>
     </Compile>
+    <None Include="CurrentModel.cd" />
     <Page Include="BacktestingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -211,15 +214,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="libzmq.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\DarkLight.Utilities\DarkLight.Utilities.csproj">
       <Project>{377A079C-34EB-4CAC-9705-4106B1DBC54F}</Project>
       <Name>DarkLight.Utilities</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="libzmq.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

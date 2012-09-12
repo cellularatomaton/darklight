@@ -69,53 +69,53 @@ namespace DarkLight.Analytics.Models
         }
     }
 
-    public class TickDataFileList : ObservableCollection<FileModel>
-    {
-        private string _tickDataDirectory = "";
-        public string TickDataDirectory
-        {
-            get
-            {
-                return _tickDataDirectory;
-            }
+    //public class TickDataFileList : ObservableCollection<FileModel>
+    //{
+    //    private string _tickDataDirectory = "";
+    //    public string TickDataDirectory
+    //    {
+    //        get
+    //        {
+    //            return _tickDataDirectory;
+    //        }
 
-            set
-            {
-                if (value != _tickDataDirectory)
-                {
-                    _tickDataDirectory = value;
-                    OnPropertyChanged(new PropertyChangedEventArgs("TickDataDirectory"));
-                }
-            }
-        }
+    //        set
+    //        {
+    //            if (value != _tickDataDirectory)
+    //            {
+    //                _tickDataDirectory = value;
+    //                OnPropertyChanged(new PropertyChangedEventArgs("TickDataDirectory"));
+    //            }
+    //        }
+    //    }
 
-        public TickDataFileList()
-        {
-        }
+    //    public TickDataFileList()
+    //    {
+    //    }
 
-        public void LoadPathFromFileName(string fileName)
-        {
-            var path = System.IO.Path.GetDirectoryName(fileName);
-            LoadPath(path, fileName);
-        }
+    //    public void LoadPathFromFileName(string fileName)
+    //    {
+    //        var path = System.IO.Path.GetDirectoryName(fileName);
+    //        LoadPath(path, fileName);
+    //    }
 
-        public void LoadPath(string path, string fileName = "")
-        {
-            var files = System.IO.Directory.GetFiles(path, "*.TIK");
-            Clear();
-            TickDataDirectory = path;
-            foreach (var file in files)
-            {
-                var fileModel = new FileModel
-                {
-                    Checked = (file == fileName),
-                    LongFileName = file,
-                    ShortFileName = System.IO.Path.GetFileName(file),
-                };
-                Add(fileModel);
-            }
-        }
-    }
+    //    public void LoadPath(string path, string fileName = "")
+    //    {
+    //        var files = System.IO.Directory.GetFiles(path, "*.TIK");
+    //        Clear();
+    //        TickDataDirectory = path;
+    //        foreach (var file in files)
+    //        {
+    //            var fileModel = new FileModel
+    //            {
+    //                Checked = (file == fileName),
+    //                LongFileName = file,
+    //                ShortFileName = System.IO.Path.GetFileName(file),
+    //            };
+    //            Add(fileModel);
+    //        }
+    //    }
+    //}
 
     public class FileModel : INotifyPropertyChanged
     {
@@ -272,6 +272,7 @@ namespace DarkLight.Analytics.Models
             }
         }
         #endregion
+
     }
 
     public class TickDataModel : INotifyPropertyChanged

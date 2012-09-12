@@ -73,10 +73,10 @@ namespace DarkLight.Analytics
 
             _backtestingResponseLibraryList.LoadResponseListFromFileName(Properties.Settings.Default.ResponseFileName);
 
-            BacktestPlotter.AxisGrid.DrawHorizontalMinorTicks = false;
-            BacktestPlotter.AxisGrid.DrawHorizontalTicks = false;
-            BacktestPlotter.AxisGrid.DrawVerticalMinorTicks = false;
-            BacktestPlotter.AxisGrid.DrawVerticalTicks = false;
+            //BacktestPlotter.AxisGrid.DrawHorizontalMinorTicks = false;
+            //BacktestPlotter.AxisGrid.DrawHorizontalTicks = false;
+            //BacktestPlotter.AxisGrid.DrawVerticalMinorTicks = false;
+            //BacktestPlotter.AxisGrid.DrawVerticalTicks = false;
 
             _backtest = new Backtest();
             _backtest.PropertyChanged += (o, args) =>
@@ -97,10 +97,10 @@ namespace DarkLight.Analytics
 
             _backtestingResponseLibraryList.LoadResponseListFromFileName(Properties.Settings.Default.ResponseFileName);
 
-            BacktestPlotter.AxisGrid.DrawHorizontalMinorTicks = false;
-            BacktestPlotter.AxisGrid.DrawHorizontalTicks = false;
-            BacktestPlotter.AxisGrid.DrawVerticalMinorTicks = false;
-            BacktestPlotter.AxisGrid.DrawVerticalTicks = false;
+            //BacktestPlotter.AxisGrid.DrawHorizontalMinorTicks = false;
+            //BacktestPlotter.AxisGrid.DrawHorizontalTicks = false;
+            //BacktestPlotter.AxisGrid.DrawVerticalMinorTicks = false;
+            //BacktestPlotter.AxisGrid.DrawVerticalTicks = false;
 
             _backtest2 = new Backtest2();
             _backtest2.PropertyChanged += (o, args) =>
@@ -307,9 +307,8 @@ namespace DarkLight.Analytics
                 MessagesDataGrid.DataContext = _backtest.SelectedReport;
                 BacktestingTabControl.DataContext = _backtest.SelectedReport;
                 BacktestingPlotExpander.DataContext = _backtest.SelectedReport;
-
+                BacktestPlotter.DataContext = _backtest.SelectedReport;
                 
-
                 _reportModelsUnbound = false;
             }));
         }
@@ -321,8 +320,7 @@ namespace DarkLight.Analytics
                 MessagesDataGrid.DataContext = _backtest2.SelectedReport;
                 BacktestingTabControl.DataContext = _backtest2.SelectedReport;
                 BacktestingPlotExpander.DataContext = _backtest2.SelectedReport;
-
-
+                BacktestPlotter.DataContext = _backtest2.SelectedReport;
 
                 _reportModelsUnbound = false;
             }));
@@ -347,17 +345,17 @@ namespace DarkLight.Analytics
                     {
                         var statsModel = new PrimativeTypeStatisticsModel(plotCollections);
                         statsModel.SelectedViewableProperty = statsModel.ViewableProperties.First();
-                        statsModel.PropertyChanged += (sender, args) =>
-                        {
-                            if (args.PropertyName == "Statistics")
-                            {
-                                var model = sender as PrimativeTypeStatisticsModel;
-                                if (model != null)
-                                {
-                                    BacktestingStatisticsControl.SetHistogramPlotterDomain(model.Statistics);
-                                }
-                            }
-                        };
+                        //statsModel.PropertyChanged += (sender, args) =>
+                        //{
+                        //    if (args.PropertyName == "Statistics")
+                        //    {
+                        //        var model = sender as PrimativeTypeStatisticsModel;
+                        //        if (model != null)
+                        //        {
+                        //            BacktestingStatisticsControl.SetHistogramPlotterDomain(model.Statistics);
+                        //        }
+                        //    }
+                        //};
                         BacktestingStatisticsControl.DataContext = statsModel;
                     }
                 }
@@ -366,17 +364,17 @@ namespace DarkLight.Analytics
                     var results = _backtest.BacktestReports.Select(r => r.Results).ToList();
                     var statsModel = new ComplexTypeStatisticsModel<DarkLightResults>(results);
                     statsModel.SelectedViewableProperty = statsModel.ViewableProperties.First();
-                    statsModel.PropertyChanged += (sender, args) =>
-                    {
-                        if (args.PropertyName == "Statistics")
-                        {
-                            var model = sender as ComplexTypeStatisticsModel<DarkLightResults>;
-                            if (model != null)
-                            {
-                                BacktestingStatisticsControl.SetHistogramPlotterDomain(model.Statistics);
-                            }
-                        }
-                    };
+                    //statsModel.PropertyChanged += (sender, args) =>
+                    //{
+                    //    if (args.PropertyName == "Statistics")
+                    //    {
+                    //        var model = sender as ComplexTypeStatisticsModel<DarkLightResults>;
+                    //        if (model != null)
+                    //        {
+                    //            BacktestingStatisticsControl.SetHistogramPlotterDomain(model.Statistics);
+                    //        }
+                    //    }
+                    //};
                     BacktestingStatisticsControl.DataContext = statsModel;
                 }
                 
@@ -394,17 +392,17 @@ namespace DarkLight.Analytics
                     {
                         var statsModel = new PrimativeTypeStatisticsModel(plotCollections);
                         statsModel.SelectedViewableProperty = statsModel.ViewableProperties.First();
-                        statsModel.PropertyChanged += (sender, args) =>
-                        {
-                            if (args.PropertyName == "Statistics")
-                            {
-                                var model = sender as PrimativeTypeStatisticsModel;
-                                if (model != null)
-                                {
-                                    BacktestingStatisticsControl.SetHistogramPlotterDomain(model.Statistics);
-                                }
-                            }
-                        };
+                        //statsModel.PropertyChanged += (sender, args) =>
+                        //{
+                        //    if (args.PropertyName == "Statistics")
+                        //    {
+                        //        var model = sender as PrimativeTypeStatisticsModel;
+                        //        if (model != null)
+                        //        {
+                        //            BacktestingStatisticsControl.SetHistogramPlotterDomain(model.Statistics);
+                        //        }
+                        //    }
+                        //};
                         BacktestingStatisticsControl.DataContext = statsModel;
                     }
                 }
@@ -413,17 +411,17 @@ namespace DarkLight.Analytics
                     var results = _backtest2.BacktestReports.Select(r => r.Results).ToList();
                     var statsModel = new ComplexTypeStatisticsModel<DarkLightResults>(results);
                     statsModel.SelectedViewableProperty = statsModel.ViewableProperties.First();
-                    statsModel.PropertyChanged += (sender, args) =>
-                    {
-                        if (args.PropertyName == "Statistics")
-                        {
-                            var model = sender as ComplexTypeStatisticsModel<DarkLightResults>;
-                            if (model != null)
-                            {
-                                BacktestingStatisticsControl.SetHistogramPlotterDomain(model.Statistics);
-                            }
-                        }
-                    };
+                    //statsModel.PropertyChanged += (sender, args) =>
+                    //{
+                    //    if (args.PropertyName == "Statistics")
+                    //    {
+                    //        var model = sender as ComplexTypeStatisticsModel<DarkLightResults>;
+                    //        if (model != null)
+                    //        {
+                    //            BacktestingStatisticsControl.SetHistogramPlotterDomain(model.Statistics);
+                    //        }
+                    //    }
+                    //};
                     BacktestingStatisticsControl.DataContext = statsModel;
                 }
 
@@ -432,7 +430,7 @@ namespace DarkLight.Analytics
 
         #region Private Backtesting Methods
 
-        private List<IPlotterElement> _charts = new List<IPlotterElement>();
+        //private List<IPlotterElement> _charts = new List<IPlotterElement>();
         private void UpdateBacktestPlots()
         {
             BacktestPlotter.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
@@ -441,41 +439,43 @@ namespace DarkLight.Analytics
                 {
                     if (_backtest.SelectedReport.Plots.Count != 0)
                     {
-                        BacktestPlotter.Children.RemoveAll(_charts.ToArray());
-                        _charts.Clear();
+                        //BacktestPlotter.Children.RemoveAll(_charts.ToArray());
+                        //_charts.Clear();
 
-                        double maxTime = double.MinValue;
-                        double minTime = double.MaxValue;
-                        double maxValue = double.MinValue;
-                        double minValue = double.MaxValue;
+                        //double maxTime = double.MinValue;
+                        //double minTime = double.MaxValue;
+                        //double maxValue = double.MinValue;
+                        //double minValue = double.MaxValue;
 
-                        foreach (var plot in _backtest.SelectedReport.Plots.Where(p => p.Selected))
-                        {
-                            var cleanedData =
-                                plot.PlotPoints.GroupBy(point => point.Time).Select(group => group.First()).OrderBy(
-                                    point => point.Time).ToList();
+                        //foreach (var plot in _backtest.SelectedReport.Plots.Where(p => p.Selected))
+                        //{
+                        //    var cleanedData =
+                        //        plot.PlotPoints.GroupBy(point => point.Time).Select(group => group.First()).OrderBy(
+                        //            point => point.Time).ToList();
 
-                            // Viewport info:
-                            maxTime = Math.Max(dateAxis.ConvertToDouble(cleanedData.Max(point => point.Time)), maxTime);
-                            minTime = Math.Min(dateAxis.ConvertToDouble(cleanedData.Min(point => point.Time)), minTime);
-                            maxValue = Math.Max(Convert.ToDouble(cleanedData.Max(point => point.Value)), maxValue);
-                            minValue = Math.Min(Convert.ToDouble(cleanedData.Min(point => point.Value)), minValue);
+                        //    // Viewport info:
+                        //    maxTime = Math.Max(dateAxis.ConvertToDouble(cleanedData.Max(point => point.Time)), maxTime);
+                        //    minTime = Math.Min(dateAxis.ConvertToDouble(cleanedData.Min(point => point.Time)), minTime);
+                        //    maxValue = Math.Max(Convert.ToDouble(cleanedData.Max(point => point.Value)), maxValue);
+                        //    minValue = Math.Min(Convert.ToDouble(cleanedData.Min(point => point.Value)), minValue);
 
-                            var dataSource = CreateBacktestPlotDataSource(cleanedData);
-                            LineChart chart = new LineChart
-                            {
-                                ItemsSource = dataSource,
-                                StrokeThickness = 2,
-                                Stroke = new SolidColorBrush(plot.PointColor),
-                                Description = plot.Label,
-                            };
-                            _charts.Add(chart);
-                            BacktestPlotter.Children.Add(chart);
-                        }
+                        //    var dataSource = CreateBacktestPlotDataSource(cleanedData);
+                        //    LineChart chart = new LineChart
+                        //    {
+                        //        ItemsSource = dataSource,
+                        //        StrokeThickness = 2,
+                        //        Stroke = new SolidColorBrush(plot.PointColor),
+                        //        Description = plot.Label,
+                        //    };
+                        //    _charts.Add(chart);
+                        //    BacktestPlotter.Children.Add(chart);
+                        //}
 
-                        var viewWidth = maxTime - minTime;
-                        var viewHeight = maxValue - minValue;
-                        BacktestPlotter.Viewport.Domain = new DataRect(minTime, minValue, viewWidth, viewHeight);
+                        //var viewWidth = maxTime - minTime;
+                        //var viewHeight = maxValue - minValue;
+                        //BacktestPlotter.Viewport.Domain = new DataRect(minTime, minValue, viewWidth, viewHeight);
+
+                        _backtest.SelectedReport.UpdateReportPlots();
                     }
                     else
                     {
@@ -493,41 +493,43 @@ namespace DarkLight.Analytics
                 {
                     if (_backtest2.SelectedReport.Plots.Count != 0)
                     {
-                        BacktestPlotter.Children.RemoveAll(_charts.ToArray());
-                        _charts.Clear();
+                        //BacktestPlotter.Children.RemoveAll(_charts.ToArray());
+                        //_charts.Clear();
 
-                        double maxTime = double.MinValue;
-                        double minTime = double.MaxValue;
-                        double maxValue = double.MinValue;
-                        double minValue = double.MaxValue;
+                        //double maxTime = double.MinValue;
+                        //double minTime = double.MaxValue;
+                        //double maxValue = double.MinValue;
+                        //double minValue = double.MaxValue;
 
-                        foreach (var plot in _backtest2.SelectedReport.Plots.Where(p => p.Selected))
-                        {
-                            var cleanedData =
-                                plot.PlotPoints.GroupBy(point => point.Time).Select(group => group.First()).OrderBy(
-                                    point => point.Time).ToList();
+                        //foreach (var plot in _backtest2.SelectedReport.Plots.Where(p => p.Selected))
+                        //{
+                        //    var cleanedData =
+                        //        plot.PlotPoints.GroupBy(point => point.Time).Select(group => group.First()).OrderBy(
+                        //            point => point.Time).ToList();
 
-                            // Viewport info:
-                            maxTime = Math.Max(dateAxis.ConvertToDouble(cleanedData.Max(point => point.Time)), maxTime);
-                            minTime = Math.Min(dateAxis.ConvertToDouble(cleanedData.Min(point => point.Time)), minTime);
-                            maxValue = Math.Max(Convert.ToDouble(cleanedData.Max(point => point.Value)), maxValue);
-                            minValue = Math.Min(Convert.ToDouble(cleanedData.Min(point => point.Value)), minValue);
+                        //    // Viewport info:
+                        //    maxTime = Math.Max(dateAxis.ConvertToDouble(cleanedData.Max(point => point.Time)), maxTime);
+                        //    minTime = Math.Min(dateAxis.ConvertToDouble(cleanedData.Min(point => point.Time)), minTime);
+                        //    maxValue = Math.Max(Convert.ToDouble(cleanedData.Max(point => point.Value)), maxValue);
+                        //    minValue = Math.Min(Convert.ToDouble(cleanedData.Min(point => point.Value)), minValue);
 
-                            var dataSource = CreateBacktestPlotDataSource(cleanedData);
-                            LineChart chart = new LineChart
-                            {
-                                ItemsSource = dataSource,
-                                StrokeThickness = 2,
-                                Stroke = new SolidColorBrush(plot.PointColor),
-                                Description = plot.Label,
-                            };
-                            _charts.Add(chart);
-                            BacktestPlotter.Children.Add(chart);
-                        }
+                        //    var dataSource = CreateBacktestPlotDataSource(cleanedData);
+                        //    LineChart chart = new LineChart
+                        //    {
+                        //        ItemsSource = dataSource,
+                        //        StrokeThickness = 2,
+                        //        Stroke = new SolidColorBrush(plot.PointColor),
+                        //        Description = plot.Label,
+                        //    };
+                        //    _charts.Add(chart);
+                        //    BacktestPlotter.Children.Add(chart);
+                        //}
 
-                        var viewWidth = maxTime - minTime;
-                        var viewHeight = maxValue - minValue;
-                        BacktestPlotter.Viewport.Domain = new DataRect(minTime, minValue, viewWidth, viewHeight);
+                        //var viewWidth = maxTime - minTime;
+                        //var viewHeight = maxValue - minValue;
+                        //BacktestPlotter.Viewport.Domain = new DataRect(minTime, minValue, viewWidth, viewHeight);
+
+                        _backtest2.SelectedReport.UpdateReportPlots();
                     }
                     else
                     {
@@ -537,11 +539,11 @@ namespace DarkLight.Analytics
             }));
         }
 
-        private ObservableCollection<Point> CreateBacktestPlotDataSource(IEnumerable<TimePlotPoint> plots)
-        {
-            var points = plots.Select(p => new Point(dateAxis.ConvertToDouble(p.Time), Convert.ToDouble(p.Value)));
-            return new ObservableCollection<Point>(points);
-        }
+        //private ObservableCollection<Point> CreateBacktestPlotDataSource(IEnumerable<TimePlotPoint> plots)
+        //{
+        //    var points = plots.Select(p => new Point(dateAxis.ConvertToDouble(p.Time), Convert.ToDouble(p.Value)));
+        //    return new ObservableCollection<Point>(points);
+        //}
 
         #endregion
 

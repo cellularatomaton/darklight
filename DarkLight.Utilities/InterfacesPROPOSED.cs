@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Threading;
+using OxyPlot;
 using TradeLink.API;
 
 namespace DarkLight.Utilities
@@ -43,6 +44,7 @@ namespace DarkLight.Utilities
         #region Control Properties
 
         void RegisterDispatcher(byte[] dispatchableType, Dispatcher dispatcher);
+        void UpdateReportPlots();
 
         string ReportName { get; set; }
         ObservableCollection<KeyValuePair<string, string>> ResultsList { get; set; }
@@ -54,7 +56,8 @@ namespace DarkLight.Utilities
         ObservableCollection<DataGridOrder> OrderTable { get; set; }
         ObservableCollection<DataGridFill> FillTable { get; set; }
         ObservableCollection<TimePlot> Plots { get; set; }
-       
+        PlotModel ReportPlots { get; set; }
+
         #endregion
 
     }

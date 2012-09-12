@@ -33,7 +33,7 @@ namespace DarkLight.Analytics
         static BacktestingModel _backtestModel;
         static OptimizationBatchReportModel _reportModel;
         static OptimizationConfigurationModel _optimizationConfigurationModel = new OptimizationConfigurationModel();
-        static TickDataFileList _optimizationTickDataFileList = new TickDataFileList();
+        //static TickDataFileList _optimizationTickDataFileList = new TickDataFileList();
         static ResponseLibraryList _optimizationResponseLibraryList = new ResponseLibraryList();
         
         static AutoResetEvent _optimizationResetEvent = new AutoResetEvent(false);
@@ -64,7 +64,7 @@ namespace DarkLight.Analytics
         {
             UnbindInitializationModels();
 
-            _optimizationTickDataFileList.LoadPath(Properties.Settings.Default.TickDataDirectory);
+            //_optimizationTickDataFileList.LoadPath(Properties.Settings.Default.TickDataDirectory);
             _optimizationResponseLibraryList.LoadResponseListFromFileName(Properties.Settings.Default.ResponseFileName);
 
             OptimizationPlotter.AxisGrid.DrawHorizontalMinorTicks = false;
@@ -85,7 +85,7 @@ namespace DarkLight.Analytics
             openFileDialog.Filter = "TickFiles|" + TikConst.WILDCARD_EXT + "|AllFiles|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
-                _optimizationTickDataFileList.LoadPathFromFileName(openFileDialog.FileName);
+                //_optimizationTickDataFileList.LoadPathFromFileName(openFileDialog.FileName);
             }
         }
 
@@ -164,7 +164,7 @@ namespace DarkLight.Analytics
         private void BindInitializationModels()
         {
             OptimizationResponseExpander.DataContext = _optimizationResponseLibraryList;
-            OptimizationTickDataExpander.DataContext = _optimizationTickDataFileList;
+            //OptimizationTickDataExpander.DataContext = _optimizationTickDataFileList;
             OptimizationRunExpander.DataContext = _optimizationConfigurationModel;
             OptimizationPlotConfigurationListBox.DataContext = _optimizationConfigurationModel;
             OptimizationStatusBar.DataContext = _activityModel;
@@ -316,10 +316,10 @@ namespace DarkLight.Analytics
 
         private void RunOptimizationModel(Response response)
         {
-            var tickDataFileNames = _optimizationTickDataFileList.Where(f => f.Checked).Select(f => f.LongFileName).ToList();
+            //var tickDataFileNames = _optimizationTickDataFileList.Where(f => f.Checked).Select(f => f.LongFileName).ToList();
             _backtestModel.Reset();
             _backtestModel.LoadResponse(response);
-            _backtestModel.LoadTickData(tickDataFileNames);
+            //_backtestModel.LoadTickData(tickDataFileNames);
             _backtestModel.Play(_optimizationConfigurationModel.SelectedPlayToValue);
         }
 
