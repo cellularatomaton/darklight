@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using DarkLight.Analytics.Models;
+using OxyPlot;
 using TradeLink.API;
 using TradeLink.AppKit;
 using TradeLink.Common;
@@ -388,6 +389,20 @@ namespace DarkLight.Utilities
             }
         }
 
+        private PlotModel _reportPlots;
+        public PlotModel ReportPlots
+        {
+            get { return _reportPlots; }
+            set
+            {
+                if (value != _reportPlots)
+                {
+                    _reportPlots = value;
+                    NotifyPropertyChanged("ReportPlots");
+                }
+            }
+        }
+
         #endregion
 
         #region Private Members
@@ -436,6 +451,63 @@ namespace DarkLight.Utilities
             initializeIndicators();
             _plotMap.Clear();
             _nowTime = "0";
+        }
+
+        public void UpdateReportPlots()
+        {
+            double maxTime = double.MinValue;
+            double minTime = double.MaxValue;
+            double maxValue = double.MinValue;
+            double minValue = double.MaxValue;
+
+            var plotModel = new PlotModel();
+            var plots = Plots.Where(p => p.Selected);
+            
+
+            foreach (var _timePlot in plots)
+            {
+                var lineSeries = new LineSeries();
+                var plotColor = _timePlot.PointColor;
+                lineSeries.Color = OxyColor.FromArgb(plotColor.A, plotColor.R, plotColor.G, plotColor.B);
+                lineSeries.MarkerFill = OxyColor.FromArgb(plotColor.A, plotColor.R, plotColor.G, plotColor.B);
+                lineSeries.MarkerType = MarkerType.None;
+                lineSeries.StrokeThickness = 1;
+                lineSeries.DataFieldX = "Time";
+                lineSeries.DataFieldY = "Value";
+
+                var orderedPoints = _timePlot.PlotPoints
+                    .GroupBy(point => point.Time)
+                    .Select(group => group.First())
+                    .OrderBy(point => point.Time)
+                    .ToList();
+                foreach (var _point in orderedPoints)
+                {
+                    var time = _point.Time.TimeOfDay.TotalSeconds;
+                    var value = Convert.ToDouble(_point.Value);
+                    maxTime = maxTime < time ? time : maxTime;
+                    minTime = time < minTime ? time : minTime;
+                    maxValue = maxValue <  value ? value : maxValue;
+                    minValue = value < minValue ? value : minValue;
+
+                    lineSeries.Points.Add(new DataPoint{X = time, Y = value});
+                }
+                plotModel.Series.Add(lineSeries);
+            }
+
+            var dateTimeAxis = new TimeSpanAxis(AxisPosition.Bottom, minTime, maxTime, "Time");
+            dateTimeAxis.SetColors();
+            dateTimeAxis.AbsoluteMaximum = maxTime;
+            dateTimeAxis.AbsoluteMinimum = minTime;
+            plotModel.Axes.Add(dateTimeAxis);
+
+            var linearAxis = new LinearAxis(AxisPosition.Left, minValue, maxValue, "Value");
+            linearAxis.SetColors();
+            linearAxis.AbsoluteMaximum = maxValue;
+            linearAxis.AbsoluteMinimum = minValue;
+            plotModel.Axes.Add(linearAxis);
+
+            plotModel.SetColors();
+            ReportPlots = plotModel;
         }
 
         #endregion

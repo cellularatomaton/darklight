@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Media;
 using System.Windows.Threading;
 using DarkLight.Utilities;
+using OxyPlot;
 using TradeLink.API;
 using TradeLink.Common;
 
@@ -163,6 +164,20 @@ namespace DarkLight.Analytics.Models
             }
         }
 
+        private PlotModel _reportPlots;
+        public PlotModel ReportPlots
+        {
+            get { return _reportPlots; }
+            set
+            {
+                if (value != _reportPlots)
+                {
+                    _reportPlots = value;
+                    NotifyPropertyChanged("ReportPlots");
+                }
+            }
+        }
+
         #endregion
 
         #region Protected Members
@@ -204,6 +219,61 @@ namespace DarkLight.Analytics.Models
             for (int i = 0; i < historicalDataFiles.Count; i++)
                 list[i] = System.IO.Path.GetFileNameWithoutExtension(historicalDataFiles[i]);
             return list.Length > 0 ? "[" + string.Join(",", list) + "]" : "[?]";
+        }
+
+        public void UpdateReportPlots()
+        {
+            double maxTime = double.MinValue;
+            double minTime = double.MaxValue;
+            double maxValue = double.MinValue;
+            double minValue = double.MaxValue;
+
+            var plotModel = new PlotModel();
+            var dateTimeAxis = new TimeSpanAxis();
+            dateTimeAxis.SetColors();
+            plotModel.Axes.Add(dateTimeAxis);
+            var linearAxis = new LinearAxis();
+            linearAxis.SetColors();
+            plotModel.Axes.Add(linearAxis);
+
+            var plots = Plots.Where(p => p.Selected);
+            foreach (var _timePlot in plots)
+            {
+                var lineSeries = new LineSeries();
+                var plotColor = _timePlot.PointColor;
+                lineSeries.Color = OxyColor.FromArgb(plotColor.A, plotColor.R, plotColor.G, plotColor.B);
+                lineSeries.MarkerFill = OxyColor.FromArgb(plotColor.A, plotColor.R, plotColor.G, plotColor.B);
+                lineSeries.MarkerType = MarkerType.None;
+                lineSeries.StrokeThickness = 1;
+                lineSeries.DataFieldX = "Time";
+                lineSeries.DataFieldY = "Value";
+
+                var orderedPoints = _timePlot.PlotPoints
+                    .GroupBy(point => point.Time)
+                    .Select(group => group.First())
+                    .OrderBy(point => point.Time)
+                    .ToList();
+                foreach (var _point in orderedPoints)
+                {
+                    var time = _point.Time.TimeOfDay.TotalSeconds;
+                    var value = Convert.ToDouble(_point.Value);
+                    maxTime = maxTime < time ? time : maxTime;
+                    minTime = time < minTime ? time : minTime;
+                    maxValue = maxValue < value ? value : maxValue;
+                    minValue = value < minValue ? value : minValue;
+
+                    lineSeries.Points.Add(new DataPoint { X = time, Y = value });
+                }
+                plotModel.Series.Add(lineSeries);
+            }
+
+            dateTimeAxis.AbsoluteMaximum = maxTime;
+            dateTimeAxis.AbsoluteMinimum = minTime;
+            linearAxis.AbsoluteMaximum = maxValue;
+            linearAxis.AbsoluteMinimum = minValue;
+
+            plotModel.SetColors();
+            ReportPlots = plotModel;
         }
 
         #endregion
