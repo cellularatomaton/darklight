@@ -170,6 +170,50 @@ namespace DarkLight.Analytics.Models
         }
 
         #endregion
+
+        public DarkLight.Utilities.ResponseConfigurationModel ResponseConfigurationModel
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
+        public DarkLight.Utilities.ReportConfigurationModel ReportConfigurationModel
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
+        public DarkLight.Utilities.BrokerConfigurationModel BrokerConfigurationModel
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
+        public DarkLight.Utilities.HubConfigurationModel HubConfigurationModel
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
     }
 
     public class DarkLightFactory

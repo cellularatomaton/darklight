@@ -126,7 +126,7 @@
     <Compile Include="TickFileControl.xaml.cs">
       <DependentUpon>TickFileControl.xaml</DependentUpon>
     </Compile>
-    <None Include="CurrentModel.cd" />
+    <None Include="Diagrams\BacktestingModel.cd" />
     <Page Include="BacktestingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -169,6 +169,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <None Include="Diagrams\EventModel.cd" />
     <None Include="Models\LiveTradingModel.cs" />
     <Compile Include="OptimizationControl.xaml.cs">
       <DependentUpon>OptimizationControl.xaml</DependentUpon>
