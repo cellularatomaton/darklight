@@ -26,6 +26,10 @@ namespace DarkLight.Analytics
         }
 
         private ObservableCollection<BatchReportModel> _backtestReports = new ObservableCollection<BatchReportModel>();
+        public ObservableCollection<BatchReportModel> BacktestReports
+        {
+            get { return _backtestReports; }
+        }
 
         private ObservableCollection<BacktestingModel> _backtestModels = new ObservableCollection<BacktestingModel>();
         public ObservableCollection<BacktestingModel> BacktestModels

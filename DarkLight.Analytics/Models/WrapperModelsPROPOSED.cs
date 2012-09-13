@@ -248,6 +248,28 @@ namespace DarkLight.Analytics.Models
         }
 
         #endregion
+
+        public DarkLight.Utilities.IHub IHub
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
+        public DarkLight.Utilities.BrokerConfigurationModel BrokerConfigurationModel
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
     }
 
     public class DarkLightResponse : Actor, IDarkLightResponse
@@ -403,6 +425,28 @@ namespace DarkLight.Analytics.Models
         }
 
         #endregion
+
+        public DarkLight.Utilities.IHub IHub
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
+        public DarkLight.Utilities.ResponseConfigurationModel ResponseConfigurationModel
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
     }
 
     public class Actor : IActor
@@ -417,6 +461,28 @@ namespace DarkLight.Analytics.Models
         public ActorType Type { get { return _type; } }
 
         #endregion
+
+        public DarkLight.Utilities.IHub IHub
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
+        public DarkLight.Utilities.ActorConfigurationModel ActorConfigurationModel
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
         
         #region Constructors
 
