@@ -17,6 +17,17 @@ namespace DarkLight.Analytics.Models
 
         #endregion
 
+        public DarkLight.Utilities.EventType EventType
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
         #region Constructor
 
         public Hub()
