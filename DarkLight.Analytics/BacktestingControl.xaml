@@ -99,10 +99,6 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
                 <GridSplitter Grid.Column="1" Width="3" Margin="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FF434343"/>
-                <!--<d3:ChartPlotter x:Name="BacktestPlotter" Grid.Column="2" Margin="3" LegendVisibility="Hidden" LegendVisible="False" Background="#FF333333" Foreground="#525252">
-                    <d3:CursorCoordinateGraph/>
-                    <d3:HorizontalDateTimeAxis Name="dateAxis"/>
-                </d3:ChartPlotter>-->
                 <oxy:Plot x:Name="BacktestPlotter" Grid.Column="2" Model="{Binding ReportPlots}" Background="#FF333333" Foreground="#525252" PlotAreaBorderColor="#525252" TextColor="#525252"/>
                 <GridSplitter Grid.Column="3" Width="3" Margin="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FF434343"/>
                 <TabControl x:Name="BacktestingTabControl" Grid.Column="4" Margin="3">

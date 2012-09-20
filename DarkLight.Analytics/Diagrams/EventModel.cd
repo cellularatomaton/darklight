@@ -3,9 +3,12 @@
   <Class Name="DarkLight.Analytics.Models.Hub">
     <Position X="9" Y="7" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAAAAAAACAAAAAAAEAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <HashCode>IAAAAAAAACAAAAAAAEAAAAAEAAAAAAAAIAAAAAAAAAA=</HashCode>
       <FileName>Models\HubModelPROPOSED.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="EventType" />
+    </ShowAsAssociation>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="DarkLight.Analytics.Models.LocalHub" Collapsed="true">
@@ -104,11 +107,14 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="DarkLight.Utilities.DarkLightEventArgs">
-    <Position X="0.5" Y="7.5" Width="2" />
+    <Position X="2" Y="7.75" Width="2" />
     <TypeIdentifier />
   </Class>
   <Class Name="DarkLight.Utilities.EventType">
-    <Position X="0.5" Y="12.5" Width="1.5" />
+    <Position X="5.5" Y="8" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier />
   </Class>
   <Class Name="DarkLight.Utilities.HubConfigurationModel">
@@ -195,6 +201,16 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier />
+  </Class>
+  <Class Name="DarkLight.Analytics.Models.BatchReportModel2">
+    <Position X="13.75" Y="7" Width="2" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACAIAAEAAAAACASoCAABgAIEAECQAGAQCwCAEAAAA=</HashCode>
+      <FileName>Models\ReportModelPROPOSED.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Interface Name="DarkLight.Utilities.IReporter">
     <Position X="6.25" Y="26.25" Width="1.5" />

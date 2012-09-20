@@ -66,12 +66,6 @@ namespace DarkLight.Analytics
 
             //_optimizationTickDataFileList.LoadPath(Properties.Settings.Default.TickDataDirectory);
             _optimizationResponseLibraryList.LoadResponseListFromFileName(Properties.Settings.Default.ResponseFileName);
-
-            OptimizationPlotter.AxisGrid.DrawHorizontalMinorTicks = false;
-            OptimizationPlotter.AxisGrid.DrawHorizontalTicks = false;
-            OptimizationPlotter.AxisGrid.DrawVerticalMinorTicks = false;
-            OptimizationPlotter.AxisGrid.DrawVerticalTicks = false;
-
             _optimizationConfigurationModel.PopulatePlottableValues();
 
             BindInitializationModels();
@@ -224,71 +218,71 @@ namespace DarkLight.Analytics
             OptimizationPlotter.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
             {
                 //OptimizationPlotter.Children.RemoveAll(typeof(LineGraph));
-                OptimizationPlotter.Children.RemoveAll(OptimizationPlotter.Children.ToArray());
+                //OptimizationPlotter.Children.RemoveAll(OptimizationPlotter.Children.ToArray());
 
-                double maxX = double.MinValue;
-                double minX = double.MaxValue;
-                double maxY = double.MinValue;
-                double minY = double.MaxValue;
+                //double maxX = double.MinValue;
+                //double minX = double.MaxValue;
+                //double maxY = double.MinValue;
+                //double minY = double.MaxValue;
 
-                if (_optimizationConfigurationModel.PlottableValues.Any(p => p.Selected))
-                {
-                    var plottableValues = _optimizationConfigurationModel.PlottableValues.Where(p => p.Selected).ToList();
-                    var colorList = PlottingUtilities.GetColorList(plottableValues.Count);
-                    for (int i = 0; i < plottableValues.Count; i++)
-                    {
-                        plottableValues[i].PlotColor = colorList[i];
-                    }
+                //if (_optimizationConfigurationModel.PlottableValues.Any(p => p.Selected))
+                //{
+                //    var plottableValues = _optimizationConfigurationModel.PlottableValues.Where(p => p.Selected).ToList();
+                //    var colorList = PlottingUtilities.GetColorList(plottableValues.Count);
+                //    for (int i = 0; i < plottableValues.Count; i++)
+                //    {
+                //        plottableValues[i].PlotColor = colorList[i];
+                //    }
 
-                    foreach (var plottableValue in plottableValues)
-                    {
-                        var pointList = PlottingUtilities.ToPlottable(_reportModel.OptimizationResults, plottableValue);
-                        var dataSource = CreateResultsDataSource(pointList.OrderBy(p => p.X));
+                //    foreach (var plottableValue in plottableValues)
+                //    {
+                //        var pointList = PlottingUtilities.ToPlottable(_reportModel.OptimizationResults, plottableValue);
+                //        var dataSource = CreateResultsDataSource(pointList.OrderBy(p => p.X));
 
-                        LineChart chart = new LineChart
-                        {
-                            ItemsSource = dataSource,
-                            StrokeThickness = 2,
-                            Stroke = new SolidColorBrush(plottableValue.PlotColor),
-                            Description = plottableValue.PropertyName,
-                        };
-                        OptimizationPlotter.Children.Add(chart);
+                //        LineChart chart = new LineChart
+                //        {
+                //            ItemsSource = dataSource,
+                //            StrokeThickness = 2,
+                //            Stroke = new SolidColorBrush(plottableValue.PlotColor),
+                //            Description = plottableValue.PropertyName,
+                //        };
+                //        OptimizationPlotter.Children.Add(chart);
 
-                        //OptimizationPlotter.AddLineGraph(dataSource, plottableValue.PlotColor, 1, plottableValue.PropertyName);
+                //        //OptimizationPlotter.AddLineGraph(dataSource, plottableValue.PlotColor, 1, plottableValue.PropertyName);
 
-                        maxX = Math.Max(pointList.Max(r => r.X), maxX);
-                        minX = Math.Min(pointList.Min(r => r.X), minX);
-                        maxY = Math.Max(pointList.Max(r => r.Y), maxY);
-                        minY = Math.Min(pointList.Min(r => r.Y), minY);
+                //        maxX = Math.Max(pointList.Max(r => r.X), maxX);
+                //        minX = Math.Min(pointList.Min(r => r.X), minX);
+                //        maxY = Math.Max(pointList.Max(r => r.Y), maxY);
+                //        minY = Math.Min(pointList.Min(r => r.Y), minY);
 
-                    }
-                }
-                else
-                {
-                    var plottableValue = _optimizationConfigurationModel.PlottableValues[0];
-                    var pointList = PlottingUtilities.ToPlottable(_reportModel.OptimizationResults, plottableValue);
-                    var dataSource = CreateResultsDataSource(pointList.OrderBy(p => p.X));
+                //    }
+                //}
+                //else
+                //{
+                //    var plottableValue = _optimizationConfigurationModel.PlottableValues[0];
+                //    var pointList = PlottingUtilities.ToPlottable(_reportModel.OptimizationResults, plottableValue);
+                //    var dataSource = CreateResultsDataSource(pointList.OrderBy(p => p.X));
 
-                    LineChart chart = new LineChart
-                    {
-                        ItemsSource = dataSource,
-                        StrokeThickness = 2,
-                        Stroke = new SolidColorBrush(Colors.GreenYellow),
-                        Description = plottableValue.PropertyName,
-                    };
-                    OptimizationPlotter.Children.Add(chart);
+                //    LineChart chart = new LineChart
+                //    {
+                //        ItemsSource = dataSource,
+                //        StrokeThickness = 2,
+                //        Stroke = new SolidColorBrush(Colors.GreenYellow),
+                //        Description = plottableValue.PropertyName,
+                //    };
+                //    OptimizationPlotter.Children.Add(chart);
                     
-                    //OptimizationPlotter.AddLineGraph(dataSource, Colors.GreenYellow, 1, plottableValue.PropertyName);
+                //    //OptimizationPlotter.AddLineGraph(dataSource, Colors.GreenYellow, 1, plottableValue.PropertyName);
 
-                    maxX = Math.Max(pointList.Max(r => r.X), maxX);
-                    minX = Math.Min(pointList.Min(r => r.X), minX);
-                    maxY = Math.Max(pointList.Max(r => r.Y), maxY);
-                    minY = Math.Min(pointList.Min(r => r.Y), minY);
-                }
+                //    maxX = Math.Max(pointList.Max(r => r.X), maxX);
+                //    minX = Math.Min(pointList.Min(r => r.X), minX);
+                //    maxY = Math.Max(pointList.Max(r => r.Y), maxY);
+                //    minY = Math.Min(pointList.Min(r => r.Y), minY);
+                //}
 
-                var viewWidth = maxX - minX;
-                var viewHeight = maxY - minY;
-                OptimizationPlotter.Viewport.Domain = new DataRect(minX, minY, viewWidth, viewHeight);
+                //var viewWidth = maxX - minX;
+                //var viewHeight = maxY - minY;
+                //OptimizationPlotter.Viewport.Domain = new DataRect(minX, minY, viewWidth, viewHeight);
 
             }));
         }
