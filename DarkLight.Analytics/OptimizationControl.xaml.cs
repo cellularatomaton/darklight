@@ -11,9 +11,6 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using DarkLight.Analytics.Models;
 using DarkLight.Utilities;
-using Microsoft.Research.DynamicDataDisplay;
-using Microsoft.Research.DynamicDataDisplay.DataSources;
-using Microsoft.Research.DynamicDataDisplay.Markers2;
 using Microsoft.Win32;
 using TradeLink.API;
 using TradeLink.AppKit;
@@ -287,13 +284,6 @@ namespace DarkLight.Analytics
             }));
         }
 
-        private EnumerableDataSource<PlottablePoint> CreateResultsDataSource(IEnumerable<PlottablePoint> plottablePoints)
-        {
-            var ds = new EnumerableDataSource<PlottablePoint>(plottablePoints);
-            ds.SetXMapping(p => p.X);
-            ds.SetYMapping(p => p.Y);
-            return ds;
-        }
 
         private void RunOptimization1D(int numberUniformSamples, Action<Response> doWork)
         {

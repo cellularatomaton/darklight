@@ -78,7 +78,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="DarkLight.Analytics.ComplexTypeStatisticsModel&lt;T&gt;" BaseTypeListCollapsed="true">
-    <Position X="2.5" Y="17.25" Width="2" />
+    <Position X="2.5" Y="17.25" Width="2.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Events" Collapsed="true" />
@@ -113,13 +113,9 @@
   <Class Name="DarkLight.Analytics.StatisticsControl">
     <Position X="12.5" Y="17.25" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAACAAAAAAAAAAAABAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>StatisticsControl.xaml.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="PrimativeTypeStatisticsModel" />
-      <Property Name="ComplexTypeStatisticsModel" />
-    </ShowAsAssociation>
   </Class>
   <Class Name="DarkLight.Analytics.TickFileControl">
     <Position X="19.25" Y="13.5" Width="2" />
