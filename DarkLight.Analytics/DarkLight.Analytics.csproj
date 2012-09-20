@@ -46,15 +46,6 @@
       <HintPath>..\packages\clrzmq.2.2.5\lib\clrzmq-ext.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DynamicDataDisplay">
-      <HintPath>..\Lib\DynamicDataDisplay.dll</HintPath>
-    </Reference>
-    <Reference Include="DynamicDataDisplay.Markers">
-      <HintPath>..\Lib\DynamicDataDisplay.Markers.dll</HintPath>
-    </Reference>
-    <Reference Include="DynamicDataDisplay.Markers2">
-      <HintPath>..\Lib\DynamicDataDisplay.Markers2.dll</HintPath>
-    </Reference>
     <Reference Include="MongoDB.Bson">
       <HintPath>..\packages\mongocsharpdriver.1.6\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>

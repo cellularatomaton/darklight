@@ -101,7 +101,6 @@
         <GridSplitter Grid.Column="1" Margin="3" HorizontalAlignment="Stretch" Width="3" Background="#FF434343"/>
         <TabControl x:Name="OptimizationTabControl" Grid.Column="2">
             <TabItem Header="1D Optimization">
-                <!--<d3:ChartPlotter x:Name="OptimizationPlotter" Margin="3" Background="#FF333333" Foreground="#525252" Grid.RowSpan="2" />-->
                 <oxy:Plot x:Name="OptimizationPlotter" Grid.RowSpan="2" Model="{Binding BacktestPlot}" Background="#FF333333" Foreground="#525252" PlotAreaBorderColor="#525252" TextColor="#525252"/>
             </TabItem>
             <TabItem Header="2D Optimization">
