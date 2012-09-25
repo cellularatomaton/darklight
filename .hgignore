@@ -13,3 +13,12 @@ DarkLight.Responses/obj
 DarkLight.Utilities/bin
 DarkLight.Utilities/obj
 _ReSharper.DarkLight
+DarkLight/bin
+DarkLight/obj
+packages/Autofac.2.6.3.862
+packages/Caliburn.Micro.1.3.1
+packages/CommonServiceLocator.1.0
+packages/Caliburn.Micro.Autofac.1.4.1
+packages/Prism.4.1.0.0
+packages/Prism.UnityExtensions.4.1.0.0
+packages/Unity.2.1.505.2

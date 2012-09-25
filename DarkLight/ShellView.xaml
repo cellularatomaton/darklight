@@ -1,0 +1,13 @@
+﻿<Window x:Class="DarkLight.ShellView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:localViews="clr-namespace:DarkLight.Views">
+
+    <StackPanel>
+        <TextBlock Text="Shell View Text Block!"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   FontSize="20" />
+        <ContentControl x:Name="TestViewModel"/>
+    </StackPanel>
+</Window>
