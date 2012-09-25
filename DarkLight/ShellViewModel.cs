@@ -4,23 +4,12 @@ using System.ComponentModel.Composition;
 
 namespace DarkLight 
 {
-    [Export(typeof(IShell))]
-    public class ShellViewModel : PropertyChangedBase, IShell
+    //[Export(typeof(IShell))]
+    public class ShellViewModel : Conductor<Screen>.Collection.OneActive, IShell
     {
-        private TestViewModel testViewModel;
-        public TestViewModel TestViewModel
-        {
-            get { return testViewModel; }
-            set 
-            { 
-                testViewModel = value;
-                NotifyOfPropertyChange(() => TestViewModel);
-            }
-        }
-
         public ShellViewModel()
         {
-            TestViewModel = new TestViewModel();
+            ActivateItem(new TestViewModel());
         }
     }
 }
