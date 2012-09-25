@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using Caliburn.Micro;
+using DarkLight.Views;
 
 namespace DarkLight.ViewModels
 {
-    public class TestViewModel : PropertyChangedBase
+    public class TestViewModel : Conductor<Screen>.Collection.OneActive
     {
         string name;
 
@@ -41,6 +42,13 @@ namespace DarkLight.ViewModels
         public void SayHello()
         {
             Message = "Hello " + Name + "!";
+        }
+
+        public TestViewModel()
+        {
+            //AttachView(new TestView(), ViewLocator.DefaultContext);
+            //ViewLocator.InitializeComponent(
+            //    GetView(ViewLocator.DefaultContext));
         }
     }
 }

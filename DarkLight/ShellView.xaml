@@ -8,6 +8,6 @@
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
                    FontSize="20" />
-        <ContentControl x:Name="TestViewModel"/>
+        <ContentControl x:Name="ActiveItem"/>
     </StackPanel>
 </Window>
