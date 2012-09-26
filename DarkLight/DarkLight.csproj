@@ -73,11 +73,15 @@
     </ApplicationDefinition>
     <Compile Include="Backtesting\ViewModels\BacktestBrowserViewModel.cs" />
     <Compile Include="Backtesting\ViewModels\BacktestLauncherViewModel.cs" />
+    <Compile Include="Backtesting\ViewModels\BacktestModuleViewModel.cs" />
     <Compile Include="Backtesting\Views\BacktestBrowserView.xaml.cs">
       <DependentUpon>BacktestBrowserView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Backtesting\Views\BacktestLauncherView.xaml.cs">
       <DependentUpon>BacktestLauncherView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Backtesting\Views\BacktestModuleView.xaml.cs">
+      <DependentUpon>BacktestModuleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\ViewModels\FillsViewModel.cs" />
     <Compile Include="Common\ViewModels\IndicatorsViewModel.cs" />
@@ -123,6 +127,14 @@
     <Compile Include="Common\Views\TimeseriesView.xaml.cs">
       <DependentUpon>TimeseriesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LiveTrading\ViewModels\LiveTradingModuleViewModel.cs" />
+    <Compile Include="LiveTrading\Views\LiveTradingModuleView.xaml.cs">
+      <DependentUpon>LiveTradingModuleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Optimization\ViewModels\OptimizationModuleViewModel.cs" />
+    <Compile Include="Optimization\Views\OptimizationModuleView.xaml.cs">
+      <DependentUpon>OptimizationModuleView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ShellViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -137,6 +149,10 @@
     <Page Include="Backtesting\Views\BacktestLauncherView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Backtesting\Views\BacktestModuleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Common\Views\FillsView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -182,6 +198,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="LiveTrading\Views\LiveTradingModuleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Optimization\Views\OptimizationModuleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ShellView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -215,12 +239,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="LiveTrading\ViewModels\" />
-    <Folder Include="LiveTrading\Views\" />
-    <Folder Include="Optimization\ViewModels\" />
-    <Folder Include="Optimization\Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

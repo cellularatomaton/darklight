@@ -4,8 +4,12 @@ namespace DarkLight.Common.ViewModels
 {
     public class TestViewModel : Screen
     {
-        string name;
+        public TestViewModel()
+        {
+            this.DisplayName = this.GetType().Name;
+        }
 
+        string name;
         public string Name
         {
             get { return name; }
