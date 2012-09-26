@@ -1,4 +1,4 @@
-<UserControl x:Class="DarkLight.Common.Views.TickDataView"
+﻿<UserControl x:Class="DarkLight.LiveTrading.Views.LiveTradingModuleView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,13 +6,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Border Background="Blue">
-            <TextBlock 
-                x:Name="DisplayName"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center"
-                FontSize="20" 
-                Foreground="Green"/>
-        </Border>
+            
     </Grid>
 </UserControl>
