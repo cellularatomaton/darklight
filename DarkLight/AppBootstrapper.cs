@@ -7,7 +7,6 @@ using System.ComponentModel.Composition.Primitives;
 using System.Linq;
 using Caliburn.Micro;
 using Autofac;
-using DarkLight.ViewModels;
 
 namespace DarkLight
 {

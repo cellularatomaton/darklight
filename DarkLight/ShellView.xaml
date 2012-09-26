@@ -1,7 +1,7 @@
 ﻿<Window x:Class="DarkLight.ShellView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:localViews="clr-namespace:DarkLight.Views">
+        xmlns:localViews="clr-namespace:DarkLight.Common.Views">
 
     <StackPanel>
         <TextBlock Text="Shell View Text Block!"

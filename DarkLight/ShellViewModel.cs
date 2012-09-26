@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
-using DarkLight.ViewModels;
 using System.ComponentModel.Composition;
+using DarkLight.Common;
+using DarkLight.Common.ViewModels;
 
 namespace DarkLight 
 {
