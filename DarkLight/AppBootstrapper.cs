@@ -7,35 +7,36 @@ using System.ComponentModel.Composition.Primitives;
 using System.Linq;
 using Caliburn.Micro;
 using Autofac;
+using DarkLight.Common.ViewModels;
 
 namespace DarkLight
 {
     #region Caliburn.Micro Bootstrapper
 
-    public class AppBootstrapper : Bootstrapper<ShellViewModel> { }
+    //public class AppBootstrapper : Bootstrapper<ShellViewModel> { }
 
     #endregion
 
     #region Autofac Bootstrapper
 
-    //public class AppBootstrapper : AutofacBootstrapper<ShellViewModel>
-    //{
-    //    protected override void ConfigureBootstrapper()
-    //    {  //  you must call the base version first!
-    //        base.ConfigureBootstrapper();
-    //        //  override namespace naming convention
-    //        EnforceNamespaceConvention = false;
-    //        //  change our view model base type
-    //        ViewModelBaseType = typeof(IShell);
-    //    }
+    public class AppBootstrapper : AutofacBootstrapper<ShellViewModel>
+    {
+        protected override void ConfigureBootstrapper()
+        {  //  you must call the base version first!
+            base.ConfigureBootstrapper();
+            //  override namespace naming convention
+            EnforceNamespaceConvention = false;
+            //  change our view model base type
+            ViewModelBaseType = typeof(IShell);
+        }
 
-    //    protected override void ConfigureContainer(ContainerBuilder builder)
-    //    {
-    //        base.ConfigureContainer(builder);
+        protected override void ConfigureContainer(ContainerBuilder builder)
+        {
+            base.ConfigureContainer(builder);
 
-    //        builder.Register(c => new TestViewModel());
-    //    }
-    //}
+            builder.Register(c => new TestViewModel());
+        }
+    }
 
     #endregion
 

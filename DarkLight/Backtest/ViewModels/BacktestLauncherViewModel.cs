@@ -1,6 +1,6 @@
 using Caliburn.Micro;
 
-namespace DarkLight.Backtesting.ViewModels
+namespace DarkLight.Backtest.ViewModels
 {
     public class BacktestLauncherViewModel : Screen
     {

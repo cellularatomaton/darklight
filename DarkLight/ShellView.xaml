@@ -3,11 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:localViews="clr-namespace:DarkLight.Common.Views">
 
-    <StackPanel>
-        <TextBlock Text="Shell View Text Block!"
+    <Grid Margin="3">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="DisplayName"
+                   Grid.Row="0"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
                    FontSize="20" />
-        <ContentControl x:Name="ActiveItem"/>
-    </StackPanel>
+        <ContentControl Grid.Row="1" x:Name="ActiveItem"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Backtest" x:Name="NavigateToBacktestModule" Width="100"/>
+            <Button Content="Optimize" x:Name="NavigateToOptimizationModule" Width="100"/>
+            <Button Content="Trade" x:Name="NavigateToLiveTradingModule" Width="100"/>
+        </StackPanel>
+    </Grid>
 </Window>

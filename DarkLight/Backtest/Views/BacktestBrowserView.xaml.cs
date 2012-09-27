@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace DarkLight.Backtesting.Views
+namespace DarkLight.Backtest.Views
 {
     /// <summary>
     /// Interaction logic for BacktestBrowserView.xaml

@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DarkLight.Backtesting.Views
+namespace DarkLight.Backtest.Views
 {
     /// <summary>
     /// Interaction logic for BacktestModuleView.xaml
