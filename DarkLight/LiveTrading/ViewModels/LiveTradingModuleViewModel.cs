@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Caliburn.Micro;
 
 namespace DarkLight.LiveTrading.ViewModels
 {
-    class LiveTradingModuleViewModel
+    public class LiveTradingModuleViewModel : Screen
     {
+        public LiveTradingModuleViewModel()
+        {
+            this.DisplayName = this.GetType().Name;
+        }
     }
 }

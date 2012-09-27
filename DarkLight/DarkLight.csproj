@@ -71,16 +71,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Backtesting\ViewModels\BacktestBrowserViewModel.cs" />
-    <Compile Include="Backtesting\ViewModels\BacktestLauncherViewModel.cs" />
-    <Compile Include="Backtesting\ViewModels\BacktestModuleViewModel.cs" />
-    <Compile Include="Backtesting\Views\BacktestBrowserView.xaml.cs">
+    <Compile Include="Backtest\ViewModels\BacktestBrowserViewModel.cs" />
+    <Compile Include="Backtest\ViewModels\BacktestLauncherViewModel.cs" />
+    <Compile Include="Backtest\ViewModels\BacktestModuleViewModel.cs" />
+    <Compile Include="Backtest\Views\BacktestBrowserView.xaml.cs">
       <DependentUpon>BacktestBrowserView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Backtesting\Views\BacktestLauncherView.xaml.cs">
+    <Compile Include="Backtest\Views\BacktestLauncherView.xaml.cs">
       <DependentUpon>BacktestLauncherView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Backtesting\Views\BacktestModuleView.xaml.cs">
+    <Compile Include="Backtest\Views\BacktestModuleView.xaml.cs">
       <DependentUpon>BacktestModuleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\ViewModels\FillsViewModel.cs" />
@@ -127,6 +127,7 @@
     <Compile Include="Common\Views\TimeseriesView.xaml.cs">
       <DependentUpon>TimeseriesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Events\ModuleNavigationEvent.cs" />
     <Compile Include="LiveTrading\ViewModels\LiveTradingModuleViewModel.cs" />
     <Compile Include="LiveTrading\Views\LiveTradingModuleView.xaml.cs">
       <DependentUpon>LiveTradingModuleView.xaml</DependentUpon>
@@ -142,15 +143,15 @@
     </Compile>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="IShell.cs" />
-    <Page Include="Backtesting\Views\BacktestBrowserView.xaml">
+    <Page Include="Backtest\Views\BacktestBrowserView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Backtesting\Views\BacktestLauncherView.xaml">
+    <Page Include="Backtest\Views\BacktestLauncherView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Backtesting\Views\BacktestModuleView.xaml">
+    <Page Include="Backtest\Views\BacktestModuleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
