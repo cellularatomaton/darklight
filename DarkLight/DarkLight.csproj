@@ -83,8 +83,11 @@
     <Compile Include="Backtest\Views\BacktestModuleView.xaml.cs">
       <DependentUpon>BacktestModuleView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\ViewModels\DarkLightScreen.cs" />
+    <Compile Include="Common\ViewModels\DefaultViewModel.cs" />
     <Compile Include="Common\ViewModels\FillsViewModel.cs" />
     <Compile Include="Common\ViewModels\IndicatorsViewModel.cs" />
+    <Compile Include="Common\ViewModels\LinkableViewModel.cs" />
     <Compile Include="Common\ViewModels\MessagesViewModel.cs" />
     <Compile Include="Common\ViewModels\OrdersViewModel.cs" />
     <Compile Include="Common\ViewModels\PositionsViewModel.cs" />
@@ -94,11 +97,17 @@
     <Compile Include="Common\ViewModels\TestViewModel.cs" />
     <Compile Include="Common\ViewModels\TickDataViewModel.cs" />
     <Compile Include="Common\ViewModels\TimeseriesViewModel.cs" />
+    <Compile Include="Common\Views\DefaultView.xaml.cs">
+      <DependentUpon>DefaultView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Common\Views\FillsView.xaml.cs">
       <DependentUpon>FillsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Views\IndicatorsView.xaml.cs">
       <DependentUpon>IndicatorsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Views\LinkableView.xaml.cs">
+      <DependentUpon>LinkableView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Views\MessagesView.xaml.cs">
       <DependentUpon>MessagesView.xaml</DependentUpon>
@@ -127,7 +136,11 @@
     <Compile Include="Common\Views\TimeseriesView.xaml.cs">
       <DependentUpon>TimeseriesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Events\ModuleNavigationEvent.cs" />
+    <Compile Include="Events\LinkGroup.cs" />
+    <Compile Include="Events\LinkedEventFilter.cs" />
+    <Compile Include="Events\NavigationEvent.cs" />
+    <Compile Include="Events\LinkedNavigationEvent.cs" />
+    <Compile Include="Interfaces\IFilter.cs" />
     <Compile Include="LiveTrading\ViewModels\LiveTradingModuleViewModel.cs" />
     <Compile Include="LiveTrading\Views\LiveTradingModuleView.xaml.cs">
       <DependentUpon>LiveTradingModuleView.xaml</DependentUpon>
@@ -136,6 +149,17 @@
     <Compile Include="Optimization\Views\OptimizationModuleView.xaml.cs">
       <DependentUpon>OptimizationModuleView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\IBacktestRepository.cs" />
+    <Compile Include="Repositories\ITickDataRepository.cs" />
+    <Compile Include="Services\DefaultColorService.cs" />
+    <Compile Include="Services\DefaultFilterService.cs" />
+    <Compile Include="Services\IBacktestService.cs" />
+    <Compile Include="Services\IColorService.cs" />
+    <Compile Include="Services\IFilterService.cs" />
+    <Compile Include="Services\IOptimizationService.cs" />
+    <Compile Include="Services\IResponseService.cs" />
+    <Compile Include="Services\ITickDataService.cs" />
+    <Compile Include="Services\ITradeService.cs" />
     <Compile Include="ShellViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -155,6 +179,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Common\Views\DefaultView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Common\Views\FillsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -162,6 +190,10 @@
     <Page Include="Common\Views\IndicatorsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\Views\LinkableView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Common\Views\MessagesView.xaml">
       <Generator>MSBuild:Compile</Generator>

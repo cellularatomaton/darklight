@@ -2,11 +2,10 @@ using Caliburn.Micro;
 
 namespace DarkLight.Common.ViewModels
 {
-    public class TickDataViewModel : Screen 
+    public class TickDataViewModel : DarkLightScreen
     {
         public TickDataViewModel()
         {
-            this.DisplayName = this.GetType().Name;
         }
     }
 }

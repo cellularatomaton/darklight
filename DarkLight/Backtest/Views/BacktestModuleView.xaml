@@ -7,12 +7,27 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Border BorderBrush="Blue" BorderThickness="3">
-            <TextBlock 
+            <StackPanel>
+                <TextBlock 
                 x:Name="DisplayName"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
                 FontSize="20" 
                 Foreground="Green"/>
+                <TextBlock Text="Link Group: "/>
+                <ComboBox x:Name="LinkGroups" Margin="3"/>
+                <TextBlock Text="Linked Color: "/>
+                <ComboBox x:Name="ColorGroups" Margin="3"/>
+                <TextBlock Text="Message: "/>
+                <TextBox x:Name="TestKey" Margin="3"/>
+                <TextBlock Text="Linked Windows: "/>
+                <Button x:Name="ShowNewFillsWindow" Content="Fills"/>
+                <Button x:Name="ShowNewIndicatorsWindow" Content="Indicators"/>
+                <Button x:Name="ShowNewMessagesWindow" Content="Messages"/>
+                <Button x:Name="ShowNewOrdersWindow" Content="Orders"/>
+                <Button x:Name="ShowNewPositionsWindow" Content="Positions"/>
+                <Button x:Name="ShowNewResponsesWindow" Content="Responses"/>
+            </StackPanel>
         </Border>
     </Grid>
 </UserControl>

@@ -7,7 +7,11 @@ using System.ComponentModel.Composition.Primitives;
 using System.Linq;
 using Caliburn.Micro;
 using Autofac;
+using DarkLight.Backtest.ViewModels;
 using DarkLight.Common.ViewModels;
+using DarkLight.LiveTrading.ViewModels;
+using DarkLight.Optimization.ViewModels;
+using DarkLight.Services;
 
 namespace DarkLight
 {
@@ -34,7 +38,32 @@ namespace DarkLight
         {
             base.ConfigureContainer(builder);
 
+            // Register Types:
+            builder.RegisterType<DefaultColorService>().As<IColorService>();
+            builder.RegisterType<DefaultFilterService>().As<IFilterService>();
+
+            // Register Service Implementations:
+            builder.Register(c => new DefaultColorService());
+            builder.Register(c => new DefaultFilterService(IoC.Get<IColorService>()));
+
+            // Register Modules:
+            builder.Register(c => new LinkableViewModel(IoC.Get<IColorService>()));
+            builder.Register(c => new BacktestModuleViewModel(IoC.Get<IColorService>()));
+            builder.Register(c => new OptimizationModuleViewModel());
+            builder.Register(c => new LiveTradingModuleViewModel());
+
+            // Register View Models:
             builder.Register(c => new TestViewModel());
+            builder.Register(c => new StatisticsViewModel());
+            builder.Register(c => new ResultsViewModel());
+            builder.Register(c => new FillsViewModel());
+            builder.Register(c => new IndicatorsViewModel());
+            builder.Register(c => new MessagesViewModel());
+            builder.Register(c => new TickDataViewModel());
+            builder.Register(c => new OrdersViewModel());
+            builder.Register(c => new PositionsViewModel());
+            builder.Register(c => new TimeseriesViewModel());
+            builder.Register(c => new DefaultViewModel());
         }
     }
 
