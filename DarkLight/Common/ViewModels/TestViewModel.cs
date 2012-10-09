@@ -2,11 +2,10 @@ using Caliburn.Micro;
 
 namespace DarkLight.Common.ViewModels
 {
-    public class TestViewModel : Screen
+    public class TestViewModel : DarkLightScreen
     {
         public TestViewModel()
         {
-            this.DisplayName = this.GetType().Name;
         }
 
         string name;
