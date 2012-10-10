@@ -11,9 +11,21 @@ using DarkLight.Services;
 
 namespace DarkLight.Common.ViewModels
 {
-    public class LinkableViewModel : Conductor<Screen>.Collection.OneActive, IHandle<LinkedNavigationEvent>
+    public class LinkableViewModel : DarkLightScreen, IHandle<LinkedNavigationEvent>
     {
         private IColorService _colorService;
+        private IViewModelService _viewModelService;
+
+        private NavigationDestination _destination;
+        public NavigationDestination Destination
+        {
+            get { return _destination; }
+            set 
+            { 
+                _destination = value;
+                NotifyOfPropertyChange(() => Destination);
+            }
+        }
 
         public BindableCollection<Color> ColorGroups
         {
@@ -31,9 +43,10 @@ namespace DarkLight.Common.ViewModels
             }
         }
 
-        public LinkableViewModel(IColorService colorService)
+        public LinkableViewModel(IColorService colorService, IViewModelService viewModelService)
         {
             _colorService = colorService;
+            _viewModelService = viewModelService;
             SelectedColorGroup = _colorService.GetDefaultColorGroup();
             IoC.Get<IEventAggregator>().Subscribe(this);
         }
@@ -42,7 +55,7 @@ namespace DarkLight.Common.ViewModels
 
         public void Handle(LinkedNavigationEvent linkedNavigationEvent)
         {
-            var _filter = IoC.Get<IFilterService>().GetLinkedNavigationFilter(NavigationAction.UpdateLinkedWindows, _selectedColorGroup);
+            var _filter = IoC.Get<IFilterService>().GetLinkedNavigationFilter(NavigationAction.UpdateLinkedWindows, Destination, _selectedColorGroup);
             if(_filter.IsPassedBy(linkedNavigationEvent))
             {
                 LoadView(linkedNavigationEvent);
@@ -53,61 +66,7 @@ namespace DarkLight.Common.ViewModels
 
         private void LoadView(LinkedNavigationEvent linkedNavigationEvent)
         {
-            DarkLightScreen _viewModel;
-            switch (linkedNavigationEvent.Destination)
-            {
-                case NavigationDestination.Statistics:
-                {
-                    _viewModel = IoC.Get<StatisticsViewModel>();
-                    
-                    break;
-                }
-                case NavigationDestination.Results:
-                {
-                    _viewModel = IoC.Get<ResultsViewModel>();
-                    break;
-                }
-                case NavigationDestination.Fills:
-                {
-                    _viewModel = IoC.Get<FillsViewModel>();
-                    break;
-                }
-                case NavigationDestination.Indicators:
-                {
-                    _viewModel = IoC.Get<IndicatorsViewModel>();
-                    break;
-                }
-                case NavigationDestination.Messages:
-                {
-                    _viewModel = IoC.Get<MessagesViewModel>();
-                    break;
-                }
-                case NavigationDestination.TickData:
-                {
-                    _viewModel = IoC.Get<TickDataViewModel>();
-                    break;
-                }
-                case NavigationDestination.Orders:
-                {
-                    _viewModel = IoC.Get<OrdersViewModel>();
-                    break;
-                }
-                case NavigationDestination.Positions:
-                {
-                    _viewModel = IoC.Get<PositionsViewModel>();
-                    break;
-                }
-                case NavigationDestination.TimeSeries:
-                {
-                    _viewModel = IoC.Get<TimeseriesViewModel>();
-                    break;
-                }
-                default:
-                {
-                    _viewModel = IoC.Get<DefaultViewModel>();
-                    break;
-                }
-            }
+            var _viewModel = _viewModelService.GetScreenForNavigationEvent(linkedNavigationEvent);
             SelectedColorGroup = linkedNavigationEvent.ColorGroup;
             _viewModel.Configure(linkedNavigationEvent.Key);
             ActivateItem(_viewModel);

@@ -157,6 +157,7 @@
     <Compile Include="Repositories\ITickDataRepository.cs" />
     <Compile Include="Services\DefaultColorService.cs" />
     <Compile Include="Services\DefaultFilterService.cs" />
+    <Compile Include="Services\DefaultViewModelService.cs" />
     <Compile Include="Services\IBacktestService.cs" />
     <Compile Include="Services\IColorService.cs" />
     <Compile Include="Services\IFilterService.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Services\IResponseService.cs" />
     <Compile Include="Services\ITickDataService.cs" />
     <Compile Include="Services\ITradeService.cs" />
+    <Compile Include="Services\IViewModelService.cs" />
     <Compile Include="ShellViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>

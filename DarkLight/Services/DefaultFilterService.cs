@@ -19,20 +19,15 @@ namespace DarkLight.Services
 
         #region Implementation of IFilterService
 
-        public IFilter<LinkedNavigationEvent> GetLinkedNavigationFilter()
-        {
-            return new ShellLinkedEventFilter();
-        }
-
-        public IFilter<LinkedNavigationEvent> GetLinkedNavigationFilter(NavigationAction navigationAction)
+        public IFilter<LinkedNavigationEvent> GetLinkedNavigationFilter(NavigationAction navigationAction, NavigationDestination navigationDestination)
         {
             var _colorGroup = _colorService.GetDefaultColorGroup();
-            return GetLinkedNavigationFilter(navigationAction, _colorGroup);
+            return GetLinkedNavigationFilter(navigationAction, navigationDestination, _colorGroup);
         }
 
-        public IFilter<LinkedNavigationEvent> GetLinkedNavigationFilter(NavigationAction navigationAction, Color colorGroup)
+        public IFilter<LinkedNavigationEvent> GetLinkedNavigationFilter(NavigationAction navigationAction, NavigationDestination navigationDestination, Color colorGroup)
         {
-            return new LinkedEventFilter(navigationAction, colorGroup);
+            return new LinkedEventFilter(navigationAction, navigationDestination, colorGroup);
         }
 
         #endregion

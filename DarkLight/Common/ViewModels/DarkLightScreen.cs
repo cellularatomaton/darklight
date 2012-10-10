@@ -1,8 +1,9 @@
 using Caliburn.Micro;
+using DarkLight.Events;
 
 namespace DarkLight.Common.ViewModels
 {
-    public class DarkLightScreen : Screen
+    public class DarkLightScreen : Conductor<Screen>.Collection.OneActive
     {
         public DarkLightScreen()
         {

@@ -3,11 +3,11 @@ using System.Windows.Controls;
 namespace DarkLight.Common.Views
 {
     /// <summary>
-    /// Interaction logic for MessageView.xaml
+    /// Interaction logic for MessagesView.xaml
     /// </summary>
-    public partial class MessageView : UserControl
+    public partial class MessagesView : UserControl
     {
-        public MessageView()
+        public MessagesView()
         {
             InitializeComponent();
         }

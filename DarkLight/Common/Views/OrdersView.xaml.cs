@@ -3,11 +3,11 @@ using System.Windows.Controls;
 namespace DarkLight.Common.Views
 {
     /// <summary>
-    /// Interaction logic for OrderView.xaml
+    /// Interaction logic for OrdersView.xaml
     /// </summary>
-    public partial class OrderView : UserControl
+    public partial class OrdersView : UserControl
     {
-        public OrderView()
+        public OrdersView()
         {
             InitializeComponent();
         }
