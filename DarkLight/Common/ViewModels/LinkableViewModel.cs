@@ -42,7 +42,7 @@ namespace DarkLight.Common.ViewModels
 
         public void Handle(LinkedNavigationEvent linkedNavigationEvent)
         {
-            var _filter = IoC.Get<IFilterService>().GetLinkedNavigationFilter(NavigationAction.LinkedWindow, _selectedColorGroup);
+            var _filter = IoC.Get<IFilterService>().GetLinkedNavigationFilter(NavigationAction.UpdateLinkedWindows, _selectedColorGroup);
             if(_filter.IsPassedBy(linkedNavigationEvent))
             {
                 LoadView(linkedNavigationEvent);

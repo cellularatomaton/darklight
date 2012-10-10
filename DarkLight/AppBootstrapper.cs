@@ -48,9 +48,10 @@ namespace DarkLight
 
             // Register Modules:
             builder.Register(c => new LinkableViewModel(IoC.Get<IColorService>()));
-            builder.Register(c => new BacktestModuleViewModel(IoC.Get<IColorService>())).SingleInstance();
+            builder.Register(c => new BacktestModuleViewModel()).SingleInstance();
             builder.Register(c => new OptimizationModuleViewModel()).SingleInstance();
             builder.Register(c => new LiveTradingModuleViewModel()).SingleInstance();
+            builder.Register(c => new EventPublisherViewModel(IoC.Get<IColorService>())).SingleInstance();
 
             // Register View Models:
             builder.Register(c => new TestViewModel());

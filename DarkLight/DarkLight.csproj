@@ -85,6 +85,7 @@
     </Compile>
     <Compile Include="Common\ViewModels\DarkLightScreen.cs" />
     <Compile Include="Common\ViewModels\DefaultViewModel.cs" />
+    <Compile Include="Common\ViewModels\EventPublisherViewModel.cs" />
     <Compile Include="Common\ViewModels\FillsViewModel.cs" />
     <Compile Include="Common\ViewModels\IndicatorsViewModel.cs" />
     <Compile Include="Common\ViewModels\LinkableViewModel.cs" />
@@ -99,6 +100,9 @@
     <Compile Include="Common\ViewModels\TimeseriesViewModel.cs" />
     <Compile Include="Common\Views\DefaultView.xaml.cs">
       <DependentUpon>DefaultView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Views\EventPublisherView.xaml.cs">
+      <DependentUpon>EventPublisherView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Views\FillsView.xaml.cs">
       <DependentUpon>FillsView.xaml</DependentUpon>
@@ -180,6 +184,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Common\Views\DefaultView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Common\Views\EventPublisherView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
