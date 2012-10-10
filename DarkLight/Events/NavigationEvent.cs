@@ -21,5 +21,6 @@ namespace DarkLight.Events
         Statistics,
         TickData,
         TimeSeries,
+        EventPublisher,
     }
 }

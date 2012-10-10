@@ -4,6 +4,7 @@ namespace DarkLight.Events
     {
         Basic,
         NewWindow,
-        LinkedWindow,
+        NewLinkedWindow,
+        UpdateLinkedWindows,
     }
 }

@@ -69,7 +69,7 @@ namespace DarkLight
                     }
                 }
             }
-            else if(linkedNavigationEvent.NavigationAction == NavigationAction.NewWindow)
+            else if(linkedNavigationEvent.NavigationAction == NavigationAction.NewLinkedWindow)
             {
                 //linkedNavigationEvent.NavigationAction = IoC.Get<IFilterService>().GetDefaultLinkGroup(linkedNavigationEvent.Destination);
                 var _linkableViewModel = IoC.Get<LinkableViewModel>();
@@ -77,8 +77,22 @@ namespace DarkLight
                 _linkableViewModel.Handle(linkedNavigationEvent);
                 IoC.Get<IWindowManager>().ShowWindow(_linkableViewModel);
             }
+            else if(linkedNavigationEvent.NavigationAction == NavigationAction.NewWindow)
+            {
+                var _viewModel = IoC.Get<EventPublisherViewModel>();
+                IoC.Get<IWindowManager>().ShowWindow(_viewModel);
+            }
         }
 
         #endregion
+
+        public void ShowEventPublisher()
+        {
+            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+            {
+                NavigationAction = NavigationAction.NewWindow,
+                Destination = NavigationDestination.EventPublisher,
+            });
+        }
     }
 }
