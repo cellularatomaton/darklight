@@ -41,13 +41,14 @@ namespace DarkLight
             // Register Types:
             builder.RegisterType<DefaultColorService>().As<IColorService>();
             builder.RegisterType<DefaultFilterService>().As<IFilterService>();
+            builder.RegisterType<DefaultViewModelService>().As<IViewModelService>();
 
             // Register Service Implementations:
             builder.Register(c => new DefaultColorService()).SingleInstance();
             builder.Register(c => new DefaultFilterService(IoC.Get<IColorService>())).SingleInstance();
 
             // Register Modules:
-            builder.Register(c => new LinkableViewModel(IoC.Get<IColorService>()));
+            builder.Register(c => new LinkableViewModel(IoC.Get<IColorService>(), IoC.Get<IViewModelService>()));
             builder.Register(c => new BacktestModuleViewModel()).SingleInstance();
             builder.Register(c => new OptimizationModuleViewModel()).SingleInstance();
             builder.Register(c => new LiveTradingModuleViewModel()).SingleInstance();

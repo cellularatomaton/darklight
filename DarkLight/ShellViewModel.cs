@@ -71,11 +71,19 @@ namespace DarkLight
             }
             else if(linkedNavigationEvent.NavigationAction == NavigationAction.NewLinkedWindow)
             {
-                //linkedNavigationEvent.NavigationAction = IoC.Get<IFilterService>().GetDefaultLinkGroup(linkedNavigationEvent.Destination);
                 var _linkableViewModel = IoC.Get<LinkableViewModel>();
+                _linkableViewModel.Destination = linkedNavigationEvent.Destination;
                 _linkableViewModel.SelectedColorGroup = linkedNavigationEvent.ColorGroup;
-                _linkableViewModel.Handle(linkedNavigationEvent);
+                //_linkableViewModel.Handle(linkedNavigationEvent);
                 IoC.Get<IWindowManager>().ShowWindow(_linkableViewModel);
+                IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+                {
+                    NavigationAction = NavigationAction.UpdateLinkedWindows,
+                    Destination = linkedNavigationEvent.Destination,
+                    ColorGroup = linkedNavigationEvent.ColorGroup,
+                    Key = linkedNavigationEvent.Key,
+                });
+                
             }
             else if(linkedNavigationEvent.NavigationAction == NavigationAction.NewWindow)
             {

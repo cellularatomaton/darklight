@@ -3,11 +3,11 @@ using System.Windows.Controls;
 namespace DarkLight.Common.Views
 {
     /// <summary>
-    /// Interaction logic for IndicatorView.xaml
+    /// Interaction logic for IndicatorsView.xaml
     /// </summary>
-    public partial class IndicatorView : UserControl
+    public partial class IndicatorsView : UserControl
     {
-        public IndicatorView()
+        public IndicatorsView()
         {
             InitializeComponent();
         }
