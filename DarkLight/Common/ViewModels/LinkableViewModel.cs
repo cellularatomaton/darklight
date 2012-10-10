@@ -31,29 +31,10 @@ namespace DarkLight.Common.ViewModels
             }
         }
 
-        public BindableCollection<LinkGroup> EventGroups
-        {
-            get
-            {
-                var _eventGroupValues = Enum.GetValues(typeof (LinkGroup));
-                return new BindableCollection<LinkGroup>(_eventGroupValues.Cast<LinkGroup>().AsEnumerable());
-            }
-        }
-
-        private LinkGroup _selectedLinkGroup;
-        public LinkGroup SelectedLinkGroup 
-        { 
-            get { return _selectedLinkGroup; }
-            set 
-            { 
-                _selectedLinkGroup = value;
-                NotifyOfPropertyChange(() => SelectedLinkGroup);
-            }
-        }
-
         public LinkableViewModel(IColorService colorService)
         {
             _colorService = colorService;
+            SelectedColorGroup = _colorService.GetDefaultColorGroup();
             IoC.Get<IEventAggregator>().Subscribe(this);
         }
 
@@ -61,7 +42,7 @@ namespace DarkLight.Common.ViewModels
 
         public void Handle(LinkedNavigationEvent linkedNavigationEvent)
         {
-            var _filter = IoC.Get<IFilterService>().GetLinkedNavigationFilter(_selectedLinkGroup, _selectedColorGroup);
+            var _filter = IoC.Get<IFilterService>().GetLinkedNavigationFilter(NavigationAction.LinkedWindow, _selectedColorGroup);
             if(_filter.IsPassedBy(linkedNavigationEvent))
             {
                 LoadView(linkedNavigationEvent);
@@ -127,6 +108,7 @@ namespace DarkLight.Common.ViewModels
                     break;
                 }
             }
+            SelectedColorGroup = linkedNavigationEvent.ColorGroup;
             _viewModel.Configure(linkedNavigationEvent.Key);
             ActivateItem(_viewModel);
         }

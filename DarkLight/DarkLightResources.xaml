@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DataTemplate x:Key="ColorGroupComboBoxItemTemplate">
+        <StackPanel Orientation="Horizontal">
+            <Rectangle Margin="3" Width="10" Height="10">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="{Binding .}"/>
+                </Rectangle.Fill>
+            </Rectangle>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

@@ -39,8 +39,8 @@ namespace DarkLight
 
         public void Handle(LinkedNavigationEvent linkedNavigationEvent)
         {
-            var _filter = IoC.Get<IFilterService>().GetLinkedNavigationFilter();
-            if (_filter.IsPassedBy(linkedNavigationEvent))
+            //var _filter = IoC.Get<IFilterService>().GetLinkedNavigationFilter();
+            if (linkedNavigationEvent.NavigationAction == NavigationAction.Basic)
             {
                 Screen _viewModel;
                 switch (linkedNavigationEvent.Destination)
@@ -65,15 +65,17 @@ namespace DarkLight
                     }
                     default:
                     {
-                        linkedNavigationEvent.LinkGroup = IoC.Get<IFilterService>().GetDefaultLinkGroup(linkedNavigationEvent.Destination);
-                        var _linkableViewModel = IoC.Get<LinkableViewModel>();
-                        _linkableViewModel.SelectedColorGroup = linkedNavigationEvent.ColorGroup;
-                        _linkableViewModel.SelectedLinkGroup = linkedNavigationEvent.LinkGroup;
-                        _linkableViewModel.Handle(linkedNavigationEvent);
-                        IoC.Get<IWindowManager>().ShowWindow(_linkableViewModel);
                         break;
                     }
                 }
+            }
+            else if(linkedNavigationEvent.NavigationAction == NavigationAction.NewWindow)
+            {
+                //linkedNavigationEvent.NavigationAction = IoC.Get<IFilterService>().GetDefaultLinkGroup(linkedNavigationEvent.Destination);
+                var _linkableViewModel = IoC.Get<LinkableViewModel>();
+                _linkableViewModel.SelectedColorGroup = linkedNavigationEvent.ColorGroup;
+                _linkableViewModel.Handle(linkedNavigationEvent);
+                IoC.Get<IWindowManager>().ShowWindow(_linkableViewModel);
             }
         }
 

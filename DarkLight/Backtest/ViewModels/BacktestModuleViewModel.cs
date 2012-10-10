@@ -25,23 +25,43 @@ namespace DarkLight.Backtest.ViewModels
             }
         }
 
-        public BindableCollection<LinkGroup> LinkGroups
+        public BindableCollection<NavigationAction> NavigationActions
         {
             get
             {
-                var _eventGroupValues = Enum.GetValues(typeof(LinkGroup));
-                return new BindableCollection<LinkGroup>(_eventGroupValues.Cast<LinkGroup>().AsEnumerable());
+                var _navigationActionValues = Enum.GetValues(typeof(NavigationAction));
+                return new BindableCollection<NavigationAction>(_navigationActionValues.Cast<NavigationAction>().AsEnumerable());
             }
         }
 
-        private LinkGroup _selectedLinkGroup;
-        public LinkGroup SelectedLinkGroup
+        private NavigationAction _selectedNavigationAction;
+        public NavigationAction SelectedNavigationAction
         {
-            get { return _selectedLinkGroup; }
+            get { return _selectedNavigationAction; }
             set
             {
-                _selectedLinkGroup = value;
-                NotifyOfPropertyChange(() => SelectedLinkGroup);
+                _selectedNavigationAction = value;
+                NotifyOfPropertyChange(() => SelectedNavigationAction);
+            }
+        }
+
+        public BindableCollection<NavigationDestination> Destinations
+        {
+            get
+            {
+                var _destinationValues = Enum.GetValues(typeof(NavigationDestination));
+                return new BindableCollection<NavigationDestination>(_destinationValues.Cast<NavigationDestination>().AsEnumerable());
+            }
+        }
+
+        private NavigationDestination _selectedDestination;
+        public NavigationDestination SelectedDestination
+        {
+            get { return _selectedDestination; }
+            set
+            {
+                _selectedDestination = value;
+                NotifyOfPropertyChange(() => SelectedDestination);
             }
         }
 
@@ -61,60 +81,17 @@ namespace DarkLight.Backtest.ViewModels
         public BacktestModuleViewModel(IColorService colorService)
         {
             _colorService = colorService;
+            SelectedColorGroup = _colorService.GetDefaultColorGroup();
             this.DisplayName = this.GetType().Name;
         }
 
-        public void ShowNewFillsWindow()
+        public void SendMessage()
         {
             IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
             {
-                LinkGroup = SelectedLinkGroup,
-                ColorGroup = _colorService.GetColorGroups().First(),
-                Destination = NavigationDestination.Fills,
-                Key = TestKey,
-            });
-        }
-
-        public void ShowNewIndicatorsWindow()
-        {
-            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
-            {
-                LinkGroup = SelectedLinkGroup,
-                ColorGroup = _colorService.GetColorGroups().First(),
-                Destination = NavigationDestination.Indicators,
-                Key = TestKey,
-            });
-        }
-
-        public void ShowNewMessagesWindow()
-        {
-            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
-            {
-                LinkGroup = SelectedLinkGroup,
-                ColorGroup = _colorService.GetColorGroups().First(),
-                Destination = NavigationDestination.Messages,
-                Key = TestKey,
-            });
-        }
-
-        public void ShowNewPositionsWindow()
-        {
-            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
-            {
-                LinkGroup = SelectedLinkGroup,
-                ColorGroup = _colorService.GetColorGroups().First(),
-                Destination = NavigationDestination.Positions,
-                Key = TestKey,
-            });
-        }
-
-        public void ShowNewResponsesWindow()
-        {
-            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
-            {
-                LinkGroup = SelectedLinkGroup,
-                ColorGroup = _colorService.GetColorGroups().First(),
-                Destination = NavigationDestination.Response,
+                NavigationAction = SelectedNavigationAction,
+                ColorGroup = SelectedColorGroup,
+                Destination = SelectedDestination,
                 Key = TestKey,
             });
         }

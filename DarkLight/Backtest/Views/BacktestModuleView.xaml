@@ -7,27 +7,37 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Border BorderBrush="Blue" BorderThickness="3">
-            <StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100*"/>
+                    <ColumnDefinition Width="100*"/>
+                </Grid.ColumnDefinitions>
                 <TextBlock 
-                x:Name="DisplayName"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center"
-                FontSize="20" 
-                Foreground="Green"/>
-                <TextBlock Text="Link Group: "/>
-                <ComboBox x:Name="LinkGroups" Margin="3"/>
-                <TextBlock Text="Linked Color: "/>
-                <ComboBox x:Name="ColorGroups" Margin="3"/>
-                <TextBlock Text="Message: "/>
-                <TextBox x:Name="TestKey" Margin="3"/>
-                <TextBlock Text="Linked Windows: "/>
-                <Button x:Name="ShowNewFillsWindow" Content="Fills"/>
-                <Button x:Name="ShowNewIndicatorsWindow" Content="Indicators"/>
-                <Button x:Name="ShowNewMessagesWindow" Content="Messages"/>
-                <Button x:Name="ShowNewOrdersWindow" Content="Orders"/>
-                <Button x:Name="ShowNewPositionsWindow" Content="Positions"/>
-                <Button x:Name="ShowNewResponsesWindow" Content="Responses"/>
-            </StackPanel>
+                    Grid.ColumnSpan="2"
+                    x:Name="DisplayName"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    FontSize="20" 
+                    Foreground="Green"/>
+                <TextBlock Text="Navigation Action: " Grid.Row="1" HorizontalAlignment="Left"/>
+                <ComboBox x:Name="NavigationActions" Margin="3" Width="100" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right"/>
+                <TextBlock Text="Linked Color: " Grid.Row="2" HorizontalAlignment="Left"/>
+                <ComboBox x:Name="ColorGroups" Margin="3" Width="100" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" ItemTemplate="{StaticResource ColorGroupComboBoxItemTemplate}"/>
+                <TextBlock Text="Message: " Grid.Row="3" HorizontalAlignment="Left"/>
+                <TextBox x:Name="TestKey" Margin="3" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right"/>
+                <TextBlock Text="Destination: " Grid.Row="4" HorizontalAlignment="Left"/>
+                <ComboBox x:Name="Destinations" Margin="3" Width="100" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right"/>
+                <Button x:Name="SendMessage" Content="Send Message" Width="100" Grid.Row="6" Grid.ColumnSpan="2"/>
+            </Grid>
         </Border>
     </Grid>
 </UserControl>
