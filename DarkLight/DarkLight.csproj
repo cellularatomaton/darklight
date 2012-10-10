@@ -140,9 +140,9 @@
     <Compile Include="Common\Views\TimeseriesView.xaml.cs">
       <DependentUpon>TimeseriesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Events\LinkGroup.cs" />
+    <Compile Include="Events\NavigationAction.cs" />
     <Compile Include="Events\LinkedEventFilter.cs" />
-    <Compile Include="Events\NavigationEvent.cs" />
+    <Compile Include="Events\NavigationDestination.cs" />
     <Compile Include="Events\LinkedNavigationEvent.cs" />
     <Compile Include="Interfaces\IFilter.cs" />
     <Compile Include="LiveTrading\ViewModels\LiveTradingModuleViewModel.cs" />
