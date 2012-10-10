@@ -5,12 +5,12 @@ namespace DarkLight.Events
 {
     public class LinkedEventFilter : IFilter<LinkedNavigationEvent>
     {
-        private readonly LinkGroup _linkGroup;
+        private readonly NavigationAction _navigationAction;
         private readonly Color _colorGroup;
 
-        public LinkedEventFilter(LinkGroup linkGroup, Color colorGroup)
+        public LinkedEventFilter(NavigationAction navigationAction, Color colorGroup)
         {
-            _linkGroup = linkGroup;
+            _navigationAction = navigationAction;
             _colorGroup = colorGroup;
         }
 
@@ -18,7 +18,7 @@ namespace DarkLight.Events
 
         public bool IsPassedBy(LinkedNavigationEvent message)
         {
-            if(_linkGroup == message.LinkGroup &&
+            if(_navigationAction == message.NavigationAction &&
                _colorGroup == message.ColorGroup)
             {
                 return true;
@@ -38,7 +38,7 @@ namespace DarkLight.Events
 
         public bool IsPassedBy(LinkedNavigationEvent message)
         {
-            if(message.LinkGroup == LinkGroup.Shell)
+            if(message.NavigationAction == NavigationAction.Basic)
             {
                 return true;
             }

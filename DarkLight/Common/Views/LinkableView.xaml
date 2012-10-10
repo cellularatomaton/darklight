@@ -11,8 +11,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <ComboBox x:Name="ColorGroups" Margin="3"/>
-            <ComboBox x:Name="EventGroups" Margin="3"/>
+            <ComboBox x:Name="ColorGroups" Margin="3" Width="25" ItemTemplate="{StaticResource ColorGroupComboBoxItemTemplate}"/>
         </StackPanel>
         <ContentControl Grid.Row="1" x:Name="ActiveItem"/>
     </Grid>
