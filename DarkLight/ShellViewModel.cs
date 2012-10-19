@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using DarkLight.Backtest.ViewModels;
 using DarkLight.Common;
 using DarkLight.Common.ViewModels;
+using DarkLight.Customizations;
 using DarkLight.Events;
 using DarkLight.Interfaces;
 using DarkLight.LiveTrading.ViewModels;
@@ -22,52 +23,48 @@ namespace DarkLight
 
         public void NavigateToBacktestModule()
         {
-            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent { Destination = NavigationDestination.Backtest });
+            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent 
+            {
+                NavigationAction = NavigationAction.Basic,
+                Destination = NavigationDestination.BacktestModule 
+            });
         }
 
         public void NavigateToOptimizationModule()
         {
-            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent { Destination = NavigationDestination.Optimization });
+            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+            {
+                NavigationAction = NavigationAction.Basic,
+                Destination = NavigationDestination.OptimizationModule
+            });
         }
 
         public void NavigateToLiveTradingModule()
         {
-            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent { Destination = NavigationDestination.LiveTrading });
+            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+            {
+                NavigationAction = NavigationAction.Basic,
+                Destination = NavigationDestination.LiveTradingModule,
+            });
+        }
+
+        public void ShowEventPublisher()
+        {
+            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+            {
+                NavigationAction = NavigationAction.NewWindow,
+                Destination = NavigationDestination.EventPublisher,
+            });
         }
 
         #region Implementation of IHandle<NavigationEvent>
 
         public void Handle(LinkedNavigationEvent linkedNavigationEvent)
         {
-            //var _filter = IoC.Get<IFilterService>().GetLinkedNavigationFilter();
+            DarkLightScreen _viewModel = IoC.Get<IViewModelService>().GetScreenForNavigationEvent(linkedNavigationEvent);
             if (linkedNavigationEvent.NavigationAction == NavigationAction.Basic)
             {
-                Screen _viewModel;
-                switch (linkedNavigationEvent.Destination)
-                {
-                    case NavigationDestination.Backtest:
-                    {
-                        _viewModel = IoC.Get<BacktestModuleViewModel>();
-                        ActivateItem(_viewModel);
-                        break;
-                    }
-                    case NavigationDestination.Optimization:
-                    {
-                        _viewModel = IoC.Get<OptimizationModuleViewModel>();
-                        ActivateItem(_viewModel);
-                        break;
-                    }
-                    case NavigationDestination.LiveTrading:
-                    {
-                        _viewModel = IoC.Get<LiveTradingModuleViewModel>();
-                        ActivateItem(_viewModel);
-                        break;
-                    }
-                    default:
-                    {
-                        break;
-                    }
-                }
+                ActivateItem(_viewModel);
             }
             else if(linkedNavigationEvent.NavigationAction == NavigationAction.NewLinkedWindow)
             {
@@ -81,25 +78,16 @@ namespace DarkLight
                     Destination = linkedNavigationEvent.Destination,
                     ColorGroup = linkedNavigationEvent.ColorGroup,
                     Key = linkedNavigationEvent.Key,
-                });
-                
+                });                
             }
             else if(linkedNavigationEvent.NavigationAction == NavigationAction.NewWindow)
             {
-                var _viewModel = IoC.Get<EventPublisherViewModel>();
                 IoC.Get<IWindowManager>().ShowWindow(_viewModel);
             }
         }
 
         #endregion
 
-        public void ShowEventPublisher()
-        {
-            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
-            {
-                NavigationAction = NavigationAction.NewWindow,
-                Destination = NavigationDestination.EventPublisher,
-            });
-        }
+        
     }
 }
