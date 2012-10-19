@@ -10,6 +10,7 @@ using Autofac;
 using DarkLight.Backtest.ViewModels;
 using DarkLight.Utilities;
 using DarkLight.Common.ViewModels;
+using DarkLight.Customizations;
 using DarkLight.LiveTrading.ViewModels;
 using DarkLight.Optimization.ViewModels;
 using DarkLight.Services;
@@ -45,20 +46,23 @@ namespace DarkLight
             builder.RegisterType<DefaultColorService>().As<IColorService>();
             builder.RegisterType<DefaultFilterService>().As<IFilterService>();
             builder.RegisterType<DefaultViewModelService>().As<IViewModelService>();
+            builder.RegisterType<DarkLightWindowManager>().As<IWindowManager>();
 
             // Register Service Implementations:
             builder.Register(c => new DefaultColorService()).SingleInstance();
             builder.Register(c => new DefaultFilterService(IoC.Get<IColorService>())).SingleInstance();
+            builder.Register(c => new DarkLightWindowManager()).SingleInstance();
 
             // Register Modules:
             builder.Register(c => new LinkableViewModel(IoC.Get<IColorService>(), IoC.Get<IViewModelService>()));
             builder.Register(c => new BacktestModuleViewModel()).SingleInstance();
+            builder.Register(c => new BacktestLauncherViewModel());
+            builder.Register(c => new BacktestBrowserViewModel());
             builder.Register(c => new OptimizationModuleViewModel()).SingleInstance();
             builder.Register(c => new LiveTradingModuleViewModel()).SingleInstance();
             builder.Register(c => new EventPublisherViewModel(IoC.Get<IColorService>())).SingleInstance();
 
             // Register View Models:
-            builder.Register(c => new TestViewModel());
             builder.Register(c => new StatisticsViewModel());
             builder.Register(c => new ResultsViewModel());
             builder.Register(c => new FillsViewModel());

@@ -83,7 +83,6 @@
     <Compile Include="Backtest\Views\BacktestModuleView.xaml.cs">
       <DependentUpon>BacktestModuleView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Common\ViewModels\DarkLightScreen.cs" />
     <Compile Include="Common\ViewModels\DefaultViewModel.cs" />
     <Compile Include="Common\ViewModels\EventPublisherViewModel.cs" />
     <Compile Include="Common\ViewModels\FillsViewModel.cs" />
@@ -95,7 +94,6 @@
     <Compile Include="Common\ViewModels\ResponseViewModel.cs" />
     <Compile Include="Common\ViewModels\ResultsViewModel.cs" />
     <Compile Include="Common\ViewModels\StatisticsViewModel.cs" />
-    <Compile Include="Common\ViewModels\TestViewModel.cs" />
     <Compile Include="Common\ViewModels\TickDataViewModel.cs" />
     <Compile Include="Common\ViewModels\TimeseriesViewModel.cs" />
     <Compile Include="Common\Views\DefaultView.xaml.cs">
@@ -131,15 +129,14 @@
     <Compile Include="Common\Views\StatisticsView.xaml.cs">
       <DependentUpon>StatisticsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Common\Views\TestView.xaml.cs">
-      <DependentUpon>TestView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Common\Views\TickDataView.xaml.cs">
       <DependentUpon>TickDataView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Views\TimeseriesView.xaml.cs">
       <DependentUpon>TimeseriesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Customizations\DarkLightScreen.cs" />
+    <Compile Include="Customizations\DarkLightWindowManager.cs" />
     <Compile Include="Events\NavigationAction.cs" />
     <Compile Include="Events\LinkedEventFilter.cs" />
     <Compile Include="Events\NavigationDestination.cs" />
@@ -226,10 +223,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Common\Views\StatisticsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Common\Views\TestView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
