@@ -35,23 +35,4 @@ namespace DarkLight.Events
 
         #endregion
     }
-
-    //public class ShellLinkedEventFilter : IFilter<LinkedNavigationEvent>
-    //{
-    //    #region Implementation of IFilter<LinkedEventFilter>
-
-    //    public bool IsPassedBy(LinkedNavigationEvent message)
-    //    {
-    //        if(message.NavigationAction == NavigationAction.Basic)
-    //        {
-    //            return true;
-    //        }
-    //        else
-    //        {
-    //            return false;
-    //        }
-    //    }
-
-    //    #endregion
-    //}
 }

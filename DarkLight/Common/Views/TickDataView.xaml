@@ -6,13 +6,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Border BorderBrush="Blue" BorderThickness="3">
-            <TextBlock 
-                x:Name="DisplayName"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center"
-                FontSize="20" 
-                Foreground="Green"/>
-        </Border>
+        <TextBlock 
+            x:Name="DisplayName"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            FontSize="20" 
+            Foreground="Green"/>
     </Grid>
 </UserControl>

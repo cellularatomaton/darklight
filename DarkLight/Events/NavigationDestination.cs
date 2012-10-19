@@ -8,9 +8,11 @@ namespace DarkLight.Events
     public enum NavigationDestination
     {
         Default,
-        Backtest,
-        Optimization,
-        LiveTrading,
+        BacktestModule,
+        BacktestLauncher,
+        BacktestBrowser,
+        OptimizationModule,
+        LiveTradingModule,
         Fills,
         Indicators,
         Messages,
