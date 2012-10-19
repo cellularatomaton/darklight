@@ -21,7 +21,9 @@
                    HorizontalAlignment="Center"
                    FontSize="20" />
         <Button Grid.Row="0" Grid.Column="1" x:Name="ShowEventPublisher" Content="Events"/>
-        <ContentControl Grid.Row="1" Grid.ColumnSpan="2" x:Name="ActiveItem"/>
+        <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Blue" BorderThickness="3" Margin="3">
+            <ContentControl  x:Name="ActiveItem"/>
+        </Border>
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Backtest" x:Name="NavigateToBacktestModule" Width="100"/>
             <Button Content="Optimize" x:Name="NavigateToOptimizationModule" Width="100"/>
