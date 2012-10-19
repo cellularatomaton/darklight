@@ -8,6 +8,7 @@ using System.Linq;
 using Caliburn.Micro;
 using Autofac;
 using DarkLight.Backtest.ViewModels;
+using DarkLight.Utilities;
 using DarkLight.Common.ViewModels;
 using DarkLight.LiveTrading.ViewModels;
 using DarkLight.Optimization.ViewModels;
@@ -26,7 +27,9 @@ namespace DarkLight
     public class AppBootstrapper : AutofacBootstrapper<ShellViewModel>
     {
         protected override void ConfigureBootstrapper()
-        {  //  you must call the base version first!
+        {
+            LogManager.GetLog = type => new DebugLogger(type);
+            //  you must call the base version first!            
             base.ConfigureBootstrapper();
             //  override namespace naming convention
             EnforceNamespaceConvention = false;
@@ -66,6 +69,7 @@ namespace DarkLight
             builder.Register(c => new PositionsViewModel());
             builder.Register(c => new TimeseriesViewModel());
             builder.Register(c => new DefaultViewModel());
+           
         }
     }
 
