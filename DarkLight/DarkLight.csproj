@@ -135,6 +135,7 @@
     <Compile Include="Common\Views\TimeseriesView.xaml.cs">
       <DependentUpon>TimeseriesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\LogManager.cs" />    
     <Compile Include="Customizations\DarkLightScreen.cs" />
     <Compile Include="Customizations\DarkLightWindowManager.cs" />
     <Compile Include="Events\NavigationAction.cs" />
