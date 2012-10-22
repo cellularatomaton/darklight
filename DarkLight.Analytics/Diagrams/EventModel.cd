@@ -1,0 +1,281 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DarkLight.Analytics.Models.Hub">
+    <Position X="9" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAACAAAAAAAEAAAAAEAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Models\HubModelPROPOSED.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="EventType" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DarkLight.Analytics.Models.LocalHub" Collapsed="true">
+    <Position X="5.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\HubModelPROPOSED.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DarkLight.Analytics.Models.MixedHub" Collapsed="true">
+    <Position X="7.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\HubModelPROPOSED.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DarkLight.Analytics.Models.MultiHub" Collapsed="true">
+    <Position X="10" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\HubModelPROPOSED.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DarkLight.Analytics.Models.ZeroHub" Collapsed="true">
+    <Position X="12.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\HubModelPROPOSED.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DarkLight.Analytics.Models.Actor">
+    <Position X="9" Y="13.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="ActorConfigurationModel" Type="DarkLight.Utilities.ActorConfigurationModel">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.786" Y="0.587" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AwACAAEEECCAAAQAiAAAAgCAAAAAiQAEIQCQAEBAAAA=</HashCode>
+      <FileName>Models\WrapperModelsPROPOSED.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="IHub" />
+      <Property Name="ActorConfigurationModel" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DarkLight.Analytics.Models.DarkLightFactory">
+    <Position X="0.5" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAEAAAAAEAAAIAAAAAAA=</HashCode>
+      <FileName>Models\SessionModelPROPOSED.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DarkLight.Analytics.Models.DarkLightSimBroker">
+    <Position X="11.5" Y="13.25" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="BrokerConfigurationModel" Type="DarkLight.Utilities.BrokerConfigurationModel">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.957" Y="2.066" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAQCAGBEACAAEAAAAAABARCCAUCASAgAAAQAAAEAACE=</HashCode>
+      <FileName>Models\WrapperModelsPROPOSED.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="IHub" />
+      <Property Name="BrokerConfigurationModel" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DarkLight.Analytics.Models.DarkLightResponse">
+    <Position X="6.5" Y="13.25" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="ResponseConfigurationModel" Type="DarkLight.Utilities.ResponseConfigurationModel">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.772" Y="2.806" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAACkBAAiAgBCAAhAQAAACAAAAACAAUAQAAAACQAAA=</HashCode>
+      <FileName>Models\WrapperModelsPROPOSED.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="IHub" />
+      <Property Name="ResponseConfigurationModel" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DarkLight.Utilities.DarkLightEventArgs">
+    <Position X="2" Y="7.75" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DarkLight.Utilities.EventType">
+    <Position X="5.5" Y="8" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DarkLight.Utilities.HubConfigurationModel">
+    <Position X="14.25" Y="20.5" Width="2" />
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Field Name="Type" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="DarkLight.Utilities.ActorConfigurationModel">
+    <Position X="9" Y="17.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DarkLight.Analytics.Models.SessionModel">
+    <Position X="9.25" Y="23.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+      <Compartment Name="Events" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="ResponseConfigurationModel" Type="DarkLight.Utilities.ResponseConfigurationModel">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.905" Y="0.32" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="ReportConfigurationModel" Type="DarkLight.Utilities.ReportConfigurationModel">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.954" Y="0.171" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="BrokerConfigurationModel" Type="DarkLight.Utilities.BrokerConfigurationModel" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="10.75" Y="23.812" />
+        <Point X="12.25" Y="23.812" />
+        <Point X="12.25" Y="22.261" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.041" Y="0.444" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="HubConfigurationModel" Type="DarkLight.Utilities.HubConfigurationModel" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="10.75" Y="24.25" />
+        <Point X="15.25" Y="24.25" />
+        <Point X="15.25" Y="21.603" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAIAAiAAACIABIBAAAACAQAAgQCKAAACQAAAEACAACI=</HashCode>
+      <FileName>Models\SessionModelPROPOSED.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_broker" />
+      <Field Name="_reporter" />
+      <Property Name="ResponseConfigurationModel" />
+      <Property Name="ReportConfigurationModel" />
+      <Property Name="BrokerConfigurationModel" />
+      <Property Name="HubConfigurationModel" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Field Name="_responseList" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DarkLight.Utilities.ResponseConfigurationModel">
+    <Position X="7" Y="20.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DarkLight.Utilities.ReportConfigurationModel">
+    <Position X="9" Y="19.75" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DarkLight.Utilities.BrokerConfigurationModel">
+    <Position X="11.5" Y="20" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DarkLight.Analytics.Models.BatchReportModel2">
+    <Position X="13.75" Y="7" Width="2" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACAIAAEAAAAACASoCAABgAIEAECQAGAQCwCAEAAAA=</HashCode>
+      <FileName>Models\ReportModelPROPOSED.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="DarkLight.Utilities.IReporter">
+    <Position X="6.25" Y="26.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="DarkLight.Utilities.IReportable">
+    <Position X="0.5" Y="4" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="DarkLight.Utilities.IHub">
+    <Position X="9" Y="10" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="DarkLight.Utilities.IActor">
+    <Position X="9.25" Y="30.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="DarkLight.Utilities.IDarkLightBroker">
+    <Position X="12.5" Y="27" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="DarkLight.Utilities.IDarkLightResponse">
+    <Position X="9.25" Y="27.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier />
+  </Interface>
+  <Enum Name="DarkLight.Utilities.ActorType">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Enum>
+  <Enum Name="DarkLight.Utilities.DispatchableType">
+    <Position X="8" Y="0.75" Width="1.5" />
+    <TypeIdentifier />
+  </Enum>
+  <Enum Name="DarkLight.Utilities.HubType">
+    <Position X="17" Y="20.5" Width="1.5" />
+    <TypeIdentifier />
+  </Enum>
+  <Enum Name="DarkLight.Utilities.TransitionType">
+    <Position X="12.75" Y="1" Width="1.5" />
+    <TypeIdentifier />
+  </Enum>
+  <Enum Name="DarkLight.Utilities.ServiceType">
+    <Position X="14.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Enum>
+  <Enum Name="DarkLight.Utilities.ReportType">
+    <Position X="10.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier />
+  </Enum>
+  <Enum Name="DarkLight.Utilities.EngineType">
+    <Position X="5.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier />
+  </Enum>
+  <Enum Name="DarkLight.Utilities.BrokerType">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
