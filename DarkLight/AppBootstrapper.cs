@@ -27,9 +27,13 @@ namespace DarkLight
 
     public class AppBootstrapper : AutofacBootstrapper<ShellViewModel>
     {
-        protected override void ConfigureBootstrapper()
+        static AppBootstrapper()
         {
-            LogManager.GetLog = type => new DebugLogger(type);
+            LogManager.GetLog = type => new NLogLogger(type);
+        }
+
+        protected override void ConfigureBootstrapper()
+        {            
             //  you must call the base version first!            
             base.ConfigureBootstrapper();
             //  override namespace naming convention
