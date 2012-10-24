@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro.Autofac;
+﻿using System.Windows.Controls;
+using Caliburn.Micro.Autofac;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -8,6 +9,7 @@ using System.Linq;
 using Caliburn.Micro;
 using Autofac;
 using DarkLight.Backtest.ViewModels;
+using DarkLight.Repositories;
 using DarkLight.Utilities;
 using DarkLight.Common.ViewModels;
 using DarkLight.Customizations;
@@ -51,6 +53,7 @@ namespace DarkLight
             builder.RegisterType<DefaultFilterService>().As<IFilterService>();
             builder.RegisterType<DefaultViewModelService>().As<IViewModelService>();
             builder.RegisterType<DarkLightWindowManager>().As<IWindowManager>();
+            builder.RegisterType<DarklightBacktestRepository>().As<IBacktestRepository>();
 
             // Register Service Implementations:
             builder.Register(c => new DefaultColorService()).SingleInstance();
@@ -61,7 +64,7 @@ namespace DarkLight
             builder.Register(c => new LinkableViewModel(IoC.Get<IColorService>(), IoC.Get<IViewModelService>()));
             builder.Register(c => new BacktestModuleViewModel()).SingleInstance();
             builder.Register(c => new BacktestLauncherViewModel());
-            builder.Register(c => new BacktestBrowserViewModel());
+            builder.Register(c => new BacktestBrowserViewModel(IoC.Get<IColorService>(), IoC.Get<IViewModelService>()));
             builder.Register(c => new OptimizationModuleViewModel()).SingleInstance();
             builder.Register(c => new LiveTradingModuleViewModel()).SingleInstance();
             builder.Register(c => new EventPublisherViewModel(IoC.Get<IColorService>())).SingleInstance();
@@ -77,7 +80,11 @@ namespace DarkLight
             builder.Register(c => new PositionsViewModel());
             builder.Register(c => new TimeseriesViewModel());
             builder.Register(c => new DefaultViewModel());
-           
+
+            // Context Menu:
+            //http://compiledexperience.com/blog/posts/wp7-context-menus-with-caliburn-micro            
+            ConventionManager.AddElementConvention<MenuItem>(ItemsControl.ItemsSourceProperty, "DataContext", "Click");
+
         }
     }
 

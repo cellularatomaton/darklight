@@ -5,9 +5,9 @@ namespace DarkLight.Common.Views
     /// <summary>
     /// Interaction logic for PlotView.xaml
     /// </summary>
-    public partial class PlotView : UserControl
+    public partial class TimeseriesView : UserControl
     {
-        public PlotView()
+        public TimeseriesView()
         {
             InitializeComponent();
         }
