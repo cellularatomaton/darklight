@@ -7,4 +7,11 @@
             </Rectangle.Fill>
         </Rectangle>
     </DataTemplate>
+    <DataTemplate x:Key="ColorGroupComboBoxItemTemplate2">
+        <Rectangle Margin="15,3,3,3" Width="22" Height="22">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="{Binding .}"/>
+            </Rectangle.Fill>
+        </Rectangle>
+    </DataTemplate>
 </ResourceDictionary>

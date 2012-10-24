@@ -74,6 +74,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Backtest\Models\BacktestGroupRecord.cs" />
+    <Compile Include="Backtest\Models\BacktestRecord.cs" />
     <Compile Include="Backtest\ViewModels\BacktestBrowserViewModel.cs" />
     <Compile Include="Backtest\ViewModels\BacktestLauncherViewModel.cs" />
     <Compile Include="Backtest\ViewModels\BacktestModuleViewModel.cs" />
@@ -138,6 +140,7 @@
     <Compile Include="Common\Views\TimeseriesView.xaml.cs">
       <DependentUpon>TimeseriesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\DarklightBacktestRepository.cs" />
     <Compile Include="Utilities\NLogLogger.cs" />
     <Compile Include="Customizations\DarkLightScreen.cs" />
     <Compile Include="Customizations\DarkLightWindowManager.cs" />
@@ -275,6 +278,7 @@
     </EmbeddedResource>
     <None Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -284,7 +288,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
