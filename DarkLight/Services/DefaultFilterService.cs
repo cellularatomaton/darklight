@@ -30,6 +30,12 @@ namespace DarkLight.Services
             return new LinkedEventFilter(navigationAction, navigationDestination, colorGroup);
         }
 
+        public IFilter<LinkedNavigationEvent> GetLinkedNavigationFilter(NavigationAction navigationAction, NavigationGroup navigationGroup, Color colorGroup)
+        {
+            return new LinkedEventFilter(navigationAction, navigationGroup, colorGroup);
+        }
+
         #endregion
+   
     }
 }

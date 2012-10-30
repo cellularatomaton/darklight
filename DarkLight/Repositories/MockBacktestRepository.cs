@@ -7,7 +7,7 @@ using DarkLight.Backtest.Models;
 
 namespace DarkLight.Repositories
 {
-    class DarklightBacktestRepository : IBacktestRepository
+    class MockBacktestRepository : IBacktestRepository
     {
         public List<BacktestGroupRecord> GetBacktestGroupRecords(string query)
         {
@@ -36,5 +36,46 @@ namespace DarkLight.Repositories
 
             return backtestRecords;
         }
+
+
+        public List<string> GetBacktestFills(string backtestID)
+        {
+            return new List<string>();
+        }
+
+        public List<string> GetBacktestMessages(string backtestID)
+        {
+            return new List<string>();
+        }
+
+        public List<string> GetBacktestOrders(string backtestID)
+        {
+            return new List<string>();
+        }
+
+        public List<string> GetBacktestPositions(string backtestID)
+        {
+            return new List<string>();
+        }
+
+        public List<string> GetBacktestResults(string backtestID)
+        {
+            return new List<string>();
+        }
+
+        public List<string> GetBacktestStatistics(string backtestID)
+        {
+            return new List<string>();
+        }
+
+        public List<string> GetBacktestTicks(string backtestID)
+        {
+            return new List<string>();
+        }
+
+        public List<string> GetBacktestTimeseries(string backtestID)
+        {
+            return new List<string>();
+        }    
     }
 }

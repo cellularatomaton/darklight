@@ -10,6 +10,7 @@ using DarkLight.Services;
 
 namespace DarkLight.Backtest.ViewModels
 {
+
     public class BacktestBrowserViewModel : LinkableViewModel
     {
         #region Properties
@@ -17,9 +18,30 @@ namespace DarkLight.Backtest.ViewModels
         public BindableCollection<BacktestGroupRecord> BacktestGroups { get; set; }
         public BindableCollection<BacktestRecord> Backtests { get; set; }
 
-        public BacktestGroupRecord SelectedBacktestGroup { get; set; }
-        public BacktestGroupRecord SelectedBacktest { get; set; }
-        
+        BacktestGroupRecord _selectedBacktestGroup;
+        public BacktestGroupRecord SelectedBacktestGroup
+        {
+            get { return _selectedBacktestGroup; }
+            set { _selectedBacktestGroup = value; }
+        }
+
+        BacktestRecord _selectedBacktest;
+        public BacktestRecord SelectedBacktest
+        {
+            get { return _selectedBacktest; }
+            set
+            {
+                _selectedBacktest = value;
+                IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+                {
+                    NavigationAction = NavigationAction.UpdateLinkedWindows,
+                    Group = NavigationGroup.Backtest,
+                    ColorGroup = SelectedColorGroup,
+                    Key = SelectedBacktest.Description
+                });
+            }
+        }
+
         #endregion
 
         #region Constructor
@@ -48,7 +70,7 @@ namespace DarkLight.Backtest.ViewModels
             BacktestGroups.Clear();
             foreach (var backtestGroupRecord in backtestGroups)
             {
-                BacktestGroups.Add(backtestGroupRecord); 
+                BacktestGroups.Add(backtestGroupRecord);
             }
 
             SelectedBacktestGroup = null;
@@ -81,11 +103,18 @@ namespace DarkLight.Backtest.ViewModels
 
         public void OpenSingleTestWindow(NavigationDestination destination)
         {
-            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+            if (SelectedBacktest != null)
             {
-                NavigationAction = NavigationAction.NewWindow,
-                Destination = destination
-            });  
+
+                IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+                {
+                    NavigationAction = NavigationAction.NewLinkedWindow,
+                    Destination = destination,
+                    Group = NavigationGroup.Backtest,
+                    ColorGroup = SelectedColorGroup,
+                    Key = SelectedBacktest.Description
+                });
+            }
         }
 
         #endregion
@@ -134,6 +163,17 @@ namespace DarkLight.Backtest.ViewModels
         #endregion
 
         #endregion
+
+        #region Base Class Overrides
+
+        public override void Handle(LinkedNavigationEvent linkedNavigationEvent)
+        {
+            //ignore events for now
+        }
+
+        #endregion
     }
+
+
 
 }

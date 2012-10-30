@@ -142,7 +142,8 @@
     <Compile Include="Common\Views\TimeseriesView.xaml.cs">
       <DependentUpon>TimeseriesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Repositories\DarklightBacktestRepository.cs" />
+    <Compile Include="Events\NavigationGroup.cs" />
+    <Compile Include="Repositories\MockBacktestRepository.cs" />
     <Compile Include="Utilities\NLogLogger.cs" />
     <Compile Include="Customizations\DarkLightScreen.cs" />
     <Compile Include="Customizations\DarkLightWindowManager.cs" />
@@ -296,7 +297,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" /> 
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
