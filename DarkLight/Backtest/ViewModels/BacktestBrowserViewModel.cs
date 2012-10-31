@@ -1,5 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Data;
 using Caliburn.Micro;
 using DarkLight.Backtest.Models;
 using DarkLight.Common.ViewModels;
@@ -17,27 +19,29 @@ namespace DarkLight.Backtest.ViewModels
 
         public BindableCollection<BacktestGroupRecord> BacktestGroups { get; set; }
         public BindableCollection<BacktestRecord> Backtests { get; set; }
+        public ICollectionView BacktestGroupView { get; set; }
+        public ICollectionView BacktestView { get; set; }
 
-        BacktestGroupRecord _selectedBacktestGroup;
-        public BacktestGroupRecord SelectedBacktestGroup
+        BacktestGroupRecord _selectedBacktestGroupView;
+        public BacktestGroupRecord SelectedBacktestGroupView
         {
-            get { return _selectedBacktestGroup; }
-            set { _selectedBacktestGroup = value; }
+            get { return _selectedBacktestGroupView; }
+            set { _selectedBacktestGroupView = value; }
         }
 
-        BacktestRecord _selectedBacktest;
-        public BacktestRecord SelectedBacktest
+        BacktestRecord _selectedBacktestView;
+        public BacktestRecord SelectedBacktestView
         {
-            get { return _selectedBacktest; }
+            get { return _selectedBacktestView; }
             set
             {
-                _selectedBacktest = value;
+                _selectedBacktestView = value;
                 IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
                 {
                     NavigationAction = NavigationAction.UpdateLinkedWindows,
                     Group = NavigationGroup.Backtest,
                     ColorGroup = SelectedColorGroup,
-                    Key = SelectedBacktest.Description
+                    Key = SelectedBacktestView.Description
                 });
             }
         }
@@ -51,6 +55,8 @@ namespace DarkLight.Backtest.ViewModels
         {
             BacktestGroups = new BindableCollection<BacktestGroupRecord>();
             Backtests = new BindableCollection<BacktestRecord>();
+            BacktestGroupView = CollectionViewSource.GetDefaultView(BacktestGroups);
+            BacktestView = CollectionViewSource.GetDefaultView(Backtests);
         }
 
         #endregion
@@ -73,12 +79,12 @@ namespace DarkLight.Backtest.ViewModels
                 BacktestGroups.Add(backtestGroupRecord);
             }
 
-            SelectedBacktestGroup = null;
+            SelectedBacktestGroupView = null;
         }
 
         public bool CanQueryBacktestGroup(string query)
         {
-            if (string.IsNullOrWhiteSpace(query) || SelectedBacktestGroup == null)
+            if (string.IsNullOrWhiteSpace(query) || SelectedBacktestGroupView == null)
                 return false;
             else
                 return true;
@@ -86,9 +92,9 @@ namespace DarkLight.Backtest.ViewModels
 
         public void QueryBacktestGroup(string query)
         {
-            if (SelectedBacktestGroup != null)
+            if (SelectedBacktestGroupView != null)
             {
-                var backtests = IoC.Get<IBacktestRepository>().GetBacktestRecords(SelectedBacktestGroup.Description, query);
+                var backtests = IoC.Get<IBacktestRepository>().GetBacktestRecords(SelectedBacktestGroupView.Description, query);
                 Backtests.Clear();
                 foreach (var backtest in backtests)
                 {
@@ -103,7 +109,7 @@ namespace DarkLight.Backtest.ViewModels
 
         public void OpenSingleTestWindow(NavigationDestination destination)
         {
-            if (SelectedBacktest != null)
+            if (SelectedBacktestView != null)
             {
 
                 IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
@@ -112,7 +118,7 @@ namespace DarkLight.Backtest.ViewModels
                     Destination = destination,
                     Group = NavigationGroup.Backtest,
                     ColorGroup = SelectedColorGroup,
-                    Key = SelectedBacktest.Description
+                    Key = SelectedBacktestView.Description
                 });
             }
         }

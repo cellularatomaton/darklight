@@ -1,31 +1,20 @@
+using System.ComponentModel;
+using System.Windows.Data;
 using Caliburn.Micro;
+using DarkLight.Common.Models;
 using DarkLight.Customizations;
 using DarkLight.Events;
 using DarkLight.Repositories;
+using DarkLight.Utilities;
 
 namespace DarkLight.Common.ViewModels
 {
     public class TickDataViewModel : DarkLightScreen
     {
-        public TickDataViewModel()
-        {
-        }
-
         #region Properties
 
-        private string _testField;
-        public string TestField
-        {
-            get { return _testField; }
-            set
-            {
-                _testField = value;
-                NotifyOfPropertyChange(() => TestField);
-            }
-        }
-
-        private BindableCollection<string> _ticks;
-        public BindableCollection<string> Ticks
+        private BindableCollection<DarkLightTick> _ticks;
+        public BindableCollection<DarkLightTick> Ticks
         {
             get { return _ticks; }
             set
@@ -35,14 +24,40 @@ namespace DarkLight.Common.ViewModels
             }
         }
 
+        public ICollectionView TickView { get; set; }
+    
+        #endregion
+
+        #region Constructor
+
+        public TickDataViewModel()
+        {
+            Ticks = new BindableCollection<DarkLightTick>();
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void AddTick()
+        {
+            Ticks.Add(MockUtilities.GenerateTicks("backtestidToImplement",1)[0]);
+        }
+
         #endregion
 
         #region Base Class Overrides
 
         public override void Initialize(LinkedNavigationEvent linkedNavigationEvent)
         {
-            var results = IoC.Get<IBacktestRepository>().GetBacktestTicks(linkedNavigationEvent.Key);
-            TestField = linkedNavigationEvent.Key;
+            var ticks = IoC.Get<IBacktestRepository>().GetBacktestTicks(linkedNavigationEvent.Key);
+            Ticks.Clear();
+            foreach (var tick in ticks)
+            {
+                Ticks.Add(tick);
+            }
+
+            TickView = CollectionViewSource.GetDefaultView(Ticks);
         }
 
         #endregion

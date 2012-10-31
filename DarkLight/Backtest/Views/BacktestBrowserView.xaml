@@ -41,13 +41,18 @@
             <Button  Grid.Column="1" Grid.Row="0" Content="Find" Margin="0,5,10,5"
                 cal:Message.Attach="[Event Click] = [Action FindBacktestGroups(FindBacktestGroups_Input.Text)]" />
         </Grid>
-        <ListBox x:Name="BacktestGroups" Margin="10,5,10,5" Height="150">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Description}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <ListView x:Name="BacktestGroupView" Margin="10,5,10,5" Height="150">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="120" Header="Description" DisplayMemberBinding="{Binding Description}" />
+                    <GridViewColumn Width="120" Header="GUID" DisplayMemberBinding="{Binding GUID}" />
+                    <GridViewColumn Width="120" Header="CreateDate" DisplayMemberBinding="{Binding CreateDate}" />
+                    <GridViewColumn Width="120" Header="NumBacktests" DisplayMemberBinding="{Binding NumBacktests}" />
+                    <GridViewColumn Width="120" Header="MaxPNL" DisplayMemberBinding="{Binding MaxPNL}" />
+                    <GridViewColumn Width="120" Header="MinPNL" DisplayMemberBinding="{Binding MinPNL}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
         <Grid Height="40">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
@@ -60,13 +65,18 @@
             <Button  Grid.Column="1" Grid.Row="0" Content="Query" Margin="0,5,10,5" 
                      cal:Message.Attach="[Event Click] = [Action QueryBacktestGroup(QueryBacktestGroup_Input.Text)]" />                
         </Grid>
-        <ListBox x:Name="Backtests" Margin="10,5,10,5" Height="150">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Description}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <ListView x:Name="BacktestView" Margin="10,5,10,5" Height="150">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="120" Header="Description" DisplayMemberBinding="{Binding Description}" />
+                    <GridViewColumn Width="120" Header="GUID" DisplayMemberBinding="{Binding GUID}" />
+                    <GridViewColumn Width="120" Header="CreateDate" DisplayMemberBinding="{Binding CreateDate}" />
+                    <GridViewColumn Width="120" Header="NumTrades" DisplayMemberBinding="{Binding NumTrades}" />
+                    <GridViewColumn Width="120" Header="PNL" DisplayMemberBinding="{Binding PNL}" />
+                    <GridViewColumn Width="120" Header="WinLossRatio" DisplayMemberBinding="{Binding WinLossRatio}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition/>

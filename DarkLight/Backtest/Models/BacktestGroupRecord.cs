@@ -11,7 +11,7 @@ namespace DarkLight.Backtest.Models
         public string GUID { get; set; }
         public DateTime CreateDate { get; set; }
         public int NumBacktests { get; set; }
-        public float MaxPNL { get; set; }
-        public float MinPNL { get; set; }    
+        public double MaxPNL { get; set; }
+        public double MinPNL { get; set; }    
     }
 }
