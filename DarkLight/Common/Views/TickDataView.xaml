@@ -2,17 +2,27 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel MinWidth="400">
-        <Grid>
-            <TextBlock 
-            x:Name="TestField"
-             VerticalAlignment="Center"
-             HorizontalAlignment="Center"
-             FontSize="20" 
-             Foreground="Green"/>
-        </Grid>
+        <Button  Content="Add Tick" Width ="75" HorizontalAlignment="Left" Margin="0,5,10,5"  cal:Message.Attach="[Event Click] = [Action AddTick()]" />
+        <ListView x:Name="TickView" Height="300">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="120" Header="Time" DisplayMemberBinding="{Binding Time}" />
+                    <GridViewColumn Width="120" Header="Sym" DisplayMemberBinding="{Binding Sym}" />
+                    <GridViewColumn Width="120" Header="Trade" DisplayMemberBinding="{Binding Trade}" />
+                    <GridViewColumn Width="120" Header="TSize" DisplayMemberBinding="{Binding TSize}" />
+                    <GridViewColumn Width="120" Header="Bid" DisplayMemberBinding="{Binding Bid}" />
+                    <GridViewColumn Width="120" Header="Ask" DisplayMemberBinding="{Binding Ask}" />
+                    <GridViewColumn Width="120" Header="BSize" DisplayMemberBinding="{Binding BSize}" />
+                    <GridViewColumn Width="120" Header="ASize" DisplayMemberBinding="{Binding ASize}" />
+                    <GridViewColumn Width="120" Header="TExch" DisplayMemberBinding="{Binding TExch}" />
+                    <GridViewColumn Width="120" Header="BidExch" DisplayMemberBinding="{Binding BidExch}" />
+                    <GridViewColumn Width="120" Header="AskExch" DisplayMemberBinding="{Binding AskExch}" />                    
+                </GridView>
+            </ListView.View>
+        </ListView>
     </StackPanel>
 </UserControl>
