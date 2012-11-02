@@ -14,17 +14,31 @@ namespace DarkLight.Common.ViewModels
 {
     public class LinkableViewModel : DarkLightScreen, IHandle<LinkedNavigationEvent>
     {
-        private IColorService _colorService;
-        private IViewModelService _viewModelService;
 
-        private NavigationDestination _destination;
+        #region Properties
+
+        protected IColorService _colorService;
+        protected IViewModelService _viewModelService;
+
+        protected NavigationDestination _destination;
         public NavigationDestination Destination
         {
             get { return _destination; }
-            set 
-            { 
+            set
+            {
                 _destination = value;
                 NotifyOfPropertyChange(() => Destination);
+            }
+        }
+
+        protected NavigationGroup _group;
+        public NavigationGroup Group
+        {
+            get { return _group; }
+            set
+            {
+                _group = value;
+                NotifyOfPropertyChange(() => Group);
             }
         }
 
@@ -33,7 +47,7 @@ namespace DarkLight.Common.ViewModels
             get { return _colorService.GetColorGroups(); }
         }
 
-        private Color _selectedColorGroup;
+        protected Color _selectedColorGroup;
         public Color SelectedColorGroup
         {
             get { return _selectedColorGroup; }
@@ -44,6 +58,10 @@ namespace DarkLight.Common.ViewModels
             }
         }
 
+        #endregion
+
+        #region Constructor
+
         public LinkableViewModel(IColorService colorService, IViewModelService viewModelService)
         {
             _colorService = colorService;
@@ -52,25 +70,48 @@ namespace DarkLight.Common.ViewModels
             IoC.Get<IEventAggregator>().Subscribe(this);
         }
 
+        #endregion
+
+        #region Private Methods
+
+        void LoadView(LinkedNavigationEvent linkedNavigationEvent)
+        {
+            linkedNavigationEvent.Destination = Destination;
+            var _viewModel = _viewModelService.GetScreenForNavigationEvent(linkedNavigationEvent);
+            _viewModel.Initialize(linkedNavigationEvent);
+
+            SelectedColorGroup = linkedNavigationEvent.ColorGroup;
+            _viewModel.Configure(linkedNavigationEvent.Key);
+            ActivateItem(_viewModel);
+        }
+
+        #endregion
+
         #region Implementation of IHandle<LinkedEvent>
 
-        public void Handle(LinkedNavigationEvent linkedNavigationEvent)
+        public virtual void Handle(LinkedNavigationEvent linkedNavigationEvent)
         {
-            var _filter = IoC.Get<IFilterService>().GetLinkedNavigationFilter(NavigationAction.UpdateLinkedWindows, Destination, _selectedColorGroup);
-            if(_filter.IsPassedBy(linkedNavigationEvent))
+            var _filter = IoC.Get<IFilterService>().GetLinkedNavigationFilter(NavigationAction.UpdateLinkedWindows, Group, _selectedColorGroup);
+            if (_filter.IsPassedBy(linkedNavigationEvent))
             {
                 LoadView(linkedNavigationEvent);
+                Configure(Destination + " : " + linkedNavigationEvent.Key);
             }
         }
 
         #endregion
 
-        private void LoadView(LinkedNavigationEvent linkedNavigationEvent)
+        #region Base Class Overrides
+
+        public override void Initialize(LinkedNavigationEvent linkedNavigationEvent)
         {
-            var _viewModel = _viewModelService.GetScreenForNavigationEvent(linkedNavigationEvent);
+            Destination = linkedNavigationEvent.Destination;
+            Group = linkedNavigationEvent.Group;
             SelectedColorGroup = linkedNavigationEvent.ColorGroup;
-            _viewModel.Configure(linkedNavigationEvent.Key);
-            ActivateItem(_viewModel);
+            Configure(linkedNavigationEvent.Key);
         }
+
+        #endregion
+
     }
 }

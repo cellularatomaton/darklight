@@ -1,4 +1,5 @@
 using Caliburn.Micro;
+using DarkLight.Events;
 
 namespace DarkLight.Customizations
 {
@@ -12,6 +13,11 @@ namespace DarkLight.Customizations
         public virtual void Configure(string key)
         {
             this.DisplayName = key;
+        }
+
+        public virtual void Initialize(LinkedNavigationEvent key)
+        {
+           
         }
     }
 

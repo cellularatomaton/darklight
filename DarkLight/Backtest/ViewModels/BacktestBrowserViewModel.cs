@@ -1,5 +1,9 @@
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Data;
+using System.Windows.Documents;
 using Caliburn.Micro;
 using DarkLight.Backtest.Models;
 using DarkLight.Common.ViewModels;
@@ -10,16 +14,46 @@ using DarkLight.Services;
 
 namespace DarkLight.Backtest.ViewModels
 {
+
     public class BacktestBrowserViewModel : LinkableViewModel
     {
         #region Properties
 
+        string _backtestGroupSortColumn = "CreateDate";
+        string _backtestSortColumn = "CreateDate";
+
+        ListSortDirection backtestGroupDirection = ListSortDirection.Descending;
+        ListSortDirection backtestDirection = ListSortDirection.Descending;
+
         public BindableCollection<BacktestGroupRecord> BacktestGroups { get; set; }
         public BindableCollection<BacktestRecord> Backtests { get; set; }
+        public ICollectionView BacktestGroupView { get; set; }
+        public ICollectionView BacktestView { get; set; }
 
-        public BacktestGroupRecord SelectedBacktestGroup { get; set; }
-        public BacktestGroupRecord SelectedBacktest { get; set; }
-        
+        BacktestGroupRecord _selectedBacktestGroupView;
+        public BacktestGroupRecord SelectedBacktestGroupView
+        {
+            get { return _selectedBacktestGroupView; }
+            set { _selectedBacktestGroupView = value; }
+        }
+
+        BacktestRecord _selectedBacktestView;
+        public BacktestRecord SelectedBacktestView
+        {
+            get { return _selectedBacktestView; }
+            set
+            {
+                _selectedBacktestView = value;
+                IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+                {
+                    NavigationAction = NavigationAction.UpdateLinkedWindows,
+                    Group = NavigationGroup.Backtest,
+                    ColorGroup = SelectedColorGroup,
+                    Key = SelectedBacktestView.Description
+                });
+            }
+        }
+
         #endregion
 
         #region Constructor
@@ -29,6 +63,8 @@ namespace DarkLight.Backtest.ViewModels
         {
             BacktestGroups = new BindableCollection<BacktestGroupRecord>();
             Backtests = new BindableCollection<BacktestRecord>();
+            BacktestGroupView = CollectionViewSource.GetDefaultView(BacktestGroups);
+            BacktestView = CollectionViewSource.GetDefaultView(Backtests);
         }
 
         #endregion
@@ -48,15 +84,15 @@ namespace DarkLight.Backtest.ViewModels
             BacktestGroups.Clear();
             foreach (var backtestGroupRecord in backtestGroups)
             {
-                BacktestGroups.Add(backtestGroupRecord); 
+                BacktestGroups.Add(backtestGroupRecord);
             }
 
-            SelectedBacktestGroup = null;
+            SelectedBacktestGroupView = null;
         }
 
         public bool CanQueryBacktestGroup(string query)
         {
-            if (string.IsNullOrWhiteSpace(query) || SelectedBacktestGroup == null)
+            if (string.IsNullOrWhiteSpace(query) || SelectedBacktestGroupView == null)
                 return false;
             else
                 return true;
@@ -64,9 +100,9 @@ namespace DarkLight.Backtest.ViewModels
 
         public void QueryBacktestGroup(string query)
         {
-            if (SelectedBacktestGroup != null)
+            if (SelectedBacktestGroupView != null)
             {
-                var backtests = IoC.Get<IBacktestRepository>().GetBacktestRecords(SelectedBacktestGroup.Description, query);
+                var backtests = IoC.Get<IBacktestRepository>().GetBacktestRecords(SelectedBacktestGroupView.Description, query);
                 Backtests.Clear();
                 foreach (var backtest in backtests)
                 {
@@ -75,17 +111,48 @@ namespace DarkLight.Backtest.ViewModels
             }
         }
 
+        public void SortBacktestGroup(string column)
+        {
+            if (_backtestGroupSortColumn == column)
+                backtestGroupDirection = backtestGroupDirection == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
+            else //default
+                backtestGroupDirection = ListSortDirection.Ascending;
+
+            _backtestGroupSortColumn = column;
+            BacktestGroupView.SortDescriptions.Clear();
+            BacktestGroupView.SortDescriptions.Add(new SortDescription(_backtestGroupSortColumn, backtestGroupDirection));
+        }
+
+        public void SortBacktest(string column)
+        {
+            if (_backtestSortColumn == column)
+                backtestDirection = backtestDirection == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
+            else 
+                backtestDirection = ListSortDirection.Ascending;
+
+            _backtestSortColumn = column;
+            BacktestView.SortDescriptions.Clear();
+            BacktestView.SortDescriptions.Add(new SortDescription(_backtestSortColumn, backtestDirection));
+        }
+
         #endregion
 
         #region Single Test Views
 
         public void OpenSingleTestWindow(NavigationDestination destination)
         {
-            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+            if (SelectedBacktestView != null)
             {
-                NavigationAction = NavigationAction.NewWindow,
-                Destination = destination
-            });  
+
+                IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+                {
+                    NavigationAction = NavigationAction.NewLinkedWindow,
+                    Destination = destination,
+                    Group = NavigationGroup.Backtest,
+                    ColorGroup = SelectedColorGroup,
+                    Key = SelectedBacktestView.Description
+                });
+            }
         }
 
         #endregion
@@ -134,6 +201,17 @@ namespace DarkLight.Backtest.ViewModels
         #endregion
 
         #endregion
+
+        #region Base Class Overrides
+
+        public override void Handle(LinkedNavigationEvent linkedNavigationEvent)
+        {
+            //ignore events for now
+        }
+
+        #endregion
     }
+
+
 
 }

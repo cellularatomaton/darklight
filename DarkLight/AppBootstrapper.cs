@@ -53,7 +53,7 @@ namespace DarkLight
             builder.RegisterType<DefaultFilterService>().As<IFilterService>();
             builder.RegisterType<DefaultViewModelService>().As<IViewModelService>();
             builder.RegisterType<DarkLightWindowManager>().As<IWindowManager>();
-            builder.RegisterType<DarklightBacktestRepository>().As<IBacktestRepository>();
+            builder.RegisterType<MockBacktestRepository>().As<IBacktestRepository>();
 
             // Register Service Implementations:
             builder.Register(c => new DefaultColorService()).SingleInstance();
