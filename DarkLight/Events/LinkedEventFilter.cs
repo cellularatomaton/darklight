@@ -8,6 +8,7 @@ namespace DarkLight.Events
     {
         private readonly NavigationAction _navigationAction;
         private readonly NavigationDestination _navigationDestination;
+        private readonly NavigationGroup _navigationGroup;
         private readonly Color _colorGroup;
 
         public LinkedEventFilter(NavigationAction navigationAction, NavigationDestination navigationDestination, Color colorGroup)
@@ -17,22 +18,48 @@ namespace DarkLight.Events
             _colorGroup = colorGroup;
         }
 
+        public LinkedEventFilter(NavigationAction navigationAction, NavigationGroup navigationGroup, Color colorGroup)
+        {
+            _navigationAction = navigationAction;
+            _navigationGroup = navigationGroup;
+            _colorGroup = colorGroup;
+        }
+
         #region Implementation of IFilter<LinkedEvent>
 
         public bool IsPassedBy(LinkedNavigationEvent message)
         {
-            if(_navigationAction == message.NavigationAction &&
-                _navigationDestination == message.Destination &&
-               _colorGroup == message.ColorGroup)
+            //TODO refine filter model
+            if (message.Group != NavigationGroup.Default)
             {
-                return true;
+                if (_navigationAction == message.NavigationAction &&
+                    _navigationGroup == message.Group &&
+                    _colorGroup == message.ColorGroup)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
-                return false;
+                if (_navigationAction == message.NavigationAction &&
+                    _navigationDestination == message.Destination &&
+                    _navigationGroup == message.Group &&
+                    _colorGroup == message.ColorGroup)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
 
         #endregion
+    
     }
 }

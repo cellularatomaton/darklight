@@ -2,15 +2,37 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <TextBlock 
-            x:Name="DisplayName"
-            VerticalAlignment="Center"
-            HorizontalAlignment="Center"
-            FontSize="20" 
-            Foreground="Green"/>
-    </Grid>
+    <StackPanel MinWidth="400">
+        <Button  Content="Add Position" Width ="75" HorizontalAlignment="Left" Margin="0,5,10,5"  cal:Message.Attach="[Event Click] = [Action AddPosition()]" />
+        <ListView x:Name="PositionView" Height="300">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Time}">
+                        <GridViewColumnHeader Content="Time" cal:Message.Attach="[Event Click] = [Action Sort('Time')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Symbol}">
+                        <GridViewColumnHeader Content="Symbol" cal:Message.Attach="[Event Click] = [Action Sort('Symbol')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Side}">
+                        <GridViewColumnHeader Content="Side" cal:Message.Attach="[Event Click] = [Action Sort('Side')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Size}">
+                        <GridViewColumnHeader Content="Size" cal:Message.Attach="[Event Click] = [Action Sort('Size')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding AvgPrice}">
+                        <GridViewColumnHeader Content="AvgPrice" cal:Message.Attach="[Event Click] = [Action Sort('AvgPrice')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Profit}">
+                        <GridViewColumnHeader Content="Profit" cal:Message.Attach="[Event Click] = [Action Sort('Profit')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Points}">
+                        <GridViewColumnHeader Content="Points" cal:Message.Attach="[Event Click] = [Action Sort('Points')]" />
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </StackPanel>
 </UserControl>

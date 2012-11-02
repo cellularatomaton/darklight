@@ -11,7 +11,7 @@ namespace DarkLight.Backtest.Models
         public string GUID { get; set; }
         public DateTime CreateDate { get; set; }
         public int NumTrades { get; set; }
-        public float PNL { get; set; }
-
+        public double PNL { get; set; }
+        public double WinLossRatio { get; set; }
     }
 }

@@ -90,6 +90,10 @@
     <Compile Include="Backtest\Views\BacktestModuleView.xaml.cs">
       <DependentUpon>BacktestModuleView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\Models\DarkLightFill.cs" />
+    <Compile Include="Common\Models\DarkLightOrder.cs" />
+    <Compile Include="Common\Models\DarkLightPosition.cs" />
+    <Compile Include="Common\Models\DarkLightTick.cs" />
     <Compile Include="Common\ViewModels\DefaultViewModel.cs" />
     <Compile Include="Common\ViewModels\EventPublisherViewModel.cs" />
     <Compile Include="Common\ViewModels\FillsViewModel.cs" />
@@ -142,7 +146,9 @@
     <Compile Include="Common\Views\TimeseriesView.xaml.cs">
       <DependentUpon>TimeseriesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Repositories\DarklightBacktestRepository.cs" />
+    <Compile Include="Events\NavigationGroup.cs" />
+    <Compile Include="Repositories\MockBacktestRepository.cs" />
+    <Compile Include="Utilities\MockUtilities.cs" />
     <Compile Include="Utilities\NLogLogger.cs" />
     <Compile Include="Customizations\DarkLightScreen.cs" />
     <Compile Include="Customizations\DarkLightWindowManager.cs" />
