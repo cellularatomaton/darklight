@@ -10,17 +10,42 @@
         <ListView x:Name="TickView" Height="300">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="120" Header="Time" DisplayMemberBinding="{Binding Time}" />
-                    <GridViewColumn Width="120" Header="Sym" DisplayMemberBinding="{Binding Sym}" />
-                    <GridViewColumn Width="120" Header="Trade" DisplayMemberBinding="{Binding Trade}" />
-                    <GridViewColumn Width="120" Header="TSize" DisplayMemberBinding="{Binding TSize}" />
-                    <GridViewColumn Width="120" Header="Bid" DisplayMemberBinding="{Binding Bid}" />
-                    <GridViewColumn Width="120" Header="Ask" DisplayMemberBinding="{Binding Ask}" />
-                    <GridViewColumn Width="120" Header="BSize" DisplayMemberBinding="{Binding BSize}" />
-                    <GridViewColumn Width="120" Header="ASize" DisplayMemberBinding="{Binding ASize}" />
-                    <GridViewColumn Width="120" Header="TExch" DisplayMemberBinding="{Binding TExch}" />
-                    <GridViewColumn Width="120" Header="BidExch" DisplayMemberBinding="{Binding BidExch}" />
-                    <GridViewColumn Width="120" Header="AskExch" DisplayMemberBinding="{Binding AskExch}" />                    
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Time}">
+                        <GridViewColumnHeader Content="Time" cal:Message.Attach="[Event Click] = [Action Sort('Time')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Sym}">
+                        <GridViewColumnHeader Content="Sym" cal:Message.Attach="[Event Click] = [Action Sort('Sym')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Trade}">
+                        <GridViewColumnHeader Content="Trade" cal:Message.Attach="[Event Click] = [Action Sort('Trade')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding TSize}">
+                        <GridViewColumnHeader Content="TSize" cal:Message.Attach="[Event Click] = [Action Sort('TSize')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Bid}">
+                        <GridViewColumnHeader Content="Bid" cal:Message.Attach="[Event Click] = [Action Sort('Bid')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Ask}">
+                        <GridViewColumnHeader Content="Ask" cal:Message.Attach="[Event Click] = [Action Sort('Ask')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding BSize}">
+                        <GridViewColumnHeader Content="BSize" cal:Message.Attach="[Event Click] = [Action Sort('BSize')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding ASize}">
+                        <GridViewColumnHeader Content="ASize" cal:Message.Attach="[Event Click] = [Action Sort('ASize')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding BSize}">
+                        <GridViewColumnHeader Content="BSize" cal:Message.Attach="[Event Click] = [Action Sort('BSize')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding TExch}">
+                        <GridViewColumnHeader Content="TExch" cal:Message.Attach="[Event Click] = [Action Sort('TExch')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding BidExch}">
+                        <GridViewColumnHeader Content="BidExch" cal:Message.Attach="[Event Click] = [Action Sort('BidExch')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding AskExch}">
+                        <GridViewColumnHeader Content="AskExch" cal:Message.Attach="[Event Click] = [Action Sort('AskExch')]" />
+                    </GridViewColumn>                                      
                 </GridView>
             </ListView.View>
         </ListView>

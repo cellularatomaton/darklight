@@ -1,7 +1,9 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Data;
+using System.Windows.Documents;
 using Caliburn.Micro;
 using DarkLight.Backtest.Models;
 using DarkLight.Common.ViewModels;
@@ -16,6 +18,12 @@ namespace DarkLight.Backtest.ViewModels
     public class BacktestBrowserViewModel : LinkableViewModel
     {
         #region Properties
+
+        string _backtestGroupSortColumn = "CreateDate";
+        string _backtestSortColumn = "CreateDate";
+
+        ListSortDirection backtestGroupDirection = ListSortDirection.Descending;
+        ListSortDirection backtestDirection = ListSortDirection.Descending;
 
         public BindableCollection<BacktestGroupRecord> BacktestGroups { get; set; }
         public BindableCollection<BacktestRecord> Backtests { get; set; }
@@ -101,6 +109,30 @@ namespace DarkLight.Backtest.ViewModels
                     Backtests.Add(backtest);
                 }
             }
+        }
+
+        public void SortBacktestGroup(string column)
+        {
+            if (_backtestGroupSortColumn == column)
+                backtestGroupDirection = backtestGroupDirection == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
+            else //default
+                backtestGroupDirection = ListSortDirection.Ascending;
+
+            _backtestGroupSortColumn = column;
+            BacktestGroupView.SortDescriptions.Clear();
+            BacktestGroupView.SortDescriptions.Add(new SortDescription(_backtestGroupSortColumn, backtestGroupDirection));
+        }
+
+        public void SortBacktest(string column)
+        {
+            if (_backtestSortColumn == column)
+                backtestDirection = backtestDirection == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
+            else 
+                backtestDirection = ListSortDirection.Ascending;
+
+            _backtestSortColumn = column;
+            BacktestView.SortDescriptions.Clear();
+            BacktestView.SortDescriptions.Add(new SortDescription(_backtestSortColumn, backtestDirection));
         }
 
         #endregion

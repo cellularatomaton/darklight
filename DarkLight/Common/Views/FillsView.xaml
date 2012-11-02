@@ -11,12 +11,24 @@
         <ListView x:Name="FillView" Height="300">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="120" Header="Time" DisplayMemberBinding="{Binding Time}" />
-                    <GridViewColumn Width="120" Header="Symbol" DisplayMemberBinding="{Binding Symbol}" />
-                    <GridViewColumn Width="120" Header="Side" DisplayMemberBinding="{Binding Side}" />
-                    <GridViewColumn Width="120" Header="Size" DisplayMemberBinding="{Binding Size}" />
-                    <GridViewColumn Width="120" Header="Price" DisplayMemberBinding="{Binding Price}" />
-                    <GridViewColumn Width="120" Header="Id" DisplayMemberBinding="{Binding Id}" />                    
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Time}">
+                        <GridViewColumnHeader Content="Time" cal:Message.Attach="[Event Click] = [Action Sort('Time')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Symbol}">
+                        <GridViewColumnHeader Content="Symbol" cal:Message.Attach="[Event Click] = [Action Sort('Symbol')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Side}">
+                        <GridViewColumnHeader Content="Side" cal:Message.Attach="[Event Click] = [Action Sort('Side')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Size}">
+                        <GridViewColumnHeader Content="Size" cal:Message.Attach="[Event Click] = [Action Sort('Size')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Price}">
+                        <GridViewColumnHeader Content="Price" cal:Message.Attach="[Event Click] = [Action Sort('Price')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Id}">
+                        <GridViewColumnHeader Content="Id" cal:Message.Attach="[Event Click] = [Action Sort('Id')]" />
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
