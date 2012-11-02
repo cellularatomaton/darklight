@@ -13,6 +13,9 @@ namespace DarkLight.Common.ViewModels
     {
         #region Properties
 
+        string _sortColumn = "Time";
+        ListSortDirection _sortDirection = ListSortDirection.Descending;
+
         private BindableCollection<DarkLightTick> _ticks;
         public BindableCollection<DarkLightTick> Ticks
         {
@@ -42,6 +45,18 @@ namespace DarkLight.Common.ViewModels
         public void AddTick()
         {
             Ticks.Add(MockUtilities.GenerateTicks("backtestidToImplement",1)[0]);
+        }
+
+        public void Sort(string column)
+        {
+            if (_sortColumn == column)
+                _sortDirection = _sortDirection == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
+            else //default
+                _sortDirection = ListSortDirection.Ascending;
+
+            _sortColumn = column;
+            TickView.SortDescriptions.Clear();
+            TickView.SortDescriptions.Add(new SortDescription(_sortColumn, _sortDirection));
         }
 
         #endregion

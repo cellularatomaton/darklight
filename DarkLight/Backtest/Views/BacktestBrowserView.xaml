@@ -44,12 +44,24 @@
         <ListView x:Name="BacktestGroupView" Margin="10,5,10,5" Height="150">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="120" Header="Description" DisplayMemberBinding="{Binding Description}" />
-                    <GridViewColumn Width="120" Header="GUID" DisplayMemberBinding="{Binding GUID}" />
-                    <GridViewColumn Width="120" Header="CreateDate" DisplayMemberBinding="{Binding CreateDate}" />
-                    <GridViewColumn Width="120" Header="NumBacktests" DisplayMemberBinding="{Binding NumBacktests}" />
-                    <GridViewColumn Width="120" Header="MaxPNL" DisplayMemberBinding="{Binding MaxPNL}" />
-                    <GridViewColumn Width="120" Header="MinPNL" DisplayMemberBinding="{Binding MinPNL}" />
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Description}">
+                        <GridViewColumnHeader Content="Description" cal:Message.Attach="[Event Click] = [Action SortBacktestGroup('Description')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding GUID}">
+                        <GridViewColumnHeader Content="GUID" cal:Message.Attach="[Event Click] = [Action SortBacktestGroup('GUID')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding CreateDate}">
+                        <GridViewColumnHeader Content="CreateDate" cal:Message.Attach="[Event Click] = [Action SortBacktestGroup('CreateDate')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding NumBacktests}">
+                        <GridViewColumnHeader Content="NumBacktests" cal:Message.Attach="[Event Click] = [Action SortBacktestGroup('NumBacktests')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding MaxPNL}">
+                        <GridViewColumnHeader Content="MaxPNL" cal:Message.Attach="[Event Click] = [Action SortBacktestGroup('MaxPNL')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding MinPNL}">
+                        <GridViewColumnHeader Content="MinPNL" cal:Message.Attach="[Event Click] = [Action SortBacktestGroup('MinPNL')]" />
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
@@ -68,12 +80,24 @@
         <ListView x:Name="BacktestView" Margin="10,5,10,5" Height="150">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="120" Header="Description" DisplayMemberBinding="{Binding Description}" />
-                    <GridViewColumn Width="120" Header="GUID" DisplayMemberBinding="{Binding GUID}" />
-                    <GridViewColumn Width="120" Header="CreateDate" DisplayMemberBinding="{Binding CreateDate}" />
-                    <GridViewColumn Width="120" Header="NumTrades" DisplayMemberBinding="{Binding NumTrades}" />
-                    <GridViewColumn Width="120" Header="PNL" DisplayMemberBinding="{Binding PNL}" />
-                    <GridViewColumn Width="120" Header="WinLossRatio" DisplayMemberBinding="{Binding WinLossRatio}" />
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Description}">
+                        <GridViewColumnHeader Content="Description" cal:Message.Attach="[Event Click] = [Action SortBacktest('Description')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding GUID}">
+                        <GridViewColumnHeader Content="GUID" cal:Message.Attach="[Event Click] = [Action SortBacktest('GUID')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding CreateDate}">
+                        <GridViewColumnHeader Content="CreateDate" cal:Message.Attach="[Event Click] = [Action SortBacktest('CreateDate')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding NumTrades}">
+                        <GridViewColumnHeader Content="NumTrades" cal:Message.Attach="[Event Click] = [Action SortBacktest('NumTrades')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding PNL}">
+                        <GridViewColumnHeader Content="PNL" cal:Message.Attach="[Event Click] = [Action SortBacktest('PNL')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding WinLossRatio}">
+                        <GridViewColumnHeader Content="WinLossRatio" cal:Message.Attach="[Event Click] = [Action SortBacktest('WinLossRatio')]" />
+                    </GridViewColumn>                    
                 </GridView>
             </ListView.View>
         </ListView>
