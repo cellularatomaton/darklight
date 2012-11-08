@@ -63,7 +63,7 @@ namespace DarkLight
             // Register Modules:
             builder.Register(c => new LinkableViewModel(IoC.Get<IColorService>(), IoC.Get<IViewModelService>()));
             builder.Register(c => new BacktestModuleViewModel()).SingleInstance();
-            builder.Register(c => new BacktestLauncherViewModel());
+            builder.Register(c => new BacktestLauncherViewModel(IoC.Get<IViewModelService>()));
             builder.Register(c => new BacktestBrowserViewModel(IoC.Get<IColorService>(), IoC.Get<IViewModelService>()));
             builder.Register(c => new OptimizationModuleViewModel()).SingleInstance();
             builder.Register(c => new LiveTradingModuleViewModel()).SingleInstance();
@@ -79,6 +79,9 @@ namespace DarkLight
             builder.Register(c => new OrdersViewModel());
             builder.Register(c => new PositionsViewModel());
             builder.Register(c => new TimeseriesViewModel());
+            builder.Register(c => new ResponseSelectionViewModel());
+            builder.Register(c => new ParametricRangeViewModel());
+            builder.Register(c => new TemporalRangeViewModel());
             builder.Register(c => new DefaultViewModel());
 
             // Context Menu:

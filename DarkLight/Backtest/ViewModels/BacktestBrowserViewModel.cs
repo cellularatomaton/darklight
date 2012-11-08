@@ -71,6 +71,19 @@ namespace DarkLight.Backtest.ViewModels
 
         #region Public Methods
 
+        #region Header Controls
+
+        public void NewBacktest()
+        {
+            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+            {
+                NavigationAction = NavigationAction.NewWindow,
+                Destination = NavigationDestination.BacktestLauncher,
+            });
+        }
+
+        #endregion
+
         #region Queries
 
         public bool CanFindBacktestGroups(string find)
