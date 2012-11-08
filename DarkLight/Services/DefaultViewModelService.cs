@@ -96,6 +96,26 @@ namespace DarkLight.Services
                     _viewModel = IoC.Get<TimeseriesViewModel>();
                     break;
                 }
+                case NavigationDestination.ResponseSelection:
+                {
+                    _viewModel = IoC.Get<ResponseSelectionViewModel>();
+                    break;
+                }
+                case NavigationDestination.ResponseConfiguration:
+                {
+                    _viewModel = IoC.Get<ResponseConfigurationViewModel>();
+                    break;
+                }
+                case NavigationDestination.ParametricRange:
+                {
+                    _viewModel = IoC.Get<ParametricRangeViewModel>();
+                    break;
+                }
+                case NavigationDestination.TemporalRange:
+                {
+                    _viewModel = IoC.Get<TemporalRangeViewModel>();
+                    break;
+                }
                 default:
                 {
                     _viewModel = IoC.Get<DefaultViewModel>();

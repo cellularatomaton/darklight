@@ -24,5 +24,10 @@ namespace DarkLight.Events
         TickData,
         TimeSeries,
         EventPublisher,
+        ResponseSelection,
+        ResponseConfiguration,
+        ParametricRange,
+        TemporalRange
+
     }
 }
