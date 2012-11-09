@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace DarkLight.Common.Views
+namespace DarkLight.Backtest.Views
 {
     /// <summary>
     /// Interaction logic for TemporalRange.xaml

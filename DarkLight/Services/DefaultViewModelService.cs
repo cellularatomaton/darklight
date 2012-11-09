@@ -116,6 +116,11 @@ namespace DarkLight.Services
                     _viewModel = IoC.Get<TemporalRangeViewModel>();
                     break;
                 }
+                case NavigationDestination.BacktestStatus:
+                {
+                    _viewModel = IoC.Get<BacktestStatusViewModel>();
+                    break;
+                }
                 default:
                 {
                     _viewModel = IoC.Get<DefaultViewModel>();

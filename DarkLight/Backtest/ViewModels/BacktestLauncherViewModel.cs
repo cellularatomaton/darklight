@@ -18,14 +18,35 @@ namespace DarkLight.Backtest.ViewModels
         #region Properties
 
         IViewModelService _viewModelService;
-        DarkLightScreen[] _viewModels = new DarkLightScreen[3];
+
+        string _currentScreenName;
+        public string CurrentScreenName
+        {
+            get { return _currentScreenName; }
+            set
+            {
+                _currentScreenName = value;
+                NotifyOfPropertyChange(() => CurrentScreenName);
+            }
+        }
 
         int _currentScreenIndex;
-        const int _iResponseSelection = 0;
-        const int _iParametricRange = 1;
-        const int _iTemporalRange = 2;
-
-        public string CurrentScreenName { get; set; }
+        int CurrentScreenIndex
+        {
+            get { return _currentScreenIndex; }
+            set { 
+                _currentScreenIndex = value;
+                string tempName = "";
+                string separator = " > ";
+                for (int i = 0; i < _currentScreenIndex + 1; i++)
+                {
+                    var formattedName = Items[i].ToString().Replace("DarkLight.Backtest.ViewModels.", "");
+                    formattedName = formattedName.Replace("ViewModel", "");
+                    tempName += formattedName + (i < _currentScreenIndex ? separator : "");
+                }
+                CurrentScreenName = tempName;
+            }         
+        }
 
         #endregion
 
@@ -35,13 +56,12 @@ namespace DarkLight.Backtest.ViewModels
         {
             _viewModelService = viewModelService;
 
-            _viewModels[_iResponseSelection] = _viewModelService.GetScreenForNavigationEvent(new LinkedNavigationEvent { Destination = NavigationDestination.ResponseSelection });
-            _viewModels[_iParametricRange] = _viewModelService.GetScreenForNavigationEvent(new LinkedNavigationEvent { Destination = NavigationDestination.ParametricRange });
-            _viewModels[_iTemporalRange] = _viewModelService.GetScreenForNavigationEvent(new LinkedNavigationEvent { Destination = NavigationDestination.TemporalRange });
-            
-            CurrentScreenName = "Response Selection";
-            _currentScreenIndex = 0;
-            ActivateItem(_viewModels[_iResponseSelection]);
+            ActivateItem(_viewModelService.GetScreenForNavigationEvent(new LinkedNavigationEvent { Destination = NavigationDestination.ResponseSelection }));
+            ActivateItem(_viewModelService.GetScreenForNavigationEvent(new LinkedNavigationEvent { Destination = NavigationDestination.ParametricRange }));
+            ActivateItem(_viewModelService.GetScreenForNavigationEvent(new LinkedNavigationEvent { Destination = NavigationDestination.TemporalRange }));
+
+            CurrentScreenIndex = 0;
+            ActivateItem(Items[_currentScreenIndex]);
         }
 
         #endregion
@@ -52,9 +72,8 @@ namespace DarkLight.Backtest.ViewModels
         {
             if (_currentScreenIndex > 0)
             {
-                _currentScreenIndex--;
-                CurrentScreenName = _viewModels[_currentScreenIndex].ToString();
-                ActivateItem(_viewModels[_currentScreenIndex]);
+                CurrentScreenIndex--;
+                ActivateItem(Items[CurrentScreenIndex]);
             }           
         }
 
@@ -65,17 +84,20 @@ namespace DarkLight.Backtest.ViewModels
 
         public void NavigateNext()
         {
-            if (_currentScreenIndex < 2)
+            if (_currentScreenIndex < Items.Count - 1)
             {
-                _currentScreenIndex++;
-                CurrentScreenName = _viewModels[_currentScreenIndex].ToString();
-                ActivateItem(_viewModels[_currentScreenIndex]);
-            }  
+                CurrentScreenIndex++;
+                ActivateItem(Items[CurrentScreenIndex]);
+            }              
         }
 
         public void LaunchBacktest()
         {
-
+            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+            {
+                NavigationAction = NavigationAction.NewWindow,
+                Destination = NavigationDestination.BacktestStatus
+            });
         }
 
         #endregion

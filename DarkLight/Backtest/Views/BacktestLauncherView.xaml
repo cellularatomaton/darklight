@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel>
-        <Label x:Name="CurrentScreenName"  Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" />
+        <Label x:Name="CurrentScreenName"  Width="400" HorizontalAlignment="Left" Margin="0,5,0,0" />
         <Border BorderBrush="Blue" BorderThickness="3" Margin="3">
             <ContentControl x:Name="ActiveItem"/>
         </Border>

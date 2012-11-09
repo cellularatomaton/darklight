@@ -27,7 +27,7 @@ namespace DarkLight.Events
         ResponseSelection,
         ResponseConfiguration,
         ParametricRange,
-        TemporalRange
-
+        TemporalRange,
+        BacktestStatus
     }
 }

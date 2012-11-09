@@ -82,6 +82,7 @@ namespace DarkLight
             builder.Register(c => new ResponseSelectionViewModel());
             builder.Register(c => new ParametricRangeViewModel());
             builder.Register(c => new TemporalRangeViewModel());
+            builder.Register(c => new BacktestStatusViewModel());
             builder.Register(c => new DefaultViewModel());
 
             // Context Menu:
