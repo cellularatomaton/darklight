@@ -81,6 +81,7 @@
     <Compile Include="Backtest\ViewModels\BacktestBrowserViewModel.cs" />
     <Compile Include="Backtest\ViewModels\BacktestLauncherViewModel.cs" />
     <Compile Include="Backtest\ViewModels\BacktestModuleViewModel.cs" />
+    <Compile Include="Backtest\ViewModels\BacktestStatusViewModel.cs" />
     <Compile Include="Backtest\Views\BacktestBrowserView.xaml.cs">
       <DependentUpon>BacktestBrowserView.xaml</DependentUpon>
     </Compile>
@@ -89,6 +90,9 @@
     </Compile>
     <Compile Include="Backtest\Views\BacktestModuleView.xaml.cs">
       <DependentUpon>BacktestModuleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Backtest\Views\BacktestStatusView.xaml.cs">
+      <DependentUpon>BacktestStatusView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Models\DarkLightFill.cs" />
     <Compile Include="Common\Models\DarkLightOrder.cs" />
@@ -101,14 +105,14 @@
     <Compile Include="Common\ViewModels\LinkableViewModel.cs" />
     <Compile Include="Common\ViewModels\MessagesViewModel.cs" />
     <Compile Include="Common\ViewModels\OrdersViewModel.cs" />
-    <Compile Include="Common\ViewModels\ParametricRangeViewModel.cs" />
+    <Compile Include="Backtest\ViewModels\ParametricRangeViewModel.cs" />
     <Compile Include="Common\ViewModels\PositionsViewModel.cs" />
     <Compile Include="Common\ViewModels\ResponseConfigurationViewModel.cs" />
-    <Compile Include="Common\ViewModels\ResponseSelectionViewModel.cs" />
+    <Compile Include="Backtest\ViewModels\ResponseSelectionViewModel.cs" />
     <Compile Include="Common\ViewModels\ResponseViewModel.cs" />
     <Compile Include="Common\ViewModels\ResultsViewModel.cs" />
     <Compile Include="Common\ViewModels\StatisticsViewModel.cs" />
-    <Compile Include="Common\ViewModels\TemporalRangeViewModel.cs" />
+    <Compile Include="Backtest\ViewModels\TemporalRangeViewModel.cs" />
     <Compile Include="Common\ViewModels\TickDataViewModel.cs" />
     <Compile Include="Common\ViewModels\TimeseriesViewModel.cs" />
     <Compile Include="Common\Views\DefaultView.xaml.cs">
@@ -132,7 +136,7 @@
     <Compile Include="Common\Views\OrdersView.xaml.cs">
       <DependentUpon>OrdersView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Common\Views\ParametricRange.xaml.cs">
+    <Compile Include="Backtest\Views\ParametricRange.xaml.cs">
       <DependentUpon>ParametricRange.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Views\PositionsView.xaml.cs">
@@ -147,7 +151,7 @@
     <Compile Include="Common\Views\StatisticsView.xaml.cs">
       <DependentUpon>StatisticsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Common\Views\TemporalRange.xaml.cs">
+    <Compile Include="Backtest\Views\TemporalRange.xaml.cs">
       <DependentUpon>TemporalRange.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Views\TickDataView.xaml.cs">
@@ -156,7 +160,7 @@
     <Compile Include="Common\Views\TimeseriesView.xaml.cs">
       <DependentUpon>TimeseriesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Common\Views\ResponseSelectionView.xaml.cs">
+    <Compile Include="Backtest\Views\ResponseSelectionView.xaml.cs">
       <DependentUpon>ResponseSelectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Views\ResponseConfigurationView.xaml.cs">
@@ -213,6 +217,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Backtest\Views\BacktestStatusView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Common\Views\DefaultView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -241,7 +249,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Common\Views\ParametricRange.xaml">
+    <Page Include="Backtest\Views\ParametricRange.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -261,7 +269,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Common\Views\TemporalRange.xaml">
+    <Page Include="Backtest\Views\TemporalRange.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -273,7 +281,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Common\Views\ResponseSelectionView.xaml">
+    <Page Include="Backtest\Views\ResponseSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

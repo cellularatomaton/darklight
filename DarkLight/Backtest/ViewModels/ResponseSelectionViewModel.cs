@@ -11,7 +11,7 @@ using DarkLight.Interfaces;
 using DarkLight.Services;
 
 
-namespace DarkLight.Common.ViewModels
+namespace DarkLight.Backtest.ViewModels
 {
     class ResponseSelectionViewModel : DarkLightScreen
     {

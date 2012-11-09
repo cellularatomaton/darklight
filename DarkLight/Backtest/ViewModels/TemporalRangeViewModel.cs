@@ -10,7 +10,7 @@ using System.Collections;
 using DarkLight.Interfaces;
 using DarkLight.Services;
 
-namespace DarkLight.Common.ViewModels
+namespace DarkLight.Backtest.ViewModels
 {
     class TemporalRangeViewModel : DarkLightScreen
     {
