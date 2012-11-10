@@ -5,6 +5,25 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <StackPanel MinWidth="400">        
+        <ListView x:Name="ProgressModels" Height="300">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding Slot}"/>
+                    <GridViewColumn Width="200" DisplayMemberBinding="{Binding BacktestID}"/>
+                    <!--<GridViewColumn Width="200" DisplayMemberBinding="{Binding ProgressValue}"/>-->
+                    <GridViewColumn Width="300" >
+                        <GridViewColumn.CellTemplate> 
+                            <DataTemplate>
+                                <ProgressBar  Maximum="1" Minimum="0" Height="25" Width="200" Value="{Binding ProgressValue}"/>
+                           </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>                   
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </StackPanel>
+    <!--
     <StackPanel>
         <ProgressBar x:Name="ProgressSlot1" Maximum="1" Minimum="0" Height="25" Margin="10,10,10,10"/>
         <ProgressBar x:Name="ProgressSlot2" Maximum="1" Minimum="0" Height="25" Margin="10,10,10,10"/>
@@ -13,4 +32,5 @@
         <Button  Content="Increment" Margin="100,10,100,10" x:Name="Increment" />
         <Button  Content="Decrement" Margin="100,10,100,10" x:Name="Decrement" />
     </StackPanel>
+    -->
 </UserControl>

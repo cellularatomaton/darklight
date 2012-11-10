@@ -9,6 +9,8 @@ using DarkLight.Events;
 using System.Collections;
 using DarkLight.Interfaces;
 using DarkLight.Services;
+using DarkLight.Customizations;
+using DarkLight.Backtest.Models;
 
 namespace DarkLight.Backtest.ViewModels
 {
@@ -18,6 +20,7 @@ namespace DarkLight.Backtest.ViewModels
         #region Properties
 
         IViewModelService _viewModelService;
+        IBacktestService _backtestService;
 
         string _currentScreenName;
         public string CurrentScreenName
@@ -52,9 +55,10 @@ namespace DarkLight.Backtest.ViewModels
 
         #region Constructor
 
-        public BacktestLauncherViewModel(IViewModelService viewModelService)
+        public BacktestLauncherViewModel(IViewModelService viewModelService, IBacktestService backtestService)
         {
             _viewModelService = viewModelService;
+            _backtestService = backtestService;
 
             ActivateItem(_viewModelService.GetScreenForNavigationEvent(new LinkedNavigationEvent { Destination = NavigationDestination.ResponseSelection }));
             ActivateItem(_viewModelService.GetScreenForNavigationEvent(new LinkedNavigationEvent { Destination = NavigationDestination.ParametricRange }));
@@ -93,11 +97,13 @@ namespace DarkLight.Backtest.ViewModels
 
         public void LaunchBacktest()
         {
-            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
-            {
-                NavigationAction = NavigationAction.NewWindow,
-                Destination = NavigationDestination.BacktestStatus
-            });
+            //TODO refactor, handle as periodic updates through event broker?
+            var viewModel = IoC.Get<BacktestStatusViewModel>();
+            var histDataService = IoC.Get<IHistDataService>();
+            var response = new DarkLightResponse();
+            IoC.Get<IBacktestService>().RunBackTest(histDataService, response, viewModel);
+            IoC.Get<IWindowManager>().ShowWindow(viewModel);
+ 
         }
 
         #endregion
