@@ -9,15 +9,51 @@ using DarkLight.Events;
 using System.Collections;
 using DarkLight.Interfaces;
 using DarkLight.Services;
+using DarkLight.Backtest.Models;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace DarkLight.Backtest.ViewModels
 {
-    class BacktestStatusViewModel : DarkLightScreen
+    public class BacktestStatusViewModel : DarkLightScreen
     {
-        double _progress1 = 0.5;
-        double _progress2 = 0.5;
-        double _progress3 = 0.5;
-        double _progress4 = 0.5;
+
+        private BindableCollection<BacktestProgressModel> _progressModels;
+        public BindableCollection<BacktestProgressModel> ProgressModels
+        {
+            get { return _progressModels; }
+            set
+            {
+                _progressModels = value;
+                NotifyOfPropertyChange(() => ProgressModels);
+            }
+        }
+
+        public ICollectionView ProgressView { get; set; }
+
+        public BacktestStatusViewModel()
+        {
+            ProgressModels = new BindableCollection<BacktestProgressModel>();
+            for (int i = 0; i < 4; i++)
+            {
+                var progressModel = new BacktestProgressModel
+                {
+                    Slot = "Slot " + i.ToString(),
+                    BacktestID = "Backtest " + i.ToString(),
+                    ProgressValue = 0
+                };
+
+                ProgressModels.Add(progressModel);
+            }
+
+            ProgressView = CollectionViewSource.GetDefaultView(ProgressModels);     
+        }
+
+        /*
+        double _progress1 = 0.0;
+        double _progress2 = 0.0;
+        double _progress3 = 0.0;
+        double _progress4 = 0.0;
 
         public double ProgressSlot1
         {
@@ -68,6 +104,6 @@ namespace DarkLight.Backtest.ViewModels
         {
             ProgressSlot1 -= 0.1;
         }
-
+        */
     }
 }
