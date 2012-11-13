@@ -83,7 +83,7 @@ namespace DarkLight.Backtest.ViewModels
 
         public void NavigateQuit()
         {
-            //TODO: close out
+            TryClose();
         }
 
         public void NavigateNext()
@@ -97,13 +97,18 @@ namespace DarkLight.Backtest.ViewModels
 
         public void LaunchBacktest()
         {
-            //TODO refactor, handle as periodic updates through event broker?
             var viewModel = IoC.Get<BacktestStatusViewModel>();
             var histDataService = IoC.Get<IHistDataService>();
             var response = new DarkLightResponse();
-            IoC.Get<IBacktestService>().RunBackTest(histDataService, response, viewModel);
+
+            //Version 1: Event Aggregator           
+            viewModel.Initialize("Momentum", 4);
             IoC.Get<IWindowManager>().ShowWindow(viewModel);
- 
+            IoC.Get<IBacktestService>().RunBackTest(histDataService, response);
+
+            // Version 2: Bind directly to viewmodel
+            //IoC.Get<IBacktestService>().RunBackTest(histDataService, response, viewModel);
+            //IoC.Get<IWindowManager>().ShowWindow(viewModel); 
         }
 
         #endregion

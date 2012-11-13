@@ -15,8 +15,59 @@ using System.Windows.Data;
 
 namespace DarkLight.Backtest.ViewModels
 {
-    public class BacktestStatusViewModel : DarkLightScreen
+    public class BacktestStatusViewModel : DarkLightScreen, IHandle<StatusEvent>
     {
+        #region Private Members
+
+        int _numBacktestSlots;
+        double _totalProgressValue;
+        string _backtestStatus;
+        string _backtestName;
+        string _totalProgressString;
+
+        #endregion
+
+        #region Public Members
+
+        public string BacktestStatus
+        {
+            get { return _backtestStatus; }
+            set
+            {
+                _backtestStatus = value;
+                NotifyOfPropertyChange(() => BacktestStatus);
+            }
+        }
+
+        public string BacktestName
+        {
+            get { return _backtestName; }
+            set
+            {
+                _backtestName = value;
+                NotifyOfPropertyChange(() => BacktestName);
+            }
+        }
+
+        public string TotalProgressString
+        {
+            get { return _totalProgressString; }
+            set
+            {
+                _totalProgressString = value;
+                NotifyOfPropertyChange(() => TotalProgressString);
+            }
+        }
+
+        public double TotalProgressValue
+        {
+            get { return _totalProgressValue; }
+            set
+            {
+                _totalProgressValue = value;
+                NotifyOfPropertyChange(() => TotalProgressValue);
+            }
+        }
 
         private BindableCollection<BacktestProgressModel> _progressModels;
         public BindableCollection<BacktestProgressModel> ProgressModels
@@ -29,81 +80,66 @@ namespace DarkLight.Backtest.ViewModels
             }
         }
 
-        public ICollectionView ProgressView { get; set; }
+        #endregion
+
+        #region Constructors
 
         public BacktestStatusViewModel()
         {
+
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void Initialize(string backtestName, int numSlots)
+        {
+            BacktestName = backtestName;
+            _numBacktestSlots = numSlots;
+
             ProgressModels = new BindableCollection<BacktestProgressModel>();
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < _numBacktestSlots; i++)
             {
-                var progressModel = new BacktestProgressModel
+                ProgressModels.Add(new BacktestProgressModel());
+            }
+
+            BacktestStatus = "Initializing Backtest:";
+
+            IoC.Get<IEventAggregator>().Subscribe(this);
+        }
+
+        #endregion
+
+        #region Implementation of IHandle<ServiceStatusEvent>
+
+        public void Handle(StatusEvent se)
+        {
+            if (se.StatusType == StatusType.Begin)
+            {
+                BacktestStatus = "Running Backtest:";
+            }
+            else if (se.StatusType == StatusType.Progress)
+            {
+                //Slot Progress                
+                double tempTotal = 0;
+                for (int i = 0; i < ProgressModels.Count; i++)
                 {
-                    Slot = "Slot " + i.ToString(),
-                    BacktestID = "Backtest " + i.ToString(),
-                    ProgressValue = 0
-                };
+                    ProgressModels[i] = se.ProgressModels[i];
+                    tempTotal += se.ProgressModels[i].ProgressValue / _numBacktestSlots;
+                }
 
-                ProgressModels.Add(progressModel);
+                //Total Progress
+                TotalProgressString = "Percent Complete (" + (tempTotal*1000).ToString() + " / 1000 tests complete):";
+                TotalProgressValue = tempTotal;
             }
-
-            ProgressView = CollectionViewSource.GetDefaultView(ProgressModels);     
-        }
-
-        /*
-        double _progress1 = 0.0;
-        double _progress2 = 0.0;
-        double _progress3 = 0.0;
-        double _progress4 = 0.0;
-
-        public double ProgressSlot1
-        {
-            get { return _progress1; }
-            set
+            else if (se.StatusType == StatusType.Complete)
             {
-                _progress1 = value;
-                NotifyOfPropertyChange(() => ProgressSlot1);
+                BacktestStatus = "Backtest Complete";
             }
         }
 
-        public double ProgressSlot2
-        {
-            get { return _progress2; }
-            set
-            {
-                _progress2 = value;
-                NotifyOfPropertyChange(() => ProgressSlot2);
-            }
-        }
+        #endregion
 
-        public double ProgressSlot3
-        {
-            get { return _progress3; }
-            set
-            {
-                _progress3 = value;
-                NotifyOfPropertyChange(() => ProgressSlot3);
-            }
-        }
-
-        public double ProgressSlot4
-        {
-            get { return _progress4; }
-            set
-            {
-                _progress4 = value;
-                NotifyOfPropertyChange(() => ProgressSlot4);
-            }
-        }
-
-        public void Increment()
-        {
-            ProgressSlot1 += 0.1;
-        }
-
-        public void Decrement()
-        {
-            ProgressSlot1 -= 0.1;
-        }
-        */
     }
 }

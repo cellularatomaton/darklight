@@ -169,6 +169,12 @@
     </Compile>
     <Compile Include="Customizations\DarkLightResponse.cs" />
     <Compile Include="Events\NavigationGroup.cs" />
+    <Compile Include="Events\ServiceEventBase.cs" />
+    <Compile Include="Events\ServiceType.cs" />
+    <Compile Include="Events\StatusEvent.cs" />
+    <Compile Include="Events\StatusType.cs" />
+    <Compile Include="Events\TradeEvent.cs" />
+    <Compile Include="Events\TradeEventType.cs" />
     <Compile Include="Services\IHistDataService.cs" />
     <Compile Include="Repositories\MockBacktestRepository.cs" />
     <Compile Include="Services\MockBacktestService.cs" />

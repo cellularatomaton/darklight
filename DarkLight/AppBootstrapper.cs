@@ -61,6 +61,7 @@ namespace DarkLight
             builder.Register(c => new DefaultColorService()).SingleInstance();
             builder.Register(c => new DefaultFilterService(IoC.Get<IColorService>())).SingleInstance();
             builder.Register(c => new DarkLightWindowManager()).SingleInstance();
+            builder.Register(c => new MockBacktestService(IoC.Get<IEventAggregator>())).SingleInstance();
 
             // Register Modules:
             builder.Register(c => new LinkableViewModel(IoC.Get<IColorService>(), IoC.Get<IViewModelService>()));
