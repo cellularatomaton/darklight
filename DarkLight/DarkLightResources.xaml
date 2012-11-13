@@ -14,4 +14,7 @@
             </Rectangle.Fill>
         </Rectangle>
     </DataTemplate>
+    <Style x:Key="noHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+        <Setter Property="Visibility" Value="Collapsed" />
+    </Style>
 </ResourceDictionary>
