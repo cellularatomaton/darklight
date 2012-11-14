@@ -156,7 +156,6 @@ namespace DarkLight.Backtest.ViewModels
         {
             if (SelectedBacktestView != null)
             {
-
                 IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
                 {
                     NavigationAction = NavigationAction.NewLinkedWindow,

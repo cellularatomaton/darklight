@@ -175,6 +175,13 @@
     <Compile Include="Events\StatusType.cs" />
     <Compile Include="Events\TradeEvent.cs" />
     <Compile Include="Events\TradeEventType.cs" />
+    <Compile Include="Infrastructure\BlockingCircularBuffer.cs" />
+    <Compile Include="Infrastructure\IMediator.cs" />
+    <Compile Include="Infrastructure\Mediator.cs" />
+    <Compile Include="Infrastructure\PeriodicTask.cs" />
+    <Compile Include="Infrastructure\PriorityTaskScheduler.cs" />
+    <Compile Include="Infrastructure\SporadicTask.cs" />
+    <Compile Include="Infrastructure\TaskType.cs" />
     <Compile Include="Services\IHistDataService.cs" />
     <Compile Include="Repositories\MockBacktestRepository.cs" />
     <Compile Include="Services\MockBacktestService.cs" />

@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Media;
 using Caliburn.Micro;
 using DarkLight.Events;
+using DarkLight.Infrastructure;
 using DarkLight.Interfaces;
 using System.Threading.Tasks;
 using DarkLight.Backtest.Models;
@@ -18,23 +19,21 @@ namespace DarkLight.Services
     {
         #region Members
 
-        BacktestStatusViewModel _statusViewModel;
-        IEventAggregator _eventAggregator;
+        IMediator _mediator;
 
         #endregion
 
-        public MockBacktestService(IEventAggregator eventBroker)
+        public MockBacktestService(IMediator mediator)
         {
-            _eventAggregator = eventBroker;
+            _mediator = mediator;
         }
 
-        //Version 1: implement using Event Aggregator
         public string RunBackTest(IHistDataService _histDataService, DarkLightResponse _response)
         {
             Task.Factory.StartNew(() =>
             {
                 //Begin
-                _eventAggregator.Publish(new StatusEvent
+                _mediator.Publish(new StatusEvent
                 {
                     ServiceType = ServiceType.Backtest,
                     Key = "",
@@ -58,54 +57,22 @@ namespace DarkLight.Services
                                                 };
                     }
 
-                    _eventAggregator.Publish(new StatusEvent
+                    _mediator.Publish(new StatusEvent
                     {
                         ServiceType = ServiceType.Backtest,
                         Key = "",
                         StatusType = StatusType.Progress,
                         ProgressModels = progressModels
-                    });
+                    });                     
                 }
 
                 //Complete
-                _eventAggregator.Publish(new StatusEvent
+                _mediator.Publish(new StatusEvent
                 {
                     ServiceType = ServiceType.Backtest,
                     Key = "",
                     StatusType = StatusType.Complete
                 });
-            });
-
-            return "";
-        }
-
-        //Version 2: implement using direct reference to viewmodel
-        public string RunBackTest(IHistDataService _histDataService, DarkLightResponse _response, BacktestStatusViewModel viewModel)
-        {
-            _statusViewModel = viewModel;
-
-            Task.Factory.StartNew(() =>
-            {
-                for (int i = 0; i < 100; i++)
-                {
-                    Thread.Sleep(100);
-                    double d = (double)i;
-
-                    for (int j = 0; j < 4; j++)
-                    {
-                        var progressModel = new BacktestProgressModel
-                        {
-                            Slot = "Slot " + (j + 1).ToString(),
-                            BacktestID = "Momentum " + j.ToString(),
-                            ProgressValue = d / 100
-                        };
-
-                        //NOTE: here we are replacing the entire model rather than updating individual progress value.
-                        //In order to update individual values we could implement NotifyPropertyChanged on individual properties in ProgressModel
-                        //Additionally, trying a update a view (even if based on a BindableCollection) from separate thread like this does not work 
-                        _statusViewModel.ProgressModels[j] = progressModel;
-                    }
-                }
             });
 
             return "";

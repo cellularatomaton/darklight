@@ -9,6 +9,7 @@ using System.Linq;
 using Caliburn.Micro;
 using Autofac;
 using DarkLight.Backtest.ViewModels;
+using DarkLight.Infrastructure;
 using DarkLight.Repositories;
 using DarkLight.Utilities;
 using DarkLight.Common.ViewModels;
@@ -55,14 +56,15 @@ namespace DarkLight
             builder.RegisterType<DarkLightWindowManager>().As<IWindowManager>();
             builder.RegisterType<MockBacktestRepository>().As<IBacktestRepository>();
             builder.RegisterType<MockBacktestService>().As<IBacktestService>();
-            builder.RegisterType<MockHistDataService>().As<IHistDataService>();            
+            builder.RegisterType<MockHistDataService>().As<IHistDataService>();
+            builder.RegisterType<Mediator>().As<IMediator>().SingleInstance();
 
             // Register Service Implementations:
             builder.Register(c => new DefaultColorService()).SingleInstance();
             builder.Register(c => new DefaultFilterService(IoC.Get<IColorService>())).SingleInstance();
             builder.Register(c => new DarkLightWindowManager()).SingleInstance();
-            builder.Register(c => new MockBacktestService(IoC.Get<IEventAggregator>())).SingleInstance();
-
+            builder.Register(c => new MockBacktestService(IoC.Get<IMediator>())).SingleInstance();
+            
             // Register Modules:
             builder.Register(c => new LinkableViewModel(IoC.Get<IColorService>(), IoC.Get<IViewModelService>()));
             builder.Register(c => new BacktestModuleViewModel()).SingleInstance();

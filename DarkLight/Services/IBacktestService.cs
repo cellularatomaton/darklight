@@ -15,7 +15,6 @@ namespace DarkLight.Services
     public interface IBacktestService
     {
         string RunBackTest(IHistDataService _histDataService, DarkLightResponse _response);
-        string RunBackTest(IHistDataService _histDataService, DarkLightResponse _response, BacktestStatusViewModel viewModel);        
         BacktestRecord GetBackTest(string backtestID);
     }
 }
