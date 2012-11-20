@@ -6,7 +6,7 @@ using DarkLight.Common.Models;
 
 namespace DarkLight.Events
 {
-    public class TradeEvent : ServiceEventBase
+    public class TradeEvent : DarkLightEvent
     {
         public TradeEventType Type { get; set; }
 

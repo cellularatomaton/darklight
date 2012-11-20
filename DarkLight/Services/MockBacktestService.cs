@@ -19,23 +19,24 @@ namespace DarkLight.Services
     {
         #region Members
 
-        IMediator _mediator;
+        //IMediator _mediator;
+        IBacktestAdapter _backTestAdapter;        
 
         #endregion
 
-        public MockBacktestService(IMediator mediator)
+        public MockBacktestService(IBacktestAdapter backTestAdapter)
         {
-            _mediator = mediator;
+            _backTestAdapter = backTestAdapter;          
+            _backTestAdapter.OnRunBacktest += RunBackTest;
         }
 
-        public string RunBackTest(IHistDataService _histDataService, DarkLightResponse _response)
+        public void RunBackTest(IHistDataService _histDataService, DarkLightResponse _response)
         {
             Task.Factory.StartNew(() =>
             {
                 //Begin
-                _mediator.Publish(new StatusEvent
+                _backTestAdapter.Publish(new StatusEvent
                 {
-                    ServiceType = ServiceType.Backtest,
                     Key = "",
                     StatusType = StatusType.Begin
                 });
@@ -57,9 +58,8 @@ namespace DarkLight.Services
                                                 };
                     }
 
-                    _mediator.Publish(new StatusEvent
+                    _backTestAdapter.Publish(new StatusEvent
                     {
-                        ServiceType = ServiceType.Backtest,
                         Key = "",
                         StatusType = StatusType.Progress,
                         ProgressModels = progressModels
@@ -67,15 +67,13 @@ namespace DarkLight.Services
                 }
 
                 //Complete
-                _mediator.Publish(new StatusEvent
+                _backTestAdapter.Publish(new StatusEvent
                 {
-                    ServiceType = ServiceType.Backtest,
                     Key = "",
                     StatusType = StatusType.Complete
                 });
-            });
+          });
 
-            return "";
         }
 
         public BacktestRecord GetBackTest(string backtestID)

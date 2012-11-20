@@ -168,20 +168,29 @@
       <DependentUpon>ResponseConfigurationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Customizations\DarkLightResponse.cs" />
-    <Compile Include="Events\NavigationGroup.cs" />
-    <Compile Include="Events\ServiceEventBase.cs" />
-    <Compile Include="Events\ServiceType.cs" />
+    <Compile Include="Enums\EventType.cs" />
+    <Compile Include="Enums\NavigationGroup.cs" />
+    <Compile Include="Events\BacktestRequestEvent.cs" />
+    <Compile Include="Events\DarkLightEvent.cs" />
     <Compile Include="Events\StatusEvent.cs" />
-    <Compile Include="Events\StatusType.cs" />
+    <Compile Include="Enums\StatusType.cs" />
     <Compile Include="Events\TradeEvent.cs" />
-    <Compile Include="Events\TradeEventType.cs" />
-    <Compile Include="Infrastructure\BlockingCircularBuffer.cs" />
-    <Compile Include="Infrastructure\IMediator.cs" />
-    <Compile Include="Infrastructure\Mediator.cs" />
-    <Compile Include="Infrastructure\PeriodicTask.cs" />
-    <Compile Include="Infrastructure\PriorityTaskScheduler.cs" />
-    <Compile Include="Infrastructure\SporadicTask.cs" />
-    <Compile Include="Infrastructure\TaskType.cs" />
+    <Compile Include="Enums\TradeEventType.cs" />
+    <Compile Include="Infrastructure\Adapters\IAdapter.cs" />
+    <Compile Include="Infrastructure\Adapters\IHistDataAdapter.cs" />
+    <Compile Include="Infrastructure\Adapters\IMediatorAdapter.cs" />
+    <Compile Include="Infrastructure\Adapters\IOptimizationAdapter.cs" />
+    <Compile Include="Infrastructure\ServiceBus\ServiceBusZeroMQ.cs" />
+    <Compile Include="Infrastructure\ServiceBus\ServiceBusWCF.cs" />
+    <Compile Include="Infrastructure\WPFClient\BlockingCircularBuffer.cs" />
+    <Compile Include="Infrastructure\Adapters\IBacktestAdapter.cs" />
+    <Compile Include="Infrastructure\WPFClient\IMediator.cs" />
+    <Compile Include="Infrastructure\WPFClient\Mediator.cs" />
+    <Compile Include="Infrastructure\WPFClient\PeriodicTask.cs" />
+    <Compile Include="Infrastructure\WPFClient\PriorityTaskScheduler.cs" />
+    <Compile Include="Infrastructure\WPFClient\SporadicTask.cs" />
+    <Compile Include="Infrastructure\WPFClient\TaskType.cs" />
+    <Compile Include="Infrastructure\ServiceBus\ServiceBusLocal.cs" />
     <Compile Include="Services\IHistDataService.cs" />
     <Compile Include="Repositories\MockBacktestRepository.cs" />
     <Compile Include="Services\MockBacktestService.cs" />
@@ -190,9 +199,9 @@
     <Compile Include="Utilities\NLogLogger.cs" />
     <Compile Include="Customizations\DarkLightScreen.cs" />
     <Compile Include="Customizations\DarkLightWindowManager.cs" />
-    <Compile Include="Events\NavigationAction.cs" />
+    <Compile Include="Enums\NavigationAction.cs" />
     <Compile Include="Events\LinkedEventFilter.cs" />
-    <Compile Include="Events\NavigationDestination.cs" />
+    <Compile Include="Enums\NavigationDestination.cs" />
     <Compile Include="Events\LinkedNavigationEvent.cs" />
     <Compile Include="Interfaces\IFilter.cs" />
     <Compile Include="LiveTrading\ViewModels\LiveTradingModuleViewModel.cs" />
@@ -357,6 +366,9 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Infrastructure\WebClient\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using DarkLight.Events;
 
-namespace DarkLight.Infrastructure
+namespace DarkLight.Infrastructure.Adapters
 {
-    public interface IMediator
+    public interface IAdapter
     {
-        void Publish(StatusEvent statusEvent);
+        void Publish(DarkLightEvent darkLightEvent);
     }
 }
