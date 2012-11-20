@@ -7,6 +7,7 @@ using Caliburn.Micro;
 using DarkLight.Customizations;
 using DarkLight.Events;
 using System.Collections;
+using DarkLight.Infrastructure;
 using DarkLight.Interfaces;
 using DarkLight.Services;
 using DarkLight.Customizations;
@@ -97,18 +98,16 @@ namespace DarkLight.Backtest.ViewModels
 
         public void LaunchBacktest()
         {
-            var viewModel = IoC.Get<BacktestStatusViewModel>();
-            var histDataService = IoC.Get<IHistDataService>();
-            var response = new DarkLightResponse();
-
-            //Version 1: Event Aggregator           
+            var viewModel = IoC.Get<BacktestStatusViewModel>();          
             viewModel.Initialize("Momentum", 4);
-            IoC.Get<IWindowManager>().ShowWindow(viewModel);
-            IoC.Get<IBacktestService>().RunBackTest(histDataService, response);
 
-            // Version 2: Bind directly to viewmodel
-            //IoC.Get<IBacktestService>().RunBackTest(histDataService, response, viewModel);
-            //IoC.Get<IWindowManager>().ShowWindow(viewModel); 
+            IoC.Get<IWindowManager>().ShowWindow(viewModel);
+
+            var requestEvent = new BacktestRequestEvent();
+            requestEvent.Response = new DarkLightResponse();
+            requestEvent.HistDataService = IoC.Get<IHistDataService>();
+            IoC.Get<IMediator>().Broadcast(requestEvent);
+            //IoC.Get<IBacktestService>().RunBackTest(histDataService, response);
         }
 
         #endregion

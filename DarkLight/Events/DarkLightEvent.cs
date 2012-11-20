@@ -5,9 +5,9 @@ using System.Text;
 
 namespace DarkLight.Events
 {
-    public class ServiceEventBase
+    public class DarkLightEvent
     {
-        public ServiceType ServiceType { get; set; }
         public string Key { get; set; }
+        public EventType EventType { get; set; }
     }
 }

@@ -10,6 +10,8 @@ using Caliburn.Micro;
 using Autofac;
 using DarkLight.Backtest.ViewModels;
 using DarkLight.Infrastructure;
+using DarkLight.Infrastructure.Adapters;
+using DarkLight.Infrastructure.ServiceHubs;
 using DarkLight.Repositories;
 using DarkLight.Utilities;
 using DarkLight.Common.ViewModels;
@@ -58,12 +60,14 @@ namespace DarkLight
             builder.RegisterType<MockBacktestService>().As<IBacktestService>();
             builder.RegisterType<MockHistDataService>().As<IHistDataService>();
             builder.RegisterType<Mediator>().As<IMediator>().SingleInstance();
-
+            builder.RegisterType<ServiceBusLocal>().As<IMediatorAdapter,IBacktestAdapter>().SingleInstance();
+            
             // Register Service Implementations:
             builder.Register(c => new DefaultColorService()).SingleInstance();
             builder.Register(c => new DefaultFilterService(IoC.Get<IColorService>())).SingleInstance();
             builder.Register(c => new DarkLightWindowManager()).SingleInstance();
-            builder.Register(c => new MockBacktestService(IoC.Get<IMediator>())).SingleInstance();
+            builder.Register(c => new MockBacktestService(IoC.Get<IBacktestAdapter>())).SingleInstance();
+            builder.Register(c => new Mediator(IoC.Get<IMediatorAdapter>())).SingleInstance();            
             
             // Register Modules:
             builder.Register(c => new LinkableViewModel(IoC.Get<IColorService>(), IoC.Get<IViewModelService>()));
