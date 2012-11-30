@@ -6,12 +6,16 @@ using System.Windows.Media;
 
 namespace DarkLight.Events
 {
-    public class LinkedNavigationEvent
+    public class LinkedNavigationEvent : DarkLightEvent
     {
-        public string Key { get; set; }
         public NavigationAction NavigationAction { get; set; }
         public Color ColorGroup { get; set; }
         public NavigationDestination Destination { get; set; }
         public NavigationGroup Group { get; set; }
+
+        public LinkedNavigationEvent()
+        {
+            EventType = EventType.LinkedNavigation;
+        }
     }
 }

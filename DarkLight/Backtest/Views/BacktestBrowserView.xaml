@@ -48,12 +48,12 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="120" DisplayMemberBinding="{Binding Description}">
-                        <GridViewColumnHeader Content="Description" cal:Message.Attach="[Event Click] = [Action SortBacktestGroup('Description')]" />
+                        <GridViewColumnHeader Content="Response Type" cal:Message.Attach="[Event Click] = [Action SortBacktestGroup('Description')]" />
                     </GridViewColumn>
-                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding GUID}">
-                        <GridViewColumnHeader Content="GUID" cal:Message.Attach="[Event Click] = [Action SortBacktestGroup('GUID')]" />
+                    <GridViewColumn Width="350" DisplayMemberBinding="{Binding GUID}">
+                        <GridViewColumnHeader Content="Parameter Space" cal:Message.Attach="[Event Click] = [Action SortBacktestGroup('GUID')]" />
                     </GridViewColumn>
-                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding CreateDate}">
+                    <GridViewColumn Width="150" DisplayMemberBinding="{Binding CreateDate}">
                         <GridViewColumnHeader Content="CreateDate" cal:Message.Attach="[Event Click] = [Action SortBacktestGroup('CreateDate')]" />
                     </GridViewColumn>
                     <GridViewColumn Width="120" DisplayMemberBinding="{Binding NumBacktests}">
@@ -83,13 +83,10 @@
         <ListView x:Name="BacktestView" Margin="10,5,10,5" Height="150">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Description}">
-                        <GridViewColumnHeader Content="Description" cal:Message.Attach="[Event Click] = [Action SortBacktest('Description')]" />
+                    <GridViewColumn Width="350" DisplayMemberBinding="{Binding GUID}">
+                        <GridViewColumnHeader Content="Parameters" cal:Message.Attach="[Event Click] = [Action SortBacktest('GUID')]" />
                     </GridViewColumn>
-                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding GUID}">
-                        <GridViewColumnHeader Content="GUID" cal:Message.Attach="[Event Click] = [Action SortBacktest('GUID')]" />
-                    </GridViewColumn>
-                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding CreateDate}">
+                    <GridViewColumn Width="150" DisplayMemberBinding="{Binding CreateDate}">
                         <GridViewColumnHeader Content="CreateDate" cal:Message.Attach="[Event Click] = [Action SortBacktest('CreateDate')]" />
                     </GridViewColumn>
                     <GridViewColumn Width="120" DisplayMemberBinding="{Binding NumTrades}">
@@ -148,7 +145,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Button  Grid.Column="0" Grid.Row="0" x:Name="OpenTemporalStatisticsWindow" Content="Temporal Statistics" Margin="10,10,10,10"/>
+                        <Button  Grid.Column="0" Grid.Row="0" x:Name="OpenTemporalStatisticsWindow" Content="Result Statistics" Margin="10,10,10,10"/>
                         <Button  Grid.Column="0" Grid.Row="1" x:Name="OpenParametricStatisticsWindow" Content="Parametric Statistics" Margin="10,10,10,10"/>
                     </Grid>
                 </StackPanel>

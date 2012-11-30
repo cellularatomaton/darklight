@@ -75,7 +75,9 @@ namespace DarkLight
             builder.Register(c => new BacktestLauncherViewModel(IoC.Get<IViewModelService>(), IoC.Get<IBacktestService>()));
             builder.Register(c => new BacktestBrowserViewModel(IoC.Get<IColorService>(), IoC.Get<IViewModelService>()));
             builder.Register(c => new OptimizationModuleViewModel()).SingleInstance();
+            builder.Register(c => new OptimizationSchedulerViewModel()).SingleInstance();
             builder.Register(c => new LiveTradingModuleViewModel()).SingleInstance();
+            builder.Register(c => new LiveTradingPortfoliosViewModel()).SingleInstance();
             builder.Register(c => new EventPublisherViewModel(IoC.Get<IColorService>())).SingleInstance();
 
             // Register View Models:

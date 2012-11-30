@@ -46,9 +46,19 @@ namespace DarkLight.Services
                     _viewModel = IoC.Get<OptimizationModuleViewModel>();
                     break;
                 }
+                case NavigationDestination.OptimizationScheduler:
+                {
+                    _viewModel = IoC.Get<OptimizationSchedulerViewModel>();
+                    break;
+                }
                 case NavigationDestination.LiveTradingModule:
                 {
                     _viewModel = IoC.Get<LiveTradingModuleViewModel>();
+                    break;
+                }
+                case NavigationDestination.LiveTradingPorfolios:
+                {
+                    _viewModel = IoC.Get<LiveTradingPortfoliosViewModel>();
                     break;
                 }
                 case NavigationDestination.Statistics:

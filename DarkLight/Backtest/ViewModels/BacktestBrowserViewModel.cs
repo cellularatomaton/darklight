@@ -9,6 +9,7 @@ using DarkLight.Backtest.Models;
 using DarkLight.Common.ViewModels;
 using DarkLight.Customizations;
 using DarkLight.Events;
+using DarkLight.Infrastructure;
 using DarkLight.Repositories;
 using DarkLight.Services;
 
@@ -44,7 +45,7 @@ namespace DarkLight.Backtest.ViewModels
             set
             {
                 _selectedBacktestView = value;
-                IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+                IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
                 {
                     NavigationAction = NavigationAction.UpdateLinkedWindows,
                     Group = NavigationGroup.Backtest,
@@ -75,7 +76,7 @@ namespace DarkLight.Backtest.ViewModels
 
         public void NewBacktest()
         {
-            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+            IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
             {
                 NavigationAction = NavigationAction.NewWindow,
                 Destination = NavigationDestination.BacktestLauncher,
@@ -156,7 +157,7 @@ namespace DarkLight.Backtest.ViewModels
         {
             if (SelectedBacktestView != null)
             {
-                IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+                IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
                 {
                     NavigationAction = NavigationAction.NewLinkedWindow,
                     Destination = destination,

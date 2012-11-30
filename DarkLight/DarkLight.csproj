@@ -191,6 +191,14 @@
     <Compile Include="Infrastructure\WPFClient\SporadicTask.cs" />
     <Compile Include="Infrastructure\WPFClient\TaskType.cs" />
     <Compile Include="Infrastructure\ServiceBus\ServiceBusLocal.cs" />
+    <Compile Include="LiveTrading\ViewModels\LiveTradingPortfoliosViewModel.cs" />
+    <Compile Include="LiveTrading\Views\LiveTradingPortfoliosView.xaml.cs">
+      <DependentUpon>LiveTradingPortfoliosView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Optimization\ViewModels\OptimizationSchedulerViewModel.cs" />
+    <Compile Include="Optimization\Views\OptimizationSchedulerView.xaml.cs">
+      <DependentUpon>OptimizationSchedulerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\IHistDataService.cs" />
     <Compile Include="Repositories\MockBacktestRepository.cs" />
     <Compile Include="Services\MockBacktestService.cs" />
@@ -324,7 +332,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="LiveTrading\Views\LiveTradingPortfoliosView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Optimization\Views\OptimizationModuleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Optimization\Views\OptimizationSchedulerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
