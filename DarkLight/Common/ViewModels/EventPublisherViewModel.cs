@@ -6,6 +6,7 @@ using System.Windows.Media;
 using Caliburn.Micro;
 using DarkLight.Customizations;
 using DarkLight.Events;
+using DarkLight.Infrastructure;
 using DarkLight.Services;
 
 namespace DarkLight.Common.ViewModels
@@ -89,7 +90,7 @@ namespace DarkLight.Common.ViewModels
 
         public void SendMessage()
         {
-            IoC.Get<IEventAggregator>().Publish(new LinkedNavigationEvent
+            IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
             {
                 NavigationAction = SelectedNavigationAction,
                 ColorGroup = SelectedColorGroup,

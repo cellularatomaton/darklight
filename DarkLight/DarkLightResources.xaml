@@ -17,4 +17,19 @@
     <Style x:Key="noHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
         <Setter Property="Visibility" Value="Collapsed" />
     </Style>
+    <Style x:Key="toggleButtonStyle" TargetType="{x:Type ToggleButton}">
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="IsHitTestVisible" Value="False" />
+                <Setter Property="BorderThickness" Value="2" />
+                <Setter Property="BorderBrush" Value="Black" />
+            </Trigger>
+            <Trigger Property="IsChecked" Value="False">
+                <Setter Property="IsHitTestVisible" Value="True" />
+            </Trigger>
+            <Trigger Property="IsChecked" Value="{x:Null}">
+                <Setter Property="Foreground" Value="Green"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>    
 </ResourceDictionary>
