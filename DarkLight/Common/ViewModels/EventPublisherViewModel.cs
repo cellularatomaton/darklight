@@ -8,25 +8,27 @@ using DarkLight.Customizations;
 using DarkLight.Events;
 using DarkLight.Infrastructure;
 using DarkLight.Services;
+using DarkLight.Utilities;
 
 namespace DarkLight.Common.ViewModels
 {
     public class EventPublisherViewModel : DarkLightScreen
     {
+        
+        #region Properties
+
+        public BindableCollection<EventType> EventTypes
+        {
+            get
+            {
+                var _eventTypes = Enum.GetValues(typeof(EventType));
+                return new BindableCollection<EventType>(_eventTypes.Cast<EventType>().AsEnumerable());
+            }
+        }
+
         public BindableCollection<Color> ColorGroups
         {
             get { return _colorService.GetColorGroups(); }
-        }
-
-        private Color _selectedColorGroup;
-        public Color SelectedColorGroup
-        {
-            get { return _selectedColorGroup; }
-            set
-            {
-                _selectedColorGroup = value;
-                NotifyOfPropertyChange(() => SelectedColorGroup);
-            }
         }
 
         public BindableCollection<NavigationAction> NavigationActions
@@ -38,18 +40,16 @@ namespace DarkLight.Common.ViewModels
             }
         }
 
-        private NavigationAction _selectedNavigationAction;
-        public NavigationAction SelectedNavigationAction
+        public BindableCollection<NavigationGroup> NavigationGroups
         {
-            get { return _selectedNavigationAction; }
-            set
+            get
             {
-                _selectedNavigationAction = value;
-                NotifyOfPropertyChange(() => SelectedNavigationAction);
+                var _groupValues = Enum.GetValues(typeof(NavigationGroup));
+                return new BindableCollection<NavigationGroup>(_groupValues.Cast<NavigationGroup>().AsEnumerable());
             }
         }
 
-        public BindableCollection<NavigationDestination> Destinations
+        public BindableCollection<NavigationDestination> NavigationDestinations
         {
             get
             {
@@ -58,14 +58,14 @@ namespace DarkLight.Common.ViewModels
             }
         }
 
-        private NavigationDestination _selectedDestination;
-        public NavigationDestination SelectedDestination
+        private EventType _selectedEventType;
+        public EventType SelectedEventType
         {
-            get { return _selectedDestination; }
+            get { return _selectedEventType; }
             set
             {
-                _selectedDestination = value;
-                NotifyOfPropertyChange(() => SelectedDestination);
+                _selectedEventType = value;
+                NotifyOfPropertyChange(() => SelectedEventType);
             }
         }
 
@@ -80,7 +80,55 @@ namespace DarkLight.Common.ViewModels
             }
         }
 
+        private Color _selectedColorGroup;
+        public Color SelectedColorGroup
+        {
+            get { return _selectedColorGroup; }
+            set
+            {
+                _selectedColorGroup = value;
+                NotifyOfPropertyChange(() => SelectedColorGroup);
+            }
+        }
+
+        private NavigationAction _selectedNavigationAction;
+        public NavigationAction SelectedNavigationAction
+        {
+            get { return _selectedNavigationAction; }
+            set
+            {
+                _selectedNavigationAction = value;
+                NotifyOfPropertyChange(() => SelectedNavigationAction);
+            }
+        }
+
+        private NavigationGroup _selectedGroup;
+        public NavigationGroup SelectedNavigationGroup
+        {
+            get { return _selectedGroup; }
+            set
+            {
+                _selectedGroup = value;
+                NotifyOfPropertyChange(() => SelectedNavigationGroup);
+            }
+        }
+
+        private NavigationDestination _selectedDestination;
+        public NavigationDestination SelectedNavigationDestination
+        {
+            get { return _selectedDestination; }
+            set
+            {
+                _selectedDestination = value;
+                NotifyOfPropertyChange(() => SelectedNavigationDestination);
+            }
+        }
+
         private IColorService _colorService;
+
+        #endregion
+
+        #region Constructor
 
         public EventPublisherViewModel(IColorService colorService)
         {
@@ -88,15 +136,36 @@ namespace DarkLight.Common.ViewModels
             SelectedColorGroup = _colorService.GetDefaultColorGroup();
         }
 
+        #endregion
+
+        #region Public Methods
+
         public void SendMessage()
         {
-            IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
+            if (SelectedEventType == EventType.LinkedNavigation)
             {
-                NavigationAction = SelectedNavigationAction,
-                ColorGroup = SelectedColorGroup,
-                Destination = SelectedDestination,
-                Key = TestKey,
-            });
+                IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
+                                                   {
+                                                       NavigationAction = SelectedNavigationAction,
+                                                       ColorGroup = SelectedColorGroup,
+                                                       Destination = SelectedNavigationDestination,
+                                                       Key = TestKey,
+                                                   });
+            }
+            else if (SelectedEventType == EventType.Trade)
+            {
+                IoC.Get<IMediator>().Broadcast(new TradeEvent
+                {
+                    Key = TestKey,
+                    Fill = MockUtilities.GenerateFills("backtestidToImplement", 1)[0],
+                    Order = MockUtilities.GenerateOrders("backtestidToImplement", 1)[0],
+                    Position = MockUtilities.GeneratePositions("backtestidToImplement", 1)[0],
+                    Tick = MockUtilities.GenerateTicks("backtestidToImplement", 1)[0],
+                });
+            }
         }
+
+        #endregion
+
     }
 }

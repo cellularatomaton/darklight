@@ -5,8 +5,10 @@ using System.Text;
 using System.Windows.Media;
 using Caliburn.Micro;
 using DarkLight.Customizations;
+using DarkLight.Enums;
 using DarkLight.Events;
 using System.Collections;
+using DarkLight.Infrastructure;
 using DarkLight.Interfaces;
 using DarkLight.Services;
 using DarkLight.Backtest.Models;
@@ -93,9 +95,9 @@ namespace DarkLight.Backtest.ViewModels
 
         #region Public Methods
 
-        public void Initialize(string backtestName, int numSlots)
+        public void Initialize(BacktestGroupRecord backtestGroup, int numSlots)
         {
-            BacktestName = backtestName;
+            BacktestName = backtestGroup.GUID;
             _numBacktestSlots = numSlots;
 
             ProgressModels = new BindableCollection<BacktestProgressModel>();
@@ -109,33 +111,53 @@ namespace DarkLight.Backtest.ViewModels
             IoC.Get<IEventAggregator>().Subscribe(this);
         }
 
+        public void PauseBacktest()
+        {
+            var requestEvent = new BacktestRequestEvent();
+            requestEvent.ActionType = ServiceAction.Pause;
+            requestEvent.Key = BacktestName;
+            IoC.Get<IMediator>().Broadcast(requestEvent);
+        }
+
+        public void ResumeBacktest()
+        {
+            var requestEvent = new BacktestRequestEvent();
+            requestEvent.ActionType = ServiceAction.Resume;
+            requestEvent.Key = BacktestName;
+            IoC.Get<IMediator>().Broadcast(requestEvent);
+        }
+
         #endregion
 
         #region Implementation of IHandle<ServiceStatusEvent>
 
         public void Handle(StatusEvent se)
         {
-            if (se.StatusType == StatusType.Begin)
+            if (se.Key == BacktestName)
             {
-                BacktestStatus = "Running Backtest:";
-            }
-            else if (se.StatusType == StatusType.Progress)
-            {
-                //Slot Progress                
-                double tempTotal = 0;
-                for (int i = 0; i < ProgressModels.Count; i++)
+                if (se.StatusType == StatusType.Begin)
                 {
-                    ProgressModels[i] = se.ProgressModels[i];
-                    tempTotal += se.ProgressModels[i].ProgressValue / _numBacktestSlots;
+                    BacktestStatus = "Running Backtest:";
                 }
+                else if (se.StatusType == StatusType.Progress)
+                {
+                    //Slot Progress                
+                    double tempTotal = 0;
+                    for (int i = 0; i < ProgressModels.Count; i++)
+                    {
+                        ProgressModels[i] = se.ProgressModels[i];
+                        //tempTotal += se.ProgressModels[i].ProgressValue / _numBacktestSlots;
+                    }
 
-                //Total Progress
-                TotalProgressString = "Percent Complete (" + (tempTotal*1000).ToString() + " / 1000 tests complete):";
-                TotalProgressValue = tempTotal;
-            }
-            else if (se.StatusType == StatusType.Complete)
-            {
-                BacktestStatus = "Backtest Complete";
+                    //Total Progress
+                    TotalProgressString = "Percent Complete (" + se.NumBacktestsComplete.ToString() + " / " +
+                                          se.NumBacktests.ToString() + " tests complete):";
+                    TotalProgressValue = ((double) se.NumBacktestsComplete)/(se.NumBacktests);
+                }
+                else if (se.StatusType == StatusType.Complete)
+                {
+                    BacktestStatus = "Backtest Complete";
+                }
             }
         }
 

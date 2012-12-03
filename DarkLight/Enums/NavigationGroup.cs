@@ -10,6 +10,8 @@ namespace DarkLight.Events
         Default,
         Backtest,
         BacktestGroup,
+        Live,
+        LiveGroup,
         Response
     }
 }

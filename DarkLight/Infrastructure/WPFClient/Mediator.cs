@@ -61,7 +61,7 @@ namespace DarkLight.Infrastructure
             //TODO: refactor mapping below
             {
                 //NOT BEING USED YET
-                case EventType.BacktestRequest://TaskType.Background:
+                case (EventType.BacktestRequest): //TaskType.Background:
                     // check if already running
                     if (!_baseQueue.ContainsKey(target))
                    {
@@ -70,6 +70,7 @@ namespace DarkLight.Infrastructure
                     }
                     break;
 
+                case (EventType.Trade):
                 case EventType.Status://TaskType.Periodic:
                     var periodicTask = new PeriodicTask(() => _eventAggregator.Publish(darkLightEvent), _budget);
                     periodicTask.Start(_preemptiveScheduler);

@@ -131,6 +131,11 @@ namespace DarkLight.Services
                     _viewModel = IoC.Get<BacktestStatusViewModel>();
                     break;
                 }
+                case NavigationDestination.Error:
+                {
+                    _viewModel = IoC.Get<ErrorViewModel>();
+                    break;
+                }
                 default:
                 {
                     _viewModel = IoC.Get<DefaultViewModel>();
