@@ -27,9 +27,31 @@ namespace DarkLight.Backtest.ViewModels
         ListSortDirection backtestDirection = ListSortDirection.Descending;
 
         public BindableCollection<BacktestGroupRecord> BacktestGroups { get; set; }
-        public BindableCollection<BacktestRecord> Backtests { get; set; }
+        public BindableCollection<ResponseSessionRecord> Backtests { get; set; }
         public ICollectionView BacktestGroupView { get; set; }
         public ICollectionView BacktestView { get; set; }
+
+        string _findBacktestGroupsText;
+        public string FindBacktestGroupsText
+        {
+            get { return _findBacktestGroupsText; }
+            set
+            {
+                _findBacktestGroupsText = value;
+                NotifyOfPropertyChange(() => FindBacktestGroupsText);
+            }
+        }
+
+        string _queryBacktestGroupText;
+        public string QueryBacktestGroupText
+        {
+            get { return _queryBacktestGroupText; }
+            set
+            {
+                _queryBacktestGroupText = value;
+                NotifyOfPropertyChange(() => QueryBacktestGroupText);
+            }
+        }
 
         BacktestGroupRecord _selectedBacktestGroupView;
         public BacktestGroupRecord SelectedBacktestGroupView
@@ -38,8 +60,8 @@ namespace DarkLight.Backtest.ViewModels
             set { _selectedBacktestGroupView = value; }
         }
 
-        BacktestRecord _selectedBacktestView;
-        public BacktestRecord SelectedBacktestView
+        ResponseSessionRecord _selectedBacktestView;
+        public ResponseSessionRecord SelectedBacktestView
         {
             get { return _selectedBacktestView; }
             set
@@ -50,7 +72,7 @@ namespace DarkLight.Backtest.ViewModels
                     NavigationAction = NavigationAction.UpdateLinkedWindows,
                     Group = NavigationGroup.Backtest,
                     ColorGroup = SelectedColorGroup,
-                    Key = SelectedBacktestView.Description
+                    Key = SelectedBacktestView.GUID
                 });
             }
         }
@@ -63,7 +85,7 @@ namespace DarkLight.Backtest.ViewModels
             : base(colorService, viewModelService)
         {
             BacktestGroups = new BindableCollection<BacktestGroupRecord>();
-            Backtests = new BindableCollection<BacktestRecord>();
+            Backtests = new BindableCollection<ResponseSessionRecord>();
             BacktestGroupView = CollectionViewSource.GetDefaultView(BacktestGroups);
             BacktestView = CollectionViewSource.GetDefaultView(Backtests);
         }
@@ -86,37 +108,46 @@ namespace DarkLight.Backtest.ViewModels
         #endregion
 
         #region Queries
-
+        /*
         public bool CanFindBacktestGroups(string find)
         {
             return !string.IsNullOrWhiteSpace(find);
         }
-
-        public void FindBacktestGroups(string find)
+        */
+        public void FindBacktestGroups()
         {
-            var backtestGroups = IoC.Get<IBacktestRepository>().GetBacktestGroupRecords(find);
-            BacktestGroups.Clear();
-            foreach (var backtestGroupRecord in backtestGroups)
+            string find = FindBacktestGroupsText;
+            if (string.IsNullOrWhiteSpace(find))
             {
-                BacktestGroups.Add(backtestGroupRecord);
+                OpenErrorWindow("Please enter response type");
             }
-
-            SelectedBacktestGroupView = null;
-        }
-
-        public bool CanQueryBacktestGroup(string query)
-        {
-            if (string.IsNullOrWhiteSpace(query) || SelectedBacktestGroupView == null)
-                return false;
             else
-                return true;
+            {
+                var backtestGroups = IoC.Get<IBacktestRepository>().GetBacktestGroupRecords(find);
+                BacktestGroups.Clear();
+                foreach (var backtestGroupRecord in backtestGroups)
+                {
+                    BacktestGroups.Add(backtestGroupRecord);
+                }
+
+                SelectedBacktestGroupView = null;
+            }
         }
 
-        public void QueryBacktestGroup(string query)
+        public void QueryBacktestGroup()
         {
-            if (SelectedBacktestGroupView != null)
+            string query = QueryBacktestGroupText;
+            if (SelectedBacktestGroupView == null)
             {
-                var backtests = IoC.Get<IBacktestRepository>().GetBacktestRecords(SelectedBacktestGroupView.Description, query);
+                OpenErrorWindow("Please select backtest group");
+            }        
+            else if (string.IsNullOrWhiteSpace(query))
+            {
+                OpenErrorWindow("Please enter query");                
+            }
+            else
+            {
+                var backtests = IoC.Get<IBacktestRepository>().GetBacktestRecords(SelectedBacktestGroupView.ResponseType, query);
                 Backtests.Clear();
                 foreach (var backtest in backtests)
                 {
@@ -163,7 +194,16 @@ namespace DarkLight.Backtest.ViewModels
                     Destination = destination,
                     Group = NavigationGroup.Backtest,
                     ColorGroup = SelectedColorGroup,
-                    Key = SelectedBacktestView.Description
+                    Key = SelectedBacktestView.GUID
+                });
+            }
+            else
+            {
+                IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
+                {
+                    NavigationAction = NavigationAction.NewWindow,
+                    Destination = NavigationDestination.Error,
+                    Message = "Please select backtest"
                 });
             }
         }
@@ -212,6 +252,20 @@ namespace DarkLight.Backtest.ViewModels
         }
 
         #endregion
+
+        #endregion
+
+        #region Private Methods
+
+        void OpenErrorWindow(string errorMessage)
+        {
+            IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
+            {
+                NavigationAction = NavigationAction.NewWindow,
+                Destination = NavigationDestination.Error,
+                Message = errorMessage
+            });            
+        }
 
         #endregion
 

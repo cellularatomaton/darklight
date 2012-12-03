@@ -78,7 +78,7 @@
     </ApplicationDefinition>
     <Compile Include="Backtest\Models\BacktestGroupRecord.cs" />
     <Compile Include="Backtest\Models\BacktestProgressModel.cs" />
-    <Compile Include="Backtest\Models\BacktestRecord.cs" />
+    <Compile Include="Common\Models\ResponseSessionRecord.cs" />
     <Compile Include="Backtest\ViewModels\BacktestBrowserViewModel.cs" />
     <Compile Include="Backtest\ViewModels\BacktestLauncherViewModel.cs" />
     <Compile Include="Backtest\ViewModels\BacktestModuleViewModel.cs" />
@@ -95,11 +95,12 @@
     <Compile Include="Backtest\Views\BacktestStatusView.xaml.cs">
       <DependentUpon>BacktestStatusView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Common\Models\DarkLightFill.cs" />
-    <Compile Include="Common\Models\DarkLightOrder.cs" />
-    <Compile Include="Common\Models\DarkLightPosition.cs" />
-    <Compile Include="Common\Models\DarkLightTick.cs" />
+    <Compile Include="Customizations\DarkLightFill.cs" />
+    <Compile Include="Customizations\DarkLightOrder.cs" />
+    <Compile Include="Customizations\DarkLightPosition.cs" />
+    <Compile Include="Customizations\DarkLightTick.cs" />
     <Compile Include="Common\ViewModels\DefaultViewModel.cs" />
+    <Compile Include="Common\ViewModels\ErrorViewModel.cs" />
     <Compile Include="Common\ViewModels\EventPublisherViewModel.cs" />
     <Compile Include="Common\ViewModels\FillsViewModel.cs" />
     <Compile Include="Common\ViewModels\IndicatorsViewModel.cs" />
@@ -167,7 +168,13 @@
     <Compile Include="Common\Views\ResponseConfigurationView.xaml.cs">
       <DependentUpon>ResponseConfigurationView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\Views\ErrorView.xaml.cs">
+      <DependentUpon>ErrorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Customizations\DarkLightResponse.cs" />
+    <Compile Include="Customizations\DarkLightTradeScreen.cs" />
+    <Compile Include="Enums\ServiceAction.cs" />
+    <Compile Include="Enums\TradeMode.cs" />
     <Compile Include="Enums\EventType.cs" />
     <Compile Include="Enums\NavigationGroup.cs" />
     <Compile Include="Events\BacktestRequestEvent.cs" />
@@ -176,6 +183,7 @@
     <Compile Include="Enums\StatusType.cs" />
     <Compile Include="Events\TradeEvent.cs" />
     <Compile Include="Enums\TradeEventType.cs" />
+    <Compile Include="Events\TradeEventFilter.cs" />
     <Compile Include="Infrastructure\Adapters\IAdapter.cs" />
     <Compile Include="Infrastructure\Adapters\IHistDataAdapter.cs" />
     <Compile Include="Infrastructure\Adapters\IMediatorAdapter.cs" />
@@ -321,6 +329,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Common\Views\ResponseConfigurationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Common\Views\ErrorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

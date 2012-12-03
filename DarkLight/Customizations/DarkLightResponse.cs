@@ -8,7 +8,6 @@ namespace DarkLight.Customizations
 {
     public class DarkLightResponse
     {
-        
-
+        public string Key;
     }
 }

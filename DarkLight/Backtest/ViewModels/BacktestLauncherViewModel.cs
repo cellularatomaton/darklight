@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Media;
 using Caliburn.Micro;
 using DarkLight.Customizations;
+using DarkLight.Enums;
 using DarkLight.Events;
 using System.Collections;
 using DarkLight.Infrastructure;
@@ -12,6 +13,7 @@ using DarkLight.Interfaces;
 using DarkLight.Services;
 using DarkLight.Customizations;
 using DarkLight.Backtest.Models;
+using DarkLight.Utilities;
 
 namespace DarkLight.Backtest.ViewModels
 {
@@ -98,16 +100,18 @@ namespace DarkLight.Backtest.ViewModels
 
         public void LaunchBacktest()
         {
-            var viewModel = IoC.Get<BacktestStatusViewModel>();          
-            viewModel.Initialize("Momentum", 4);
+            var viewModel = IoC.Get<BacktestStatusViewModel>();
+            var backtestGroup = MockUtilities.GenerateBacktestGroupRecords(1).First();
+            viewModel.Initialize(backtestGroup, 4);
 
-            IoC.Get<IWindowManager>().ShowWindow(viewModel);
+            IoC.Get<IWindowManager>().ShowWindow(viewModel);            
 
             var requestEvent = new BacktestRequestEvent();
-            requestEvent.Response = new DarkLightResponse();
+            requestEvent.ActionType = ServiceAction.Run;        
+            requestEvent.Response = new DarkLightResponse();           
+             requestEvent.Response.Key = backtestGroup.GUID;
             requestEvent.HistDataService = IoC.Get<IHistDataService>();
-            IoC.Get<IMediator>().Broadcast(requestEvent);
-            //IoC.Get<IBacktestService>().RunBackTest(histDataService, response);
+            IoC.Get<IMediator>().Broadcast(requestEvent);            
         }
 
         #endregion

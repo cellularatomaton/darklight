@@ -9,7 +9,7 @@ using DarkLight.Utilities;
 
 namespace DarkLight.Common.ViewModels
 {
-    public class TickDataViewModel : DarkLightScreen
+    public class TickDataViewModel : DarkLightTradeScreen
     {
         #region Properties
 
@@ -73,6 +73,12 @@ namespace DarkLight.Common.ViewModels
             }
 
             TickView = CollectionViewSource.GetDefaultView(Ticks);
+            base.Initialize(linkedNavigationEvent);
+        }
+
+        protected override void AddTrade(TradeEvent tradeEvent)
+        {
+            Ticks.Add(tradeEvent.Tick);
         }
 
         #endregion

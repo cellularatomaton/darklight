@@ -8,7 +8,7 @@ namespace DarkLight.Repositories
     public interface IBacktestRepository
     {
         List<BacktestGroupRecord> GetBacktestGroupRecords(string query);
-        List<BacktestRecord> GetBacktestRecords(string backtestGroup, string query);
+        List<ResponseSessionRecord> GetBacktestRecords(string backtestGroup, string query);
 
         List<DarkLightFill> GetBacktestFills(string backtestID);
         List<string> GetBacktestMessages(string backtestID);

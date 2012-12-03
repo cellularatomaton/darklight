@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Windows.Data;
 using Caliburn.Micro;
 using DarkLight.Backtest.Models;
@@ -7,11 +8,12 @@ using DarkLight.Customizations;
 using DarkLight.Events;
 using DarkLight.Repositories;
 using DarkLight.Common.Models;
+using DarkLight.Services;
 using DarkLight.Utilities;
 
 namespace DarkLight.Common.ViewModels
 {
-    public class FillsViewModel : DarkLightScreen
+    public class FillsViewModel : DarkLightTradeScreen
     {
         #region Properties
 
@@ -44,7 +46,7 @@ namespace DarkLight.Common.ViewModels
 
         #region Public Methods
 
-        public void AddFill()
+        public void AddFill(DarkLightFill fill)
         {
             Fills.Add(MockUtilities.GenerateFills("backtestidToImplement", 1)[0]);
         }
@@ -75,6 +77,12 @@ namespace DarkLight.Common.ViewModels
             }
 
             FillView = CollectionViewSource.GetDefaultView(Fills);
+            base.Initialize(linkedNavigationEvent);
+        }
+
+        protected override void AddTrade(TradeEvent tradeEvent)
+        {
+            Fills.Add(tradeEvent.Fill);
         }
 
         #endregion

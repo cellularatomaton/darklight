@@ -57,7 +57,7 @@ namespace DarkLight
             builder.RegisterType<DefaultViewModelService>().As<IViewModelService>();
             builder.RegisterType<DarkLightWindowManager>().As<IWindowManager>();
             builder.RegisterType<MockBacktestRepository>().As<IBacktestRepository>();
-            builder.RegisterType<MockBacktestService>().As<IBacktestService>();
+            builder.RegisterType<MockBacktestService>().As<IBacktestService>().SingleInstance();
             builder.RegisterType<MockHistDataService>().As<IHistDataService>();
             builder.RegisterType<Mediator>().As<IMediator>().SingleInstance();
             builder.RegisterType<ServiceBusLocal>().As<IMediatorAdapter,IBacktestAdapter>().SingleInstance();
@@ -94,6 +94,7 @@ namespace DarkLight
             builder.Register(c => new ParametricRangeViewModel());
             builder.Register(c => new TemporalRangeViewModel());
             builder.Register(c => new BacktestStatusViewModel());
+            builder.Register(c => new ErrorViewModel());
             builder.Register(c => new DefaultViewModel());
 
             // Context Menu:

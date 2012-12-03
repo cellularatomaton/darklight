@@ -121,6 +121,7 @@ namespace DarkLight
             }
             else if(linkedNavigationEvent.NavigationAction == NavigationAction.NewWindow)
             {
+                _viewModel.Initialize(linkedNavigationEvent);
                 IoC.Get<IWindowManager>().ShowWindow(_viewModel);
             }
         }

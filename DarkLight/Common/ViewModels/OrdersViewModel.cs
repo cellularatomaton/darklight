@@ -9,7 +9,7 @@ using DarkLight.Utilities;
 
 namespace DarkLight.Common.ViewModels
 {
-    public class OrdersViewModel : DarkLightScreen
+    public class OrdersViewModel : DarkLightTradeScreen
     {
         #region Properties
 
@@ -73,6 +73,12 @@ namespace DarkLight.Common.ViewModels
             }
 
             OrderView = CollectionViewSource.GetDefaultView(Orders);
+            base.Initialize(linkedNavigationEvent);
+        }
+
+        protected override void AddTrade(TradeEvent tradeEvent)
+        {
+            Orders.Add(tradeEvent.Order);
         }
 
         #endregion

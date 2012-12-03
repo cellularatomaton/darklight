@@ -11,5 +11,8 @@ namespace DarkLight.Infrastructure
     {
         //Func<IHistDataService, DarkLightResponse, string> OnRunBacktestString { get; set; }
         Action<IHistDataService, DarkLightResponse> OnRunBacktest { get; set; }
+        Action<string> OnPauseBacktest { get; set; }
+        Action<string> OnResumeBacktest { get; set; }
+        Action<string> OnCancelBacktest { get; set; }
     }
 }

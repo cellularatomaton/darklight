@@ -9,8 +9,9 @@ namespace DarkLight.Events
     public class StatusEvent : DarkLightEvent
     {
         public StatusType StatusType { get; set; }
-        public string Message { get; set; }
         public BacktestProgressModel[] ProgressModels { get; set; }
+        public int NumBacktestsComplete { get; set; }
+        public int NumBacktests { get; set; }
 
         public StatusEvent()
         {

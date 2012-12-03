@@ -12,6 +12,7 @@ namespace DarkLight.Events
         public Color ColorGroup { get; set; }
         public NavigationDestination Destination { get; set; }
         public NavigationGroup Group { get; set; }
+        public string Message { get; set; }
 
         public LinkedNavigationEvent()
         {
