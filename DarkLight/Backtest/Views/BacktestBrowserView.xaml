@@ -46,11 +46,8 @@
         <ListView x:Name="BacktestGroupView" Margin="10,5,10,5" Height="150">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding ResponseType}">
-                        <GridViewColumnHeader Content="Response Type" cal:Message.Attach="SortBacktestGroup('ResponseType')" />
-                    </GridViewColumn>
-                    <GridViewColumn Width="350" DisplayMemberBinding="{Binding ParameterSpace}">
-                        <GridViewColumnHeader Content="Parameter Space" cal:Message.Attach="SortBacktestGroup('ParameterSpace')" />
+                    <GridViewColumn Width="500" DisplayMemberBinding="{Binding GUID}">
+                        <GridViewColumnHeader Content="Description" cal:Message.Attach="SortBacktestGroup('GUID')" />
                     </GridViewColumn>
                     <GridViewColumn Width="150" DisplayMemberBinding="{Binding CreateDate}">
                         <GridViewColumnHeader Content="CreateDate" cal:Message.Attach="SortBacktestGroup('CreateDate')" />
@@ -81,10 +78,10 @@
         <ListView x:Name="BacktestView" Margin="10,5,10,5" Height="150">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="350" DisplayMemberBinding="{Binding Parameters}">
-                        <GridViewColumnHeader Content="Parameters" cal:Message.Attach="SortBacktest('GUID')" />
+                    <GridViewColumn Width="350" DisplayMemberBinding="{Binding GUID}">
+                        <GridViewColumnHeader Content="Description" cal:Message.Attach="SortBacktest('GUID')" />
                     </GridViewColumn>
-                    <GridViewColumn Width="150" DisplayMemberBinding="{Binding TradeDate}">
+                    <GridViewColumn Width="150" DisplayMemberBinding="{Binding CreateDate}">
                         <GridViewColumnHeader Content="CreateDate" cal:Message.Attach="SortBacktest('CreateDate')" />
                     </GridViewColumn>
                     <GridViewColumn Width="120" DisplayMemberBinding="{Binding NumTrades}">

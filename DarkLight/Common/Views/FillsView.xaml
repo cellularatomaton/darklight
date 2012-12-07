@@ -19,12 +19,12 @@
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="300"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Mode:" HorizontalAlignment="Right" FontSize="12"/>
-            <TextBlock Grid.Row="0" Grid.Column="2" x:Name="Mode" HorizontalAlignment="Left" FontSize="12"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Response:" HorizontalAlignment="Right" FontSize="12"/>
-            <TextBlock Grid.Row="1" Grid.Column="2" x:Name="ResponseType" HorizontalAlignment="Left" FontSize="12"/>
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="Parameters:" HorizontalAlignment="Right" FontSize="12"/>
-            <TextBlock Grid.Row="2" Grid.Column="2" x:Name="Parameters" HorizontalAlignment="Left" FontSize="12"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Response:" HorizontalAlignment="Right" FontSize="12"/>
+            <TextBlock Grid.Row="0" Grid.Column="2" x:Name="ResponseType" HorizontalAlignment="Left" FontSize="12"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Parameters:" HorizontalAlignment="Right" FontSize="12"/>
+            <TextBlock Grid.Row="1" Grid.Column="2" x:Name="Parameters" HorizontalAlignment="Left" FontSize="12"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="TradeDate:" HorizontalAlignment="Right" FontSize="12"/>
+            <TextBlock Grid.Row="2" Grid.Column="2" x:Name="TradeDate" HorizontalAlignment="Left" FontSize="12"/>            
         </Grid>
         <ListView x:Name="FillView" Height="300">
             <ListView.View>

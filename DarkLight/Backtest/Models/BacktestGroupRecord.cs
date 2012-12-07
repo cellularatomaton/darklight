@@ -8,11 +8,9 @@ namespace DarkLight.Backtest.Models
     public class BacktestGroupRecord
     {
         public string GUID { get; set; }
-        public string ResponseType { get; set; }        
-        public string ParameterSpace { get; set; }
         public DateTime CreateDate { get; set; }
         public int NumBacktests { get; set; }
         public double MaxPNL { get; set; }
-        public double MinPNL { get; set; }    
+        public double MinPNL { get; set; }
     }
 }

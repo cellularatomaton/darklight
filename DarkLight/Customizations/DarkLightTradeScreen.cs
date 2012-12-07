@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using Caliburn.Micro;
 using DarkLight.Enums;
 using DarkLight.Events;
 using DarkLight.Services;
@@ -8,10 +9,11 @@ namespace DarkLight.Customizations
 {
     public class DarkLightTradeScreen : DarkLightScreen, IHandle<TradeEvent>
     {
-        public string Key { get; set; }  //= "teststrategy";
-        public TradeMode Mode { get; set; }
+        public string Key { get; set; }  
+        //public TradeMode Mode { get; set; }
         public string ResponseType { get; set; }
         public string Parameters { get; set; }
+        public string TradeDate { get; set; }
 
         public DarkLightTradeScreen()
         {
@@ -32,13 +34,11 @@ namespace DarkLight.Customizations
         }
 
         public override void Initialize(LinkedNavigationEvent linkedNavigationEvent)
-        {           
-            //TODO refactor
-            var record = MockUtilities.ParseSessionGUID(linkedNavigationEvent.Key);            
-            
-            Mode = record.Mode;
-            ResponseType = record.ResponseType;
-            Parameters = record.Parameters;
+        {                       
+            Key = linkedNavigationEvent.Key;
+            ResponseType = MockUtilities.GetResponseFromGUID(Key);
+            Parameters = MockUtilities.GetParametersFromGUID(Key);
+            TradeDate = MockUtilities.GetTradeDateFromGUID(Key);
         }
 
     }

@@ -157,10 +157,10 @@ namespace DarkLight.Common.ViewModels
                 IoC.Get<IMediator>().Broadcast(new TradeEvent
                 {
                     Key = TestKey,
-                    Fill = MockUtilities.GenerateFills("backtestidToImplement", 1)[0],
-                    Order = MockUtilities.GenerateOrders("backtestidToImplement", 1)[0],
-                    Position = MockUtilities.GeneratePositions("backtestidToImplement", 1)[0],
-                    Tick = MockUtilities.GenerateTicks("backtestidToImplement", 1)[0],
+                    Fill = MockUtilities.GenerateFills(TestKey, 1)[0],
+                    Order = MockUtilities.GenerateOrders(TestKey, 1)[0],
+                    Position = MockUtilities.GeneratePositions(TestKey, 1)[0],
+                    Tick = MockUtilities.GenerateTicks(TestKey, 1)[0],
                 });
             }
         }
