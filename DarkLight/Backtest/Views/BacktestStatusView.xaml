@@ -7,7 +7,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel MinWidth="400">
         <Label x:Name="BacktestStatus"  Width="200" HorizontalAlignment="Left" Margin="0,0,0,0" FontSize="16" FontWeight="Bold"/>
-        <Label x:Name="BacktestName"  Width="400" HorizontalAlignment="Left" Margin="0,0,0,0" />
+        <Label x:Name="BacktestName"  Width="500" HorizontalAlignment="Left" Margin="0,0,0,0" />
         <ListView x:Name="ProgressModels">
             <ListView.View>
                 <GridView ColumnHeaderContainerStyle="{StaticResource noHeaderStyle}">

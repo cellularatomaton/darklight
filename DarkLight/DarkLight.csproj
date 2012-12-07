@@ -76,8 +76,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Backtest\Models\BacktestGroupDefinition.cs" />
     <Compile Include="Backtest\Models\BacktestGroupRecord.cs" />
     <Compile Include="Backtest\Models\BacktestProgressModel.cs" />
+    <Compile Include="Backtest\Models\ConfigurationSpace.cs" />
+    <Compile Include="Backtest\Models\ConfigurationVariableSpace.cs" />
+    <Compile Include="Common\Models\ResponseSessionDefinition.cs" />
     <Compile Include="Common\Models\ResponseSessionRecord.cs" />
     <Compile Include="Backtest\ViewModels\BacktestBrowserViewModel.cs" />
     <Compile Include="Backtest\ViewModels\BacktestLauncherViewModel.cs" />
@@ -211,6 +215,7 @@
     <Compile Include="Repositories\MockBacktestRepository.cs" />
     <Compile Include="Services\MockBacktestService.cs" />
     <Compile Include="Services\MockHistDataService.cs" />
+    <Compile Include="Utilities\CommonFunctions.cs" />
     <Compile Include="Utilities\MockUtilities.cs" />
     <Compile Include="Utilities\NLogLogger.cs" />
     <Compile Include="Customizations\DarkLightScreen.cs" />

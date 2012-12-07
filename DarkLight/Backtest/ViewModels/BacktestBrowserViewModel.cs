@@ -147,7 +147,7 @@ namespace DarkLight.Backtest.ViewModels
             }
             else
             {
-                var backtests = IoC.Get<IBacktestRepository>().GetBacktestRecords(SelectedBacktestGroupView.ResponseType, query);
+                var backtests = IoC.Get<IBacktestRepository>().GetBacktestRecords(SelectedBacktestGroupView, query);
                 Backtests.Clear();
                 foreach (var backtest in backtests)
                 {

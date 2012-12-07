@@ -18,10 +18,19 @@ namespace DarkLight.Repositories
             return MockUtilities.GenerateBacktestGroupRecords(20);
         }
 
-        public List<ResponseSessionRecord> GetBacktestRecords(string backtestGroup, string query)
+        public List<ResponseSessionRecord> GetBacktestRecords(BacktestGroupRecord backtestGroup, string query)
         {
             //TODO: implement Mongo query
-            return MockUtilities.GenerateResponseSessionRecords(TradeMode.Backtest, 20);
+            var filteredList = new List<ResponseSessionRecord>();
+            var completeList = MockUtilities.GenerateResponseSessionRecords(backtestGroup.GUID);
+            foreach (var record in completeList)
+            {
+                if (record.GUID.Contains(query))
+                    filteredList.Add(record);
+            }
+
+            return filteredList;
+
         }
 
         public List<DarkLightFill> GetBacktestFills(string backtestID)
