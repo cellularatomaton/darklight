@@ -8,6 +8,8 @@ using DarkLight.Enums;
 using DarkLight.Events;
 using DarkLight.Infrastructure.Adapters;
 using DarkLight.Services;
+using com.espertech.esper.client;
+using EventType = DarkLight.Events.EventType;
 
 namespace DarkLight.Infrastructure.ServiceHubs
 {
@@ -56,5 +58,15 @@ namespace DarkLight.Infrastructure.ServiceHubs
                     break;
             }
         }
+
+        public void PublishCEP(object nesperEvent)
+        {
+
+        }
+
+        public void SubscribeCEP(EventType eventType, UpdateEventHandler handler)
+        {
+            
+        } 
     }
 }

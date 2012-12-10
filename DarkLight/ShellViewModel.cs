@@ -6,10 +6,12 @@ using DarkLight.Common.ViewModels;
 using DarkLight.Customizations;
 using DarkLight.Events;
 using DarkLight.Infrastructure;
+using DarkLight.Infrastructure.WPFClient;
 using DarkLight.Interfaces;
 using DarkLight.LiveTrading.ViewModels;
 using DarkLight.Optimization.ViewModels;
 using DarkLight.Services;
+using com.espertech.esper.client;
 
 namespace DarkLight 
 {
@@ -53,7 +55,12 @@ namespace DarkLight
         {
             IsBacktestActive = true;
 
-            IoC.Get<IEventAggregator>().Subscribe(this);
+            var mediator = IoC.Get<IMediator>();
+            if (mediator.GetType() == typeof(Mediator))            
+                IoC.Get<IEventAggregator>().Subscribe(this);
+            else if (mediator.GetType() == typeof(MediatorCEP))
+                mediator.Subscribe(Events.EventType.LinkedNavigation, UpdateFromCEP);
+            
             NavigateToBacktestModule();
         }
 
@@ -128,6 +135,11 @@ namespace DarkLight
 
         #endregion
 
+        public void UpdateFromCEP(object sender, UpdateEventArgs e)
+        {
+            var linkedNavigationEvent = (LinkedNavigationEvent)e.NewEvents[0].Underlying;
+            Handle(linkedNavigationEvent);
+        }
         
     }
 }

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Caliburn.Micro;
 using DarkLight.Events;
 using DarkLight.Infrastructure.Adapters;
+using com.espertech.esper.client;
+using EventType = DarkLight.Events.EventType;
 
 
 namespace DarkLight.Infrastructure
@@ -96,17 +98,11 @@ namespace DarkLight.Infrastructure
             }
         }
 
-        #endregion
-
-        /*
-        public void Register()
-        {            
-        }
-
-        public void Unregister()
+        public void Subscribe(EventType eventType, UpdateEventHandler handler)
         {
             
         }
-        */ 
+
+        #endregion
     }
 }
