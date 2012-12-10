@@ -50,6 +50,15 @@
     <Reference Include="Caliburn.Micro.Autofac">
       <HintPath>..\packages\Caliburn.Micro.Autofac.1.4.1\lib\net40\Caliburn.Micro.Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="CGLib">
+      <HintPath>..\Lib\CGLib.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\Lib\log4net_2.11\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NEsper">
+      <HintPath>..\Lib\NEsper.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
@@ -192,12 +201,14 @@
     <Compile Include="Infrastructure\Adapters\IHistDataAdapter.cs" />
     <Compile Include="Infrastructure\Adapters\IMediatorAdapter.cs" />
     <Compile Include="Infrastructure\Adapters\IOptimizationAdapter.cs" />
+    <Compile Include="Infrastructure\ServiceBus\ServiceBusLocalCEP.cs" />
     <Compile Include="Infrastructure\ServiceBus\ServiceBusZeroMQ.cs" />
     <Compile Include="Infrastructure\ServiceBus\ServiceBusWCF.cs" />
     <Compile Include="Infrastructure\WPFClient\BlockingCircularBuffer.cs" />
     <Compile Include="Infrastructure\Adapters\IBacktestAdapter.cs" />
     <Compile Include="Infrastructure\WPFClient\IMediator.cs" />
     <Compile Include="Infrastructure\WPFClient\Mediator.cs" />
+    <Compile Include="Infrastructure\WPFClient\MediatorCEP.cs" />
     <Compile Include="Infrastructure\WPFClient\PeriodicTask.cs" />
     <Compile Include="Infrastructure\WPFClient\PriorityTaskScheduler.cs" />
     <Compile Include="Infrastructure\WPFClient\SporadicTask.cs" />

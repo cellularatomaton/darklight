@@ -12,6 +12,7 @@ using DarkLight.Backtest.ViewModels;
 using DarkLight.Infrastructure;
 using DarkLight.Infrastructure.Adapters;
 using DarkLight.Infrastructure.ServiceHubs;
+using DarkLight.Infrastructure.WPFClient;
 using DarkLight.Repositories;
 using DarkLight.Utilities;
 using DarkLight.Common.ViewModels;
@@ -61,6 +62,8 @@ namespace DarkLight
             builder.RegisterType<MockHistDataService>().As<IHistDataService>();
             builder.RegisterType<Mediator>().As<IMediator>().SingleInstance();
             builder.RegisterType<ServiceBusLocal>().As<IMediatorAdapter,IBacktestAdapter>().SingleInstance();
+            //builder.RegisterType<MediatorCEP>().As<IMediator>().SingleInstance();
+            //builder.RegisterType<ServiceBusLocalCEP>().As<IMediatorAdapter, IBacktestAdapter>().SingleInstance();
             
             // Register Service Implementations:
             builder.Register(c => new DefaultColorService()).SingleInstance();

@@ -9,11 +9,13 @@ using DarkLight.Enums;
 using DarkLight.Events;
 using System.Collections;
 using DarkLight.Infrastructure;
+using DarkLight.Infrastructure.WPFClient;
 using DarkLight.Interfaces;
 using DarkLight.Services;
 using DarkLight.Backtest.Models;
 using System.ComponentModel;
 using System.Windows.Data;
+using com.espertech.esper.client;
 
 namespace DarkLight.Backtest.ViewModels
 {
@@ -88,7 +90,11 @@ namespace DarkLight.Backtest.ViewModels
 
         public BacktestStatusViewModel()
         {
-
+            var mediator = IoC.Get<IMediator>();
+            if (mediator.GetType() == typeof(Mediator))
+                IoC.Get<IEventAggregator>().Subscribe(this);
+            else if (mediator.GetType() == typeof(MediatorCEP))
+                mediator.Subscribe(Events.EventType.Status, UpdateFromCEP);
         }
 
         #endregion
@@ -107,8 +113,6 @@ namespace DarkLight.Backtest.ViewModels
             }
 
             BacktestStatus = "Initializing Backtest:";
-
-            IoC.Get<IEventAggregator>().Subscribe(this);
         }
 
         public void PauseBacktest()
@@ -163,5 +167,10 @@ namespace DarkLight.Backtest.ViewModels
 
         #endregion
 
+        public void UpdateFromCEP(object sender, UpdateEventArgs e)
+        {
+            var statusEvent = (StatusEvent)e.NewEvents[0].Underlying;
+            Handle(statusEvent);
+        }
     }
 }
