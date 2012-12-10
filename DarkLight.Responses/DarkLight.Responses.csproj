@@ -36,6 +36,12 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Configuration">
+      <HintPath>..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.Configuration.dll</HintPath>
+    </Reference>
     <Reference Include="bbv.Common">
       <HintPath>..\Lib\bbv.Common.dll</HintPath>
     </Reference>
@@ -45,6 +51,12 @@
     <Reference Include="bbv.Common.StateMachine">
       <HintPath>..\Lib\bbv.Common.StateMachine.dll</HintPath>
     </Reference>
+    <Reference Include="Caliburn.Micro">
+      <HintPath>..\packages\Caliburn.Micro.1.3.1\lib\net40\Caliburn.Micro.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Autofac">
+      <HintPath>..\packages\Caliburn.Micro.Autofac.1.4.1\lib\net40\Caliburn.Micro.Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\Lib\log4net.dll</HintPath>
     </Reference>
@@ -52,9 +64,13 @@
       <HintPath>..\Lib\NEsper.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity">
+      <HintPath>..\packages\Caliburn.Micro.1.3.1\lib\net40\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -93,11 +109,15 @@
       <Name>DarkLight.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>SET TARGET="C:\Program Files (x86)\TradeLink"
+      <!-- <PostBuildEvent>SET TARGET="C:\Program Files (x86)\TradeLink"
 SET BIN_LIST=(Incepto.Common Incepto.Responses bbv.Common.AsyncModule bbv.Common bbv.Common.StateMachine log4net)
 for %25%25i in %25BIN_LIST%25 do xcopy "$(TargetDir)%25%25i.dll" %25TARGET%25 /e /r /y /i</PostBuildEvent>
+	-->
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
