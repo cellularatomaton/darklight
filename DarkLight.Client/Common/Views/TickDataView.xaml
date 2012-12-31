@@ -1,0 +1,71 @@
+<UserControl x:Class="DarkLight.Client.Common.Views.TickDataView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <StackPanel MinWidth="400">
+        <Grid Margin="0,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="20"/>                
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Response:" HorizontalAlignment="Right" FontSize="12"/>
+            <TextBlock Grid.Row="0" Grid.Column="2" x:Name="ResponseType" HorizontalAlignment="Left" FontSize="12"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Parameters:" HorizontalAlignment="Right" FontSize="12"/>
+            <TextBlock Grid.Row="1" Grid.Column="2" x:Name="Parameters" HorizontalAlignment="Left" FontSize="12"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="TradeDate:" HorizontalAlignment="Right" FontSize="12"/>
+            <TextBlock Grid.Row="2" Grid.Column="2" x:Name="TradeDate" HorizontalAlignment="Left" FontSize="12"/>
+        </Grid>
+        <ListView x:Name="TickView" Height="300">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Time}">
+                        <GridViewColumnHeader Content="Time" cal:Message.Attach="[Event Click] = [Action Sort('Time')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Sym}">
+                        <GridViewColumnHeader Content="Sym" cal:Message.Attach="[Event Click] = [Action Sort('Sym')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Trade}">
+                        <GridViewColumnHeader Content="Trade" cal:Message.Attach="[Event Click] = [Action Sort('Trade')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding TSize}">
+                        <GridViewColumnHeader Content="TSize" cal:Message.Attach="[Event Click] = [Action Sort('TSize')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Bid}">
+                        <GridViewColumnHeader Content="Bid" cal:Message.Attach="[Event Click] = [Action Sort('Bid')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Ask}">
+                        <GridViewColumnHeader Content="Ask" cal:Message.Attach="[Event Click] = [Action Sort('Ask')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding BSize}">
+                        <GridViewColumnHeader Content="BSize" cal:Message.Attach="[Event Click] = [Action Sort('BSize')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding ASize}">
+                        <GridViewColumnHeader Content="ASize" cal:Message.Attach="[Event Click] = [Action Sort('ASize')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding BSize}">
+                        <GridViewColumnHeader Content="BSize" cal:Message.Attach="[Event Click] = [Action Sort('BSize')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding TExch}">
+                        <GridViewColumnHeader Content="TExch" cal:Message.Attach="[Event Click] = [Action Sort('TExch')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding BidExch}">
+                        <GridViewColumnHeader Content="BidExch" cal:Message.Attach="[Event Click] = [Action Sort('BidExch')]" />
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding AskExch}">
+                        <GridViewColumnHeader Content="AskExch" cal:Message.Attach="[Event Click] = [Action Sort('AskExch')]" />
+                    </GridViewColumn>                                      
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </StackPanel>
+</UserControl>

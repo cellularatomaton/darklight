@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="DarkLight.Client.Backtest.Views.BacktestStatusView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <StackPanel MinWidth="400">
+        <Label x:Name="BacktestStatus"  Width="200" HorizontalAlignment="Left" Margin="0,0,0,0" FontSize="16" FontWeight="Bold"/>
+        <Label x:Name="BacktestName"  Width="500" HorizontalAlignment="Left" Margin="0,0,0,0" />
+        <ListView x:Name="ProgressModels">
+            <ListView.View>
+                <GridView ColumnHeaderContainerStyle="{StaticResource noHeaderStyle}">
+                    <GridViewColumn Width="50" DisplayMemberBinding="{Binding Slot}"/>
+                    <GridViewColumn Width="350" DisplayMemberBinding="{Binding BacktestID}" />
+                    <GridViewColumn Width="300" >
+                        <GridViewColumn.CellTemplate> 
+                            <DataTemplate>
+                                <ProgressBar  Maximum="1" Minimum="0" Height="25" Width="200" Value="{Binding ProgressValue}"/>
+                           </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>                   
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Grid Height="40">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="410"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" x:Name="TotalProgressString" HorizontalAlignment="Right" Margin="0,5,0,0" />
+            <ProgressBar Grid.Column="1" Maximum="1" Minimum="0" HorizontalAlignment="Left" Height="25" Width="200" Value="{Binding TotalProgressValue}"/>
+        </Grid>
+        <Grid Height="40">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="410"/>
+                <ColumnDefinition Width="95"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="95"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" x:Name="PauseBacktest" Content="Pause" Margin="0,0,0,0" />
+            <Button Grid.Column="3" x:Name="ResumeBacktest" Content="Resume" Margin="0,0,0,0" />
+        </Grid>        
+    </StackPanel>
+</UserControl>
