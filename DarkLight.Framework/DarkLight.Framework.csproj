@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2F9F25FF-4E96-44E9-91DF-15299A7A98B7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DarkLight.Framework</RootNamespace>
+    <AssemblyName>DarkLight.Framework</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Configuration">
+      <HintPath>..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro, Version=1.4.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Caliburn.Micro.1.3.1\lib\net40\Caliburn.Micro.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Autofac">
+      <HintPath>..\packages\Caliburn.Micro.Autofac.1.4.1\lib\net40\Caliburn.Micro.Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="CGLib">
+      <HintPath>..\Lib\CGLib.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\Lib\log4net_2.11\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NEsper">
+      <HintPath>..\Lib\NEsper.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.1.4\lib\net40\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\Common\DarkLightFill.cs" />
+    <Compile Include="Data\Common\DarkLightOrder.cs" />
+    <Compile Include="Data\Common\DarkLightPosition.cs" />
+    <Compile Include="Data\Common\DarkLightResponse.cs" />
+    <Compile Include="Data\Common\DarkLightTick.cs" />
+    <Compile Include="Data\Backtest\BacktestGroupDefinition.cs" />
+    <Compile Include="Data\Backtest\BacktestGroupRecord.cs" />
+    <Compile Include="Data\Backtest\BacktestProgressModel.cs" />
+    <Compile Include="Data\Backtest\ConfigurationSpace.cs" />
+    <Compile Include="Data\Backtest\ConfigurationVariableSpace.cs" />
+    <Compile Include="Data\Common\ResponseSessionDefinition.cs" />
+    <Compile Include="Data\Common\ResponseSessionRecord.cs" />
+    <Compile Include="Enums\EventType.cs" />
+    <Compile Include="Enums\NavigationAction.cs" />
+    <Compile Include="Enums\NavigationDestination.cs" />
+    <Compile Include="Enums\NavigationGroup.cs" />
+    <Compile Include="Enums\ServiceAction.cs" />
+    <Compile Include="Enums\StatusType.cs" />
+    <Compile Include="Enums\TradeEventType.cs" />
+    <Compile Include="Enums\TradeMode.cs" />
+    <Compile Include="Events\BacktestRequestEvent.cs" />
+    <Compile Include="Events\DarkLightEvent.cs" />
+    <Compile Include="Events\LinkedNavigationEvent.cs" />
+    <Compile Include="Events\StatusEvent.cs" />
+    <Compile Include="Events\TradeEvent.cs" />
+    <Compile Include="Interfaces\Adapters\IAdapter.cs" />
+    <Compile Include="Interfaces\Adapters\IBacktestAdapter.cs" />
+    <Compile Include="Interfaces\Adapters\IHistDataAdapter.cs" />
+    <Compile Include="Interfaces\Adapters\IMediatorAdapter.cs" />
+    <Compile Include="Interfaces\Adapters\IOptimizationAdapter.cs" />
+    <Compile Include="Interfaces\CEP\IDarkLightEventAggregator.cs" />
+    <Compile Include="Interfaces\Common\IMediator.cs" />
+    <Compile Include="Interfaces\Repository\IBacktestRepository.cs" />
+    <Compile Include="Interfaces\Services\IBacktestService.cs" />
+    <Compile Include="Interfaces\Services\IColorService.cs" />
+    <Compile Include="Interfaces\Common\IFilter.cs" />
+    <Compile Include="Interfaces\Services\IFilterService.cs" />
+    <Compile Include="Interfaces\Services\IHistDataService.cs" />
+    <Compile Include="Interfaces\Services\IOptimizationService.cs" />
+    <Compile Include="Interfaces\Services\IResponseService.cs" />
+    <Compile Include="Interfaces\Repository\ITickDataRepository.cs" />
+    <Compile Include="Interfaces\Services\ITickDataService.cs" />
+    <Compile Include="Interfaces\Services\ITradeService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\CommonFunctions.cs" />
+    <Compile Include="Utilities\MockBacktestRepository.cs" />
+    <Compile Include="Utilities\MockBacktestService.cs" />
+    <Compile Include="Utilities\MockHistDataService.cs" />
+    <Compile Include="Utilities\MockUtilities.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
