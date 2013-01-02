@@ -47,21 +47,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventBroker\EventBrokerLocal.cs" />
     <Compile Include="Filter\LinkedEventFilter.cs" />
     <Compile Include="Filter\TradeEventFilter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceBus\ServiceBusLocal.cs" />
-    <Compile Include="ServiceBus\ServiceBusLocalCEP.cs" />
-    <Compile Include="ServiceBus\ServiceBusWCF.cs" />
-    <Compile Include="ServiceBus\ServiceBusZeroMQ.cs" />
-    <Compile Include="Scheduler\BlockingCircularBuffer.cs" />
-    <Compile Include="Mediator\Mediator.cs" />
-    <Compile Include="Mediator\MediatorCEP.cs" />
-    <Compile Include="Scheduler\PeriodicTask.cs" />
-    <Compile Include="Scheduler\PriorityTaskScheduler.cs" />
-    <Compile Include="Scheduler\SporadicTask.cs" />
-    <Compile Include="Scheduler\TaskType.cs" />
+    <Compile Include="Deprecated\ServiceBus\ServiceBusLocal.cs" />
+    <Compile Include="Deprecated\ServiceBus\ServiceBusLocalCEP.cs" />
+    <Compile Include="Deprecated\ServiceBus\ServiceBusWCF.cs" />
+    <Compile Include="Deprecated\ServiceBus\ServiceBusZeroMQ.cs" />
+    <Compile Include="Deprecated\Scheduler\BlockingCircularBuffer.cs" />
+    <Compile Include="Deprecated\Mediator\Mediator.cs" />
+    <Compile Include="Deprecated\Mediator\MediatorCEP.cs" />
+    <Compile Include="Deprecated\Scheduler\PeriodicTask.cs" />
+    <Compile Include="Deprecated\Scheduler\PriorityTaskScheduler.cs" />
+    <Compile Include="Deprecated\Scheduler\SporadicTask.cs" />
+    <Compile Include="Deprecated\Scheduler\TaskType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DarkLight.Framework\DarkLight.Framework.csproj">

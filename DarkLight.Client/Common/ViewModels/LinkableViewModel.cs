@@ -8,6 +8,7 @@ using DarkLight.Client.Customizations;
 using System.Collections;
 using DarkLight.Framework.Enums;
 using DarkLight.Framework.Events;
+using DarkLight.Framework.Interfaces.CEP;
 using DarkLight.Framework.Interfaces.Common;
 using DarkLight.Framework.Interfaces.Services;
 using DarkLight.Infrastructure.Mediator;
@@ -16,7 +17,7 @@ using EventType = DarkLight.Framework.Enums.EventType;
 
 namespace DarkLight.Client.Common.ViewModels
 {
-    public class LinkableViewModel : DarkLightScreen, IHandle<LinkedNavigationEvent>
+    public class LinkableViewModel : DarkLightScreen, DarkLight.Framework.Interfaces.CEP.IHandle<LinkedNavigationEvent>
     {
 
         #region Properties
@@ -72,11 +73,7 @@ namespace DarkLight.Client.Common.ViewModels
             _viewModelService = viewModelService;
             SelectedColorGroup = _colorService.GetDefaultColorGroup();
 
-            var mediator = IoC.Get<IMediator>();
-            if (mediator.GetType() == typeof(Mediator))
-                IoC.Get<IEventAggregator>().Subscribe(this);
-            else if (mediator.GetType() == typeof(MediatorCEP))
-                mediator.Subscribe(EventType.LinkedNavigation, UpdateFromCEP);
+            IoC.Get<IEventBroker>().Subscribe(this);
         }
 
         #endregion
@@ -122,10 +119,5 @@ namespace DarkLight.Client.Common.ViewModels
 
         #endregion
 
-        public void UpdateFromCEP(object sender, UpdateEventArgs e)
-        {
-            var linkedNavigationEvent = (LinkedNavigationEvent)e.NewEvents[0].Underlying;
-            Handle(linkedNavigationEvent);
-        }
     }
 }

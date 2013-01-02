@@ -18,7 +18,7 @@ namespace DarkLight.Infrastructure.Mediator
     { 
         #region Private Members
 
-        IDarkLightEventAggregator _eventAggregator;
+        IEventBroker _eventAggregator;
         IMediatorAdapter _mediatorAdapter;
 
         readonly double _budget = 50;
@@ -33,7 +33,7 @@ namespace DarkLight.Infrastructure.Mediator
 
         #region Constructors
 
-        public Mediator(IMediatorAdapter mediatorAdapter, IDarkLightEventAggregator eventAggregator)
+        public Mediator(IMediatorAdapter mediatorAdapter, IEventBroker eventAggregator)
         {
             _mediatorAdapter = mediatorAdapter;
             _mediatorAdapter.OnBroadcast += Broadcast;

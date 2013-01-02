@@ -7,6 +7,7 @@ using Caliburn.Micro;
 using DarkLight.Client.Customizations;
 using DarkLight.Framework.Enums;
 using DarkLight.Framework.Events;
+using DarkLight.Framework.Interfaces.CEP;
 using DarkLight.Framework.Interfaces.Common;
 using DarkLight.Framework.Interfaces.Services;
 using DarkLight.Framework.Utilities;
@@ -146,7 +147,7 @@ namespace DarkLight.Client.Common.ViewModels
         {
             if (SelectedEventType == EventType.LinkedNavigation)
             {
-                IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
+                IoC.Get<IEventBroker>().Publish(new LinkedNavigationEvent
                                                    {
                                                        NavigationAction = SelectedNavigationAction,
                                                        ColorGroup = SelectedColorGroup,
@@ -156,7 +157,7 @@ namespace DarkLight.Client.Common.ViewModels
             }
             else if (SelectedEventType == EventType.Trade)
             {
-                IoC.Get<IMediator>().Broadcast(new TradeEvent
+                IoC.Get<IEventBroker>().Publish(new TradeEvent
                 {
                     Key = TestKey,
                     Fill = MockUtilities.GenerateFills(TestKey, 1)[0],

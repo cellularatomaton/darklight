@@ -11,29 +11,32 @@ using DarkLight.Framework.Data.Common;
 using DarkLight.Framework.Enums;
 using DarkLight.Framework.Events;
 using DarkLight.Framework.Interfaces.Adapters;
+using DarkLight.Framework.Interfaces.CEP;
 using DarkLight.Framework.Interfaces.Services;
+using com.espertech.esper.client;
 
 namespace DarkLight.Framework.Utilities
 {
-    public class MockBacktestService : IBacktestService
+    public class MockBacktestService : IBacktestService, DarkLight.Framework.Interfaces.CEP.IHandle<BacktestRequestEvent>
     {
         #region Members
 
-        //IMediator _mediator;
         const int numSlots = 4;
-        IBacktestAdapter _backTestAdapter;
+        IEventBroker _broker;
         Dictionary<string, ManualResetEventSlim> _groupDict; 
 
         #endregion
 
-        public MockBacktestService(IBacktestAdapter backTestAdapter)
+        public MockBacktestService(IEventBroker broker)
         {
-            _backTestAdapter = backTestAdapter;          
-            _backTestAdapter.OnRunBacktest += RunBackTest;
-            _backTestAdapter.OnPauseBacktest += PauseBackTest;
-            _backTestAdapter.OnResumeBacktest += ResumeBackTest;
-            _backTestAdapter.OnCancelBacktest += CancelBackTest;
-            _groupDict = new Dictionary<string, ManualResetEventSlim>();
+            _broker = broker;
+            _groupDict = new Dictionary<string, ManualResetEventSlim>();                        
+        }
+
+        public void Initialize()
+        {
+            //TODO: refactor
+            _broker.Subscribe(this);
         }
 
         public void RunBackTest(IHistDataService _histDataService, DarkLightResponse _response)
@@ -53,7 +56,7 @@ namespace DarkLight.Framework.Utilities
 
                 var testList = MockUtilities.GenerateResponseSessionRecords(key);
 
-                _backTestAdapter.Publish(new StatusEvent
+                _broker.Publish(new StatusEvent
                 {
                     Key = key,
                     StatusType = StatusType.Begin
@@ -94,7 +97,7 @@ namespace DarkLight.Framework.Utilities
                                                     };
                         }
 
-                        _backTestAdapter.Publish(new StatusEvent
+                        _broker.Publish(new StatusEvent
                         {
                             Key = key,
                             StatusType = StatusType.Progress,
@@ -105,7 +108,7 @@ namespace DarkLight.Framework.Utilities
 
                         if (numFinishedSlots == numSlots)
                         {
-                            _backTestAdapter.Publish(new StatusEvent
+                            _broker.Publish(new StatusEvent
                             {
                                 Key = "",
                                 StatusType = StatusType.Complete
@@ -140,5 +143,19 @@ namespace DarkLight.Framework.Utilities
             return new ResponseSessionRecord();
         }
 
+        public void Handle(BacktestRequestEvent request)
+        {
+            if (request.ActionType == ServiceAction.Run)
+                RunBackTest(request.HistDataService, request.Response);
+            else if (request.ActionType == ServiceAction.Pause)
+                PauseBackTest(request.Key);
+            else if (request.ActionType == ServiceAction.Resume)
+                ResumeBackTest(request.Key);
+        }
+
+        public void Update(object sender, UpdateEventArgs e)
+        {
+
+        }
     }
 }

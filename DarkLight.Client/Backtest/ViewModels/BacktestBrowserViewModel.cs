@@ -11,6 +11,7 @@ using DarkLight.Framework.Data.Backtest;
 using DarkLight.Framework.Data.Common;
 using DarkLight.Framework.Enums;
 using DarkLight.Framework.Events;
+using DarkLight.Framework.Interfaces.CEP;
 using DarkLight.Framework.Interfaces.Common;
 using DarkLight.Framework.Interfaces.Repository;
 using DarkLight.Framework.Interfaces.Services;
@@ -69,7 +70,7 @@ namespace DarkLight.Client.Backtest.ViewModels
             set
             {
                 _selectedBacktestView = value;
-                IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
+                IoC.Get<IEventBroker>().Publish(new LinkedNavigationEvent
                 {
                     NavigationAction = NavigationAction.UpdateLinkedWindows,
                     Group = NavigationGroup.Backtest,
@@ -100,7 +101,7 @@ namespace DarkLight.Client.Backtest.ViewModels
 
         public void NewBacktest()
         {
-            IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
+            IoC.Get<IEventBroker>().Publish(new LinkedNavigationEvent
             {
                 NavigationAction = NavigationAction.NewWindow,
                 Destination = NavigationDestination.BacktestLauncher,
@@ -190,7 +191,7 @@ namespace DarkLight.Client.Backtest.ViewModels
         {
             if (SelectedBacktestView != null)
             {
-                IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
+                IoC.Get<IEventBroker>().Publish(new LinkedNavigationEvent
                 {
                     NavigationAction = NavigationAction.NewLinkedWindow,
                     Destination = destination,
@@ -201,7 +202,7 @@ namespace DarkLight.Client.Backtest.ViewModels
             }
             else
             {
-                IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
+                IoC.Get<IEventBroker>().Publish(new LinkedNavigationEvent
                 {
                     NavigationAction = NavigationAction.NewWindow,
                     Destination = NavigationDestination.Error,
@@ -261,7 +262,7 @@ namespace DarkLight.Client.Backtest.ViewModels
 
         void OpenErrorWindow(string errorMessage)
         {
-            IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
+            IoC.Get<IEventBroker>().Publish(new LinkedNavigationEvent
             {
                 NavigationAction = NavigationAction.NewWindow,
                 Destination = NavigationDestination.Error,

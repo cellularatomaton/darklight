@@ -9,6 +9,7 @@ using System.Collections;
 using DarkLight.Framework.Data.Backtest;
 using DarkLight.Framework.Enums;
 using DarkLight.Framework.Events;
+using DarkLight.Framework.Interfaces.CEP;
 using DarkLight.Framework.Interfaces.Common;
 using DarkLight.Infrastructure;
 using DarkLight.Infrastructure.Mediator;
@@ -19,7 +20,7 @@ using EventType = DarkLight.Framework.Enums.EventType;
 
 namespace DarkLight.Client.Backtest.ViewModels
 {
-    public class BacktestStatusViewModel : DarkLightScreen, IHandle<StatusEvent>
+    public class BacktestStatusViewModel : DarkLightScreen, DarkLight.Framework.Interfaces.CEP.IHandle<StatusEvent>
     {
         #region Private Members
 
@@ -90,11 +91,7 @@ namespace DarkLight.Client.Backtest.ViewModels
 
         public BacktestStatusViewModel()
         {
-            var mediator = IoC.Get<IMediator>();
-            if (mediator.GetType() == typeof(Mediator))
-                IoC.Get<IEventAggregator>().Subscribe(this);
-            else if (mediator.GetType() == typeof(MediatorCEP))
-                mediator.Subscribe(EventType.Status, UpdateFromCEP);
+            IoC.Get<IEventBroker>().Subscribe(this);
         }
 
         #endregion
@@ -120,7 +117,7 @@ namespace DarkLight.Client.Backtest.ViewModels
             var requestEvent = new BacktestRequestEvent();
             requestEvent.ActionType = ServiceAction.Pause;
             requestEvent.Key = BacktestName;
-            IoC.Get<IMediator>().Broadcast(requestEvent);
+            IoC.Get<IEventBroker>().Publish(requestEvent);
         }
 
         public void ResumeBacktest()
@@ -128,7 +125,7 @@ namespace DarkLight.Client.Backtest.ViewModels
             var requestEvent = new BacktestRequestEvent();
             requestEvent.ActionType = ServiceAction.Resume;
             requestEvent.Key = BacktestName;
-            IoC.Get<IMediator>().Broadcast(requestEvent);
+            IoC.Get<IEventBroker>().Publish(requestEvent);
         }
 
         #endregion
@@ -167,10 +164,5 @@ namespace DarkLight.Client.Backtest.ViewModels
 
         #endregion
 
-        public void UpdateFromCEP(object sender, UpdateEventArgs e)
-        {
-            var statusEvent = (StatusEvent)e.NewEvents[0].Underlying;
-            Handle(statusEvent);
-        }
     }
 }
