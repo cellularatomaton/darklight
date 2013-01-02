@@ -4,6 +4,7 @@ using DarkLight.Client.Common.ViewModels;
 using DarkLight.Client.Customizations;
 using DarkLight.Framework.Enums;
 using DarkLight.Framework.Events;
+using DarkLight.Framework.Interfaces.CEP;
 using DarkLight.Framework.Interfaces.Common;
 using DarkLight.Framework.Interfaces.Services;
 using DarkLight.Infrastructure;
@@ -13,10 +14,11 @@ using DarkLight.Client.Optimization.ViewModels;
 using com.espertech.esper.client;
 using EventType = DarkLight.Framework.Enums.EventType;
 
+
 namespace DarkLight.Client
 {
     //[Export(typeof(IShell))]
-    public class ShellViewModel : Conductor<Screen>.Collection.OneActive, IShell, IHandle<LinkedNavigationEvent>
+    public class ShellViewModel : Conductor<Screen>.Collection.OneActive, IShell, DarkLight.Framework.Interfaces.CEP.IHandle<LinkedNavigationEvent>
     {
         bool _isBacktestActive;
         public bool IsBacktestActive
@@ -53,15 +55,12 @@ namespace DarkLight.Client
 
         public ShellViewModel()
         {
-            IsBacktestActive = true;
-
-            var mediator = IoC.Get<IMediator>();
-            if (mediator.GetType() == typeof(Mediator))            
-                IoC.Get<IEventAggregator>().Subscribe(this);
-            else if (mediator.GetType() == typeof(MediatorCEP))
-                mediator.Subscribe(EventType.LinkedNavigation, UpdateFromCEP);
-            
+            IsBacktestActive = true;         
+            IoC.Get<IEventBroker>().Subscribe(this);            
             NavigateToBacktestModule();
+
+            //TODO: better place for this than here?
+            IoC.Get<IBacktestService>().Initialize();                        
         }
 
         public void NavigateToBacktestModule()
@@ -69,7 +68,7 @@ namespace DarkLight.Client
             IsOptimizationActive = false;
             IsLiveActive = false;
 
-            IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
+            IoC.Get<IEventBroker>().Publish(new LinkedNavigationEvent
             {                
                 NavigationAction = NavigationAction.Basic,
                 Destination = NavigationDestination.BacktestBrowser
@@ -81,7 +80,7 @@ namespace DarkLight.Client
             IsBacktestActive = false;
             IsLiveActive = false;
 
-            IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
+            IoC.Get<IEventBroker>().Publish(new LinkedNavigationEvent
             {
                 NavigationAction = NavigationAction.Basic,
                 Destination = NavigationDestination.OptimizationScheduler
@@ -93,19 +92,19 @@ namespace DarkLight.Client
             IsBacktestActive = false;
             IsOptimizationActive = false;
 
-            IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
+            IoC.Get<IEventBroker>().Publish(new LinkedNavigationEvent
             {
                 NavigationAction = NavigationAction.Basic,
-                Destination = NavigationDestination.LiveTradingPorfolios,
+                Destination = NavigationDestination.LiveTradingPorfolios
             });
         }
 
         public void ShowEventPublisher()
         {
-            IoC.Get<IMediator>().Broadcast(new LinkedNavigationEvent
+            IoC.Get<IEventBroker>().Publish(new LinkedNavigationEvent
             {
                 NavigationAction = NavigationAction.NewWindow,
-                Destination = NavigationDestination.EventPublisher,
+                Destination = NavigationDestination.EventPublisher
             });
         }
 
@@ -124,7 +123,7 @@ namespace DarkLight.Client
                 _linkableViewModel.Initialize(linkedNavigationEvent);
                 IoC.Get<IWindowManager>().ShowWindow(_linkableViewModel);
                 linkedNavigationEvent.NavigationAction = NavigationAction.UpdateLinkedWindows;
-                IoC.Get<IMediator>().Broadcast(linkedNavigationEvent);                
+                IoC.Get<IEventBroker>().Publish(linkedNavigationEvent);                
             }
             else if(linkedNavigationEvent.NavigationAction == NavigationAction.NewWindow)
             {
@@ -134,12 +133,6 @@ namespace DarkLight.Client
         }
 
         #endregion
-
-        public void UpdateFromCEP(object sender, UpdateEventArgs e)
-        {
-            var linkedNavigationEvent = (LinkedNavigationEvent)e.NewEvents[0].Underlying;
-            Handle(linkedNavigationEvent);
-        }
         
     }
 }

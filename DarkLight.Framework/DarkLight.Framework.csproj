@@ -105,9 +105,11 @@
     <Compile Include="Interfaces\Adapters\IHistDataAdapter.cs" />
     <Compile Include="Interfaces\Adapters\IMediatorAdapter.cs" />
     <Compile Include="Interfaces\Adapters\IOptimizationAdapter.cs" />
-    <Compile Include="Interfaces\CEP\IDarkLightEventAggregator.cs" />
+    <Compile Include="Interfaces\CEP\IHandle.cs" />
+    <Compile Include="Interfaces\CEP\IEventBroker.cs" />
     <Compile Include="Interfaces\Common\IMediator.cs" />
     <Compile Include="Interfaces\Repository\IBacktestRepository.cs" />
+    <Compile Include="Interfaces\Services\IDarkLightService.cs" />
     <Compile Include="Interfaces\Services\IBacktestService.cs" />
     <Compile Include="Interfaces\Services\IColorService.cs" />
     <Compile Include="Interfaces\Common\IFilter.cs" />

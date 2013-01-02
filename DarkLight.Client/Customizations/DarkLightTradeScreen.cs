@@ -1,6 +1,7 @@
 ﻿using System;
 using Caliburn.Micro;
 using DarkLight.Framework.Events;
+using DarkLight.Framework.Interfaces.CEP;
 using DarkLight.Framework.Interfaces.Common;
 using DarkLight.Framework.Interfaces.Services;
 using DarkLight.Framework.Utilities;
@@ -10,7 +11,7 @@ using EventType = DarkLight.Framework.Enums.EventType;
 
 namespace DarkLight.Client.Customizations
 {
-    public class DarkLightTradeScreen : DarkLightScreen, IHandle<TradeEvent>
+    public class DarkLightTradeScreen : DarkLightScreen, Caliburn.Micro.IHandle<TradeEvent>
     {
         public string Key { get; set; }  
         //public TradeMode Mode { get; set; }
@@ -20,11 +21,7 @@ namespace DarkLight.Client.Customizations
 
         public DarkLightTradeScreen()
         {
-            var mediator = IoC.Get<IMediator>();
-            if (mediator.GetType() == typeof(Mediator))
-                IoC.Get<IEventAggregator>().Subscribe(this);
-            else if (mediator.GetType() == typeof(MediatorCEP))
-                mediator.Subscribe(EventType.Trade, UpdateFromCEP);
+            IoC.Get<IEventBroker>().Subscribe(this);
         }
 
         protected virtual void AddTrade(TradeEvent tradeEvent)

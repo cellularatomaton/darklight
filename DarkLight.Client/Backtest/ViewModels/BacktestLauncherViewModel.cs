@@ -9,6 +9,7 @@ using System.Collections;
 using DarkLight.Framework.Data.Common;
 using DarkLight.Framework.Enums;
 using DarkLight.Framework.Events;
+using DarkLight.Framework.Interfaces.CEP;
 using DarkLight.Framework.Interfaces.Common;
 using DarkLight.Framework.Interfaces.Services;
 using DarkLight.Framework.Utilities;
@@ -21,7 +22,6 @@ namespace DarkLight.Client.Backtest.ViewModels
         #region Properties
 
         IViewModelService _viewModelService;
-        IBacktestService _backtestService;
 
         string _currentScreenName;
         public string CurrentScreenName
@@ -56,10 +56,9 @@ namespace DarkLight.Client.Backtest.ViewModels
 
         #region Constructor
 
-        public BacktestLauncherViewModel(IViewModelService viewModelService, IBacktestService backtestService)
+        public BacktestLauncherViewModel(IViewModelService viewModelService)
         {
             _viewModelService = viewModelService;
-            _backtestService = backtestService;
 
             ActivateItem(_viewModelService.GetScreenForNavigationEvent(new LinkedNavigationEvent { Destination = NavigationDestination.ResponseSelection }));
             ActivateItem(_viewModelService.GetScreenForNavigationEvent(new LinkedNavigationEvent { Destination = NavigationDestination.ParametricRange }));
@@ -109,7 +108,7 @@ namespace DarkLight.Client.Backtest.ViewModels
             requestEvent.Response = new DarkLightResponse();           
              requestEvent.Response.Key = backtestGroup.GUID;
             requestEvent.HistDataService = IoC.Get<IHistDataService>();
-            IoC.Get<IMediator>().Broadcast(requestEvent);            
+            IoC.Get<IEventBroker>().Publish(requestEvent);            
         }
 
         #endregion

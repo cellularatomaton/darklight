@@ -16,10 +16,12 @@ using DarkLight.Client.LiveTrading.ViewModels;
 using DarkLight.Client.Utilities;
 using DarkLight.Client.WPFServices;
 using DarkLight.Framework.Interfaces.Adapters;
+using DarkLight.Framework.Interfaces.CEP;
 using DarkLight.Framework.Interfaces.Common;
 using DarkLight.Framework.Interfaces.Repository;
 using DarkLight.Framework.Interfaces.Services;
 using DarkLight.Infrastructure;
+using DarkLight.Infrastructure.EventBroker;
 using DarkLight.Infrastructure.Mediator;
 using DarkLight.Infrastructure.ServiceBus;
 using DarkLight.Client.LiveTrading.ViewModels;
@@ -65,22 +67,25 @@ namespace DarkLight.Client
             builder.RegisterType<MockBacktestRepository>().As<IBacktestRepository>();
             builder.RegisterType<MockBacktestService>().As<IBacktestService>().SingleInstance();
             builder.RegisterType<MockHistDataService>().As<IHistDataService>();
-            builder.RegisterType<Mediator>().As<IMediator>().SingleInstance();
+            builder.RegisterType<EventBrokerLocal>().As<IEventBroker>().SingleInstance();
+            builder.RegisterType<MockBacktestService>().As<IBacktestService>().SingleInstance();
+            //builder.RegisterType<Mediator>().As<IMediator>().SingleInstance();
             //builder.RegisterType<ServiceBusLocal>().As<IMediatorAdapter,IBacktestAdapter>().SingleInstance();
-            builder.RegisterType<MediatorCEP>().As<IMediator>().SingleInstance();
-            builder.RegisterType<ServiceBusLocalCEP>().As<IMediatorAdapter, IBacktestAdapter>().SingleInstance();
+            //builder.RegisterType<MediatorCEP>().As<IMediator>().SingleInstance();
+            //builder.RegisterType<ServiceBusLocalCEP>().As<IMediatorAdapter, IBacktestAdapter>().SingleInstance();
             
             // Register Service Implementations:
             builder.Register(c => new DefaultColorService()).SingleInstance();
             builder.Register(c => new DefaultFilterService(IoC.Get<IColorService>())).SingleInstance();
             builder.Register(c => new DarkLightWindowManager()).SingleInstance();
-            builder.Register(c => new MockBacktestService(IoC.Get<IBacktestAdapter>())).SingleInstance();
+            builder.Register(c => new EventBrokerLocal()).SingleInstance();
+            builder.Register(c => new MockBacktestService(IoC.Get<IEventBroker>())).SingleInstance();
             //builder.Register(c => new Mediator(IoC.Get<IMediatorAdapter>(), IoC.Get<IEventAggregator>())).SingleInstance();            
             
             // Register Modules:
             builder.Register(c => new LinkableViewModel(IoC.Get<IColorService>(), IoC.Get<IViewModelService>()));
             builder.Register(c => new BacktestModuleViewModel()).SingleInstance();
-            builder.Register(c => new BacktestLauncherViewModel(IoC.Get<IViewModelService>(), IoC.Get<IBacktestService>()));
+            builder.Register(c => new BacktestLauncherViewModel(IoC.Get<IViewModelService>()));
             builder.Register(c => new BacktestBrowserViewModel(IoC.Get<IColorService>(), IoC.Get<IViewModelService>()));
             builder.Register(c => new OptimizationModuleViewModel()).SingleInstance();
             builder.Register(c => new OptimizationSchedulerViewModel()).SingleInstance();
@@ -104,6 +109,8 @@ namespace DarkLight.Client
             builder.Register(c => new BacktestStatusViewModel());
             builder.Register(c => new ErrorViewModel());
             builder.Register(c => new DefaultViewModel());
+
+            //IoC.Get<IBacktestService>().Initialize();
 
             // Context Menu:
             //http://compiledexperience.com/blog/posts/wp7-context-menus-with-caliburn-micro            
